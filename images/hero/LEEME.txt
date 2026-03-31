@@ -1,0 +1,6 @@
+Coloca aquí 5 fotos de vehículos y nómbralas exactamente:
+hero-1.jpg  hero-2.jpg  hero-3.jpg  hero-4.jpg  hero-5.jpg
+
+Si usas .png o .webp, abre index.html y cambia la extensión en cada línea images/hero/hero-X.…
+
+Las imágenes cambian solas cada pocos segundos y la foto activa tiene un zoom suave.
