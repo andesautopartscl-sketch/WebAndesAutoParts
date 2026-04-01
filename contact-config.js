@@ -10,6 +10,6 @@
  *   y luego la página de gracias (no pasa por FormSubmit ni dominios rotos).
  */
 window.ANDES_CONTACT = {
-  web3formsAccessKey: "",
+  web3formsAccessKey: "d243c6f5-90d4-492f-b386-83c8c8ab9bdf",
   whatsappNumber: "56926152826",
 };
