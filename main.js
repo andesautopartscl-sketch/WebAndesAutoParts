@@ -38,6 +38,7 @@
 
   function bindContactForm(form) {
     if (!form) return;
+    if (form.id === "contact-form-home") return;
     var action = (form.getAttribute("action") || "").trim();
     if (action.indexOf("formsubmit.co") !== -1) return;
     form.addEventListener("submit", function (e) {
@@ -49,30 +50,17 @@
   bindContactForm(document.getElementById("contact-form"));
   bindContactForm(document.getElementById("contact-form-home"));
 
-  (function initFormSubmitNext() {
-    var form = document.getElementById("contact-form-home");
-    if (!form) return;
-    var next = form.querySelector('input[name="_next"]');
-    if (!next) return;
-    var proto = window.location.protocol;
-    if (proto === "http:" || proto === "https:") {
-      try {
-        next.value = new URL(
-          "gracias.html",
-          new URL(".", window.location.href)
-        ).href;
-      } catch (err) {
-        next.value =
-          window.location.origin.replace(/\/$/, "") + "/gracias.html";
-      }
+  function graciasPageUrl() {
+    try {
+      return new URL("gracias.html", new URL(".", window.location.href)).href;
+    } catch (err) {
+      return "gracias.html";
     }
-  })();
+  }
 
   (function initContactFormLocalDev() {
     var form = document.getElementById("contact-form-home");
     if (!form) return;
-    var action = (form.getAttribute("action") || "").trim();
-    if (action.indexOf("formsubmit.co") === -1) return;
 
     var host = (window.location.hostname || "").toLowerCase();
     var isLocal =
@@ -109,7 +97,7 @@
           encodeURIComponent(body);
         alert(
           "Modo local: al aceptar, se abrirá tu correo con el mensaje listo.\n\n" +
-            "Así evitamos el error de red con servicios externos. En GitHub Pages el envío es directo con FormSubmit."
+            "En GitHub Pages puedes usar Web3Forms (contact-config.js) o WhatsApp."
         );
         window.location.href = mailto;
       },
@@ -117,7 +105,7 @@
     );
   })();
 
-  (function initContactFormProductionAjax() {
+  (function initContactFormProduction() {
     var form = document.getElementById("contact-form-home");
     if (!form) return;
     var host = (window.location.hostname || "").toLowerCase();
@@ -133,34 +121,84 @@
       function (e) {
         e.preventDefault();
         var fd = new FormData(form);
-        fd.delete("_next");
+        var nombre = String(fd.get("nombre") || "").trim();
+        var email = String(fd.get("email") || "").trim();
+        var telefono = String(fd.get("telefono") || "").trim();
+        var mensaje = String(fd.get("mensaje") || "").trim();
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
 
-        fetch("https://formsubmit.co/ajax/andesautopartscl@gmail.com", {
-          method: "POST",
-          body: fd,
-        })
-          .then(function (res) {
-            if (!res.ok) throw new Error("HTTP " + res.status);
-            return res.json().catch(function () {
-              return {};
+        var cfg =
+          typeof window !== "undefined" && window.ANDES_CONTACT
+            ? window.ANDES_CONTACT
+            : {};
+        var key = (cfg.web3formsAccessKey || "").trim();
+        var wa = String(cfg.whatsappNumber || "56926152826").replace(/\D/g, "");
+
+        function openWhatsAppThenGracias() {
+          var text =
+            "Hola Andes Auto Parts,\n\n" +
+            "Nombre: " +
+            nombre +
+            "\nEmail: " +
+            email +
+            "\nTeléfono: " +
+            telefono +
+            "\n\nMensaje:\n" +
+            mensaje;
+          var url = "https://wa.me/" + wa + "?text=" + encodeURIComponent(text);
+          var w = window.open(url, "_blank", "noopener,noreferrer");
+          if (!w) {
+            window.location.href = url;
+          } else {
+            window.location.href = graciasPageUrl();
+          }
+        }
+
+        if (key) {
+          fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              access_key: key,
+              subject: "Mensaje web — Andes Auto Parts",
+              name: nombre,
+              email: email,
+              message:
+                "Teléfono: " + telefono + "\n\n" + mensaje,
+            }),
+          })
+            .then(function (res) {
+              return res.json().then(
+                function (data) {
+                  if (!res.ok || !data || data.success !== true) {
+                    throw new Error("fail");
+                  }
+                },
+                function () {
+                  throw new Error("fail");
+                }
+              );
+            })
+            .then(function () {
+              window.location.href = graciasPageUrl();
+            })
+            .catch(function () {
+              openWhatsAppThenGracias();
+            })
+            .finally(function () {
+              if (submitBtn) submitBtn.disabled = false;
             });
-          })
-          .then(function () {
-            window.location.href = new URL(
-              "gracias.html",
-              new URL(".", window.location.href)
-            ).href;
-          })
-          .catch(function () {
-            alert(
-              "No se pudo enviar el mensaje. Escríbenos por WhatsApp (+56 9 2615 2826) o a andesautopartscl@gmail.com."
-            );
-          })
-          .finally(function () {
+        } else {
+          try {
+            openWhatsAppThenGracias();
+          } finally {
             if (submitBtn) submitBtn.disabled = false;
-          });
+          }
+        }
       },
       true
     );
