@@ -36,20 +36,6 @@
     if (e.key === "Escape") closeMenu();
   });
 
-  function bindContactForm(form) {
-    if (!form) return;
-    if (form.id === "contact-form-home") return;
-    var action = (form.getAttribute("action") || "").trim();
-    if (action.indexOf("formsubmit.co") !== -1) return;
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      alert("Gracias por tu mensaje. En un sitio en producción esto se enviaría al servidor.");
-    });
-  }
-
-  bindContactForm(document.getElementById("contact-form"));
-  bindContactForm(document.getElementById("contact-form-home"));
-
   function graciasPageUrl() {
     try {
       return new URL("gracias.html", new URL(".", window.location.href)).href;
