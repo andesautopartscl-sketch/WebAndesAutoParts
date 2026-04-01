@@ -135,8 +135,8 @@
         var key = (cfg.web3formsAccessKey || "").trim();
         var wa = String(cfg.whatsappNumber || "56926152826").replace(/\D/g, "");
 
-        function openWhatsAppThenGracias() {
-          var text =
+        function buildWhatsAppText() {
+          return (
             "Hola Andes Auto Parts,\n\n" +
             "Nombre: " +
             nombre +
@@ -145,9 +145,25 @@
             "\nTeléfono: " +
             telefono +
             "\n\nMensaje:\n" +
-            mensaje;
-          var url = "https://wa.me/" + wa + "?text=" + encodeURIComponent(text);
-          var w = window.open(url, "_blank", "noopener,noreferrer");
+            mensaje
+          );
+        }
+
+        function whatsAppUrl() {
+          return (
+            "https://wa.me/" +
+            wa +
+            "?text=" +
+            encodeURIComponent(buildWhatsAppText())
+          );
+        }
+
+        function openWhatsAppNewTab() {
+          window.open(whatsAppUrl(), "_blank", "noopener,noreferrer");
+        }
+
+        function openWhatsAppThenGracias() {
+          var w = window.open(whatsAppUrl(), "_blank", "noopener,noreferrer");
           if (!w) {
             window.location.href = url;
           } else {
@@ -156,6 +172,7 @@
         }
 
         if (key) {
+          var waPopup = window.open("about:blank", "_blank", "noopener,noreferrer");
           fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
@@ -184,9 +201,24 @@
               );
             })
             .then(function () {
+              var url = whatsAppUrl();
+              if (waPopup && !waPopup.closed) {
+                try {
+                  waPopup.location.href = url;
+                } catch (err) {
+                  openWhatsAppNewTab();
+                }
+              } else {
+                openWhatsAppNewTab();
+              }
               window.location.href = graciasPageUrl();
             })
             .catch(function () {
+              if (waPopup && !waPopup.closed) {
+                try {
+                  waPopup.close();
+                } catch (err) {}
+              }
               openWhatsAppThenGracias();
             })
             .finally(function () {
