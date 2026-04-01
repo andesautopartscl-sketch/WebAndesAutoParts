@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260401" />
 </head>
 <body class="page-contact">
   <header class="site-header" id="top">
@@ -51,8 +51,8 @@
       <h1 class="section-title">Gracias por escribirnos</h1>
       <p class="section-desc">Recibimos tu mensaje. Te responderemos pronto en horario hábil.</p>
       <div id="wa-followup" class="thanks-wa" hidden>
-        <p class="thanks-wa__text">Si quieres continuar por WhatsApp con el mismo texto, pulsa:</p>
-        <a id="wa-open-link" href="https://wa.me/56926152826" class="btn btn-wa btn-lg" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+        <p class="thanks-wa__text">Continúa por WhatsApp con el mismo mensaje. Se abre en esta ventana; podés volver atrás con el botón del navegador.</p>
+        <a id="wa-open-link" href="https://wa.me/56926152826" class="btn btn-wa btn-lg">Abrir WhatsApp</a>
       </div>
       <a href="index.html" class="btn btn-primary btn-lg">Volver al inicio</a>
     </div>
@@ -122,9 +122,17 @@
       try {
         var params = new URLSearchParams(window.location.search);
         if (params.get("wa") !== "1") return;
-        var u = sessionStorage.getItem("andes_wa_url");
+        var u = params.get("u") || "";
+        if (!u) {
+          try {
+            u = sessionStorage.getItem("andes_wa_url") || localStorage.getItem("andes_wa_url") || "";
+          } catch (e) {}
+        }
         if (!u) return;
-        sessionStorage.removeItem("andes_wa_url");
+        try {
+          sessionStorage.removeItem("andes_wa_url");
+          localStorage.removeItem("andes_wa_url");
+        } catch (e) {}
         var box = document.getElementById("wa-followup");
         var link = document.getElementById("wa-open-link");
         if (link) link.href = u;
@@ -132,6 +140,6 @@
       } catch (e) {}
     })();
   </script>
-  <script src="main.js"></script>
+  <script src="main.js?v=20260401"></script>
 </body>
 </html>

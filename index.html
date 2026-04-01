@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260401" />
 </head>
 <body>
   <header class="site-header" id="top">
@@ -561,22 +561,22 @@
             </div>
             <div class="form-row">
               <div class="form-group">
+                <label for="patente-home">Patente</label>
+                <input type="text" id="patente-home" name="patente" placeholder="Ej.: ABCD12 (opcional)" autocomplete="off" maxlength="20" />
+              </div>
+              <div class="form-group">
+                <label for="chasis-home">N° de chasis</label>
+                <input type="text" id="chasis-home" name="chasis" placeholder="VIN o últimos dígitos (opcional)" autocomplete="off" maxlength="32" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
                 <label for="email-home">Email</label>
                 <input type="email" id="email-home" name="email" placeholder="andesautopartscl@gmail.com" required autocomplete="email" />
               </div>
               <div class="form-group">
                 <label for="telefono-home">Teléfono</label>
                 <input type="tel" id="telefono-home" name="telefono" placeholder="+56 9 2615 2826" autocomplete="tel" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="patente-home">Patente (opcional)</label>
-                <input type="text" id="patente-home" name="patente" placeholder="Ej.: ABCD12" autocomplete="off" maxlength="20" />
-              </div>
-              <div class="form-group">
-                <label for="chasis-home">N° de chasis (opcional)</label>
-                <input type="text" id="chasis-home" name="chasis" placeholder="Últimos dígitos o VIN completo" autocomplete="off" maxlength="32" />
               </div>
             </div>
             <div class="form-group">
@@ -660,7 +660,7 @@
     </div>
   </div>
 
-  <script src="contact-config.js"></script>
-  <script src="main.js"></script>
+  <script src="contact-config.js?v=20260401"></script>
+  <script src="main.js?v=20260401"></script>
 </body>
 </html>

@@ -183,12 +183,18 @@
         }
 
         function goGraciasConWhatsApp() {
+          var u = whatsAppUrl();
           try {
-            sessionStorage.setItem("andes_wa_url", whatsAppUrl());
+            sessionStorage.setItem("andes_wa_url", u);
+            localStorage.setItem("andes_wa_url", u);
           } catch (err) {}
           var base = graciasPageUrl().split("#")[0];
-          window.location.href =
-            base.indexOf("?") >= 0 ? base + "&wa=1" : base + "?wa=1";
+          var sep = base.indexOf("?") >= 0 ? "&" : "?";
+          var href = base + sep + "wa=1";
+          if (u.length <= 1600) {
+            href += "&u=" + encodeURIComponent(u);
+          }
+          window.location.href = href;
         }
 
         if (key) {
