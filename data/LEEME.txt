@@ -1,0 +1,47 @@
+CATÁLOGO — CÓMO AGREGAR MUCHOS PRODUCTOS SIN EDITAR HTML
+========================================================
+
+La página principal (index.html, sección #productos) lee el archivo:  data/productos.json
+
+0) FORMA MÁS FÁCIL (EDITOR VISUAL, ALINEADO A MERCADO LIBRE)
+   - Abre en el navegador el archivo:  editor-catalogo.html
+     (doble clic en tu PC, o desde el sitio: tudominio/editor-catalogo.html)
+   - Opcional: "Elegir archivo" y carga tu data/productos.json actual.
+   - Agrega o edita productos con los mismos datos que en ML: título, categoría/subcategoría,
+     marca, código, origen, descripción, valor, URLs de imágenes (una por línea), enlace ML.
+   - "Descargar productos.json" y reemplaza el archivo en data/productos.json
+   - Sube el cambio a GitHub como siempre.
+   - El editor tiene noindex (no aparece en Google como página importante).
+
+1) FORMATO (cada producto es un bloque entre { y }):
+   - titulo        → Nombre del repuesto (obligatorio)
+   - categoria     → Ej.: Frenos, Motor, Suspensión…
+   - subcategoria  → Opcional (ej. Pastillas, Filtros)
+   - marca         → Opcional
+   - codigo        → Código / SKU (opcional; en datos viejos puede venir como "sku")
+   - origen        → Opcional (país o tipo de origen)
+   - descripcion   → Texto corto (opcional)
+   - valor         → Precio mostrado en la tarjeta (opcional; texto, ej. 24990 o $ 24.990)
+   - imagenes      → Array de URLs (recomendado; la primera es la que se muestra)
+   - imagen        → Una sola URL (opcional; si no hay imagenes, se usa esto)
+   - url           → Enlace a la publicación en Mercado Libre (opcional)
+
+2) CARGA EN MASA SIN ESCRIBIR JSON A MANO
+   a) Arma una tabla en Excel / Google Sheets con columnas en este orden:
+      titulo | categoria | subcategoria | marca | codigo | origen | descripcion | valor | imagen | url
+      (o usa el editor y descarga el JSON.)
+   b) Exporta como CSV (UTF-8).
+   c) Usa un conversor "CSV to JSON array" en línea (busca en Google) y pega el resultado
+      en productos.json reemplazando el contenido [ ... ].
+   d) Valida el JSON en jsonlint.com si el sitio no carga el catálogo.
+
+3) FOTOS EN TU CARPETA
+   - Crea images/productos/ y sube las fotos al repo.
+   - En "imagen" o en "imagenes" pon por ejemplo:  images/productos/pastilla-001.jpg
+
+4) DESPUÉS DE CAMBIAR productos.json
+   - git add data/productos.json
+   - git commit -m "Actualiza catálogo"
+   - git push
+   - Espera 1-2 minutos a que GitHub Pages actualice.
+

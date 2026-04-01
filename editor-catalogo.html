@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Editor de catálogo (estilo Mercado Libre) — Andes Auto Parts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #1a2b4b;
+      --ml-yellow: #fff159;
+      --accent: #3483fa;
+      --bg: #ebebeb;
+      --card: #fff;
+      --muted: #666;
+      --border: #ddd;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: #333;
+      line-height: 1.45;
+      padding: 1rem;
+      padding-bottom: 3rem;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    .ml-banner {
+      background: linear-gradient(180deg, var(--ml-yellow) 0%, #ffe600 100%);
+      color: #333;
+      padding: 0.65rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    h1 {
+      font-size: 1.35rem;
+      color: var(--navy);
+      margin: 0 0 0.35rem;
+    }
+    .lead { color: var(--muted); margin: 0 0 1.25rem; font-size: 0.9rem; }
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      margin-bottom: 0.85rem;
+      border: 1px solid var(--border);
+    }
+    .panel h2 {
+      margin: 0 0 0.65rem;
+      font-size: 0.95rem;
+      color: var(--navy);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    .file-row { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; }
+    input[type="file"] { font-size: 0.85rem; max-width: 100%; }
+    .editor-file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.95rem;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #2968c8; }
+    .btn-secondary { background: var(--navy); color: #fff; }
+    .btn-ghost { background: #e8e8e8; color: #333; }
+    .btn-sm { padding: 0.35rem 0.65rem; font-size: 0.8rem; }
+    .actions-top { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.65rem; }
+    .product-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      background: #fff;
+    }
+    .product-card > header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .product-card h3 {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .grid { display: grid; gap: 0.55rem; }
+    @media (min-width: 520px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.45rem 0.55rem;
+      font-family: inherit;
+      font-size: 0.88rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+    textarea { min-height: 4rem; resize: vertical; }
+    .hint { font-size: 0.75rem; color: #888; margin: 0.35rem 0 0; }
+    .warn-box {
+      margin-top: 0.35rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      background: #fff8e1;
+      color: #6a4b00;
+      border: 1px solid #f2d486;
+    }
+    .msg {
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 0.85rem;
+      display: none;
+    }
+    .msg.ok { display: block; background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+    .msg.err { display: block; background: #ffebee; color: #b71c1c; border: 1px solid #ef9a9a; }
+    footer.note {
+      margin-top: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.85rem;
+    }
+    footer.note a { color: var(--navy); font-weight: 600; }
+    code { font-size: 0.85em; background: #f0f0f0; padding: 0.1rem 0.35rem; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <datalist id="origen-sugerencias">
+    <option value="Original"></option>
+    <option value="Alternativo"></option>
+    <option value="OEM"></option>
+    <option value="Genérico"></option>
+    <option value="Importado"></option>
+  </datalist>
+  <div class="wrap">
+    <div class="ml-banner">Campos alineados a lo que sueles cargar en Mercado Libre</div>
+    <h1>Editor de catálogo</h1>
+    <p class="lead">
+      Completa cada producto como en ML: título, categorías, marca, código, origen, descripción, precio e imágenes.
+      Luego descarga <code>productos.json</code> y reemplaza <code>data/productos.json</code> en tu proyecto.
+    </p>
+
+    <div id="flash" class="msg" role="status"></div>
+
+    <div class="panel">
+      <h2>Empezar</h2>
+      <div class="file-row">
+        <input type="file" id="file-in" accept=".json,application/json" />
+        <span style="font-size:0.82rem;color:var(--muted);">Carga tu JSON actual o agrega productos nuevos.</span>
+      </div>
+      <div class="actions-top">
+        <button type="button" class="btn btn-secondary" id="btn-add">+ Agregar producto</button>
+        <button type="button" class="btn btn-ghost" id="btn-clear">Vaciar lista</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Productos (<span id="count">0</span>)</h2>
+      <div id="list"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Guardar</h2>
+      <div class="actions-top">
+        <button type="button" class="btn btn-primary" id="btn-download">Descargar productos.json</button>
+        <button type="button" class="btn btn-ghost" id="btn-copy">Copiar JSON</button>
+      </div>
+      <p class="hint">Solo se exportan filas con <strong>título</strong> rellenado. Las imágenes se guardan como lista (varias URLs) y el editor normaliza rutas para evitar errores (ej.: <code>foto.png</code> → <code>images/productos/foto.png</code>).</p>
+    </div>
+
+    <footer class="note">
+      <a href="index.html">← Volver al sitio</a>
+    </footer>
+  </div>
+
+  <script>
+(function () {
+  var products = [];
+  var listEl = document.getElementById("list");
+  var countEl = document.getElementById("count");
+  var flashEl = document.getElementById("flash");
+
+  function showMsg(text, ok) {
+    flashEl.textContent = text;
+    flashEl.className = "msg " + (ok ? "ok" : "err");
+    setTimeout(function () {
+      flashEl.className = "msg";
+      flashEl.textContent = "";
+    }, 4500);
+  }
+
+  function updateCount() {
+    countEl.textContent = String(products.length);
+  }
+
+  function emptyProduct() {
+    return {
+      titulo: "",
+      categoria: "",
+      subcategoria: "",
+      marca: "",
+      codigo: "",
+      origen: "",
+      descripcion: "",
+      valor: "",
+      imagenesText: "",
+      url: "https://www.mercadolibre.cl/pagina/andesautopartscl",
+    };
+  }
+
+  function normalizeLoaded(row) {
+    var imgText = "";
+    if (Array.isArray(row.imagenes) && row.imagenes.length) {
+      imgText = row.imagenes.filter(Boolean).join("\n");
+    } else if (row.imagen) {
+      imgText = String(row.imagen);
+    }
+    return {
+      titulo: row.titulo || "",
+      categoria: row.categoria || "",
+      subcategoria: row.subcategoria || "",
+      marca: row.marca || "",
+      codigo: row.codigo || row.sku || "",
+      origen: row.origen || "",
+      descripcion: row.descripcion || "",
+      valor: row.valor != null && row.valor !== "" ? String(row.valor) : "",
+      imagenesText: imgText,
+      url: row.url || "",
+    };
+  }
+
+  var CATEGORY_SUBS = [
+    { name: "Frenos", subs: ["Pastillas", "Balatas", "Discos", "Caliper", "Bomba de freno", "Bombin", "Servo freno", "Flexible freno", "Sensor ABS", "Liquido de frenos", "Kit frenos"] },
+    { name: "Motor", subs: ["Filtro de aceite", "Filtro de aire", "Filtro combustible", "Filtro habitaculo", "Bujias", "Bobina", "Correa distribucion", "Tensor", "Bomba de agua", "Termostato", "Empaquetaduras", "Retenes", "Valvula PCV", "Soporte motor"] },
+    { name: "Suspension y Direccion", subs: ["Amortiguador", "Cazoleta", "Espiral", "Bieleta", "Bujes", "Rotula", "Terminal direccion", "Axial", "Brazo suspension", "Barra estabilizadora", "Cremallera", "Bomba direccion", "Homocinetica"] },
+    { name: "Transmision", subs: ["Kit embrague", "Disco embrague", "Prensa embrague", "Rodamiento embrague", "Bomba embrague", "Palier", "Homocinetica", "Reten caja", "Sincronico", "Aceite caja", "Caja automatica ATF", "Convertidor"] },
+    { name: "Caja Automatica y CVT", subs: ["Filtro caja", "Solenoide", "Cuerpo valvulas", "Convertidor torque", "Enfriador ATF", "ATF CVT", "Sensor velocidad caja"] },
+    { name: "Electrico", subs: ["Alternador", "Motor de partida", "Bateria", "Fusible", "Relay", "Sensor", "Interruptor", "Arnes", "Bulbo", "Regulador voltaje", "Bobina encendido", "Cables bujia"] },
+    { name: "Encendido e Inyeccion", subs: ["Inyector", "Riel inyeccion", "Bomba bencina", "Filtro bencina", "Cuerpo aceleracion", "Sensor MAF", "Sensor MAP", "Sensor oxigeno", "Bujias", "Bobina"] },
+    { name: "Refrigeracion", subs: ["Radiador agua", "Radiador calefaccion", "Electroventilador", "Bomba de agua", "Termostato", "Mangueras", "Deposito refrigerante", "Tapa radiador", "Sensor temperatura"] },
+    { name: "Aire Acondicionado y Calefaccion", subs: ["Compresor AC", "Condensador", "Evaporador", "Valvula expansion", "Filtro habitaculo", "Ventilador calefaccion", "Resistencia calefaccion", "Mangueras AC"] },
+    { name: "Escape y Emisiones", subs: ["Catalizador", "Silenciador", "Resonador", "Flexible escape", "Sensor oxigeno", "Valvula EGR", "DPF", "Abrazaderas", "Tubo escape"] },
+    { name: "Combustible", subs: ["Bomba combustible", "Filtro combustible", "Inyector", "Riel", "Regulador presion", "Tapa estanque", "Aforador", "Caneria combustible"] },
+    { name: "Carroceria", subs: ["Parachoque", "Capot", "Tapabarro", "Mascara", "Parrilla", "Puerta", "Portalon", "Espejo", "Manilla", "Molduras", "Guardapolvo"] },
+    { name: "Iluminacion", subs: ["Foco delantero", "Foco trasero", "Neblinero", "Intermitente", "Tercera luz freno", "Ampolletas", "Kit LED", "Balastro", "Portalampara"] },
+    { name: "Cristales y Limpiaparabrisas", subs: ["Parabrisas", "Luneta", "Vidrio puerta", "Alzavidrio", "Motor limpia", "Plumillas", "Bomba sapito", "Deposito sapito"] },
+    { name: "Interior", subs: ["Tapiz", "Tablero", "Consola", "Perillas", "Mando volante", "Cinturon seguridad", "Pedales", "Alfombras", "Manillas interiores"] },
+    { name: "Tapiceria y Cabina", subs: ["Fundas asiento", "Espuma asiento", "Apoya cabeza", "Alfombras goma", "Cubre tablero", "Cubre volante", "Aislante ruido"] },
+    { name: "Accesorios Exterior", subs: ["Barras techo", "Pisaderas", "Deflectores", "Cubre pick-up", "Enganche", "Portaequipaje", "Cubrecarter", "Aleron"] },
+    { name: "Audio y Multimedia", subs: ["Radio", "Pantalla", "Camara retroceso", "Parlantes", "Antena", "GPS", "Modulo Bluetooth", "Sensores estacionamiento"] },
+    { name: "Seguridad Vehicular", subs: ["Alarma", "Cierre centralizado", "Inmovilizador", "Camara DVR", "Sensor reversa", "Corta corriente", "Tuercas seguridad"] },
+    { name: "Neumaticos y Llantas", subs: ["Neumaticos", "Llantas", "Tapacubos", "Pernos rueda", "Tuercas de seguridad", "Valvulas", "Separadores"] },
+    { name: "Rodamientos y Mazas", subs: ["Rodamiento rueda", "Maza rueda", "Reten rueda", "Kit rodamiento"] },
+    { name: "Ejes y Diferencial", subs: ["Palier", "Semi eje", "Cruceta", "Diferencial", "Reten diferencial", "Corona y pinon"] },
+    { name: "Traccion 4x4", subs: ["Caja transferencia", "Cardan", "Cubo rueda libre", "Actuador 4x4", "Homocinetica delantera", "Retenes 4x4"] },
+    { name: "Lubricantes y Fluidos", subs: ["Aceite motor", "Aceite caja", "ATF", "Liquido frenos", "Refrigerante", "Liquido direccion", "Aditivos"] },
+    { name: "Herramientas y Taller", subs: ["Llaves", "Dados", "Gata", "Compresor", "Scanner automotriz", "Torquimetro", "Extractor", "Herramienta distribucion"] },
+    { name: "Herramientas Diagnostico", subs: ["Scanner OBD2", "Multimetro", "Osciloscopio", "Probador bateria", "Lector TPMS", "Software diagnostico"] },
+    { name: "Mantenimiento Preventivo", subs: ["Kit mantencion", "Afinamiento", "Limpia inyectores", "Aditivo combustible", "Limpia frenos", "Limpia contacto"] },
+    { name: "Seguridad y Emergencia", subs: ["Extintor", "Triangulo", "Botiquin", "Cables bateria", "Inflador", "Chaleco reflectante", "Candados"] },
+    { name: "Accesorios Universales", subs: ["Fundas asiento", "Cubre volante", "Cargador USB", "Soporte celular", "Aromatizante", "Organizador maleta"] },
+    { name: "Baterias y Carga", subs: ["Bateria 12V", "Cargador bateria", "Booster", "Terminal bateria", "Cable masa", "Porta bateria"] },
+    { name: "Sistemas ADAS", subs: ["Sensor estacionamiento", "Radar frontal", "Camara frontal", "Camara 360", "Modulo ADAS", "Calibracion"] },
+    { name: "Repuestos Camionetas y SUV", subs: ["Suspension reforzada", "Mazas 4x4", "Transfer", "Tren delantero", "Bieletas", "Rotulas", "Bujes"] },
+    { name: "Repuestos Camiones Livianos", subs: ["Embrague camion", "Tren delantero camion", "Ballesta", "Amortiguador pesado", "Frenos aire", "Filtro diesel"] },
+    { name: "Repuestos Motos", subs: ["Pastillas moto", "Kit arrastre", "Cadena", "Piñon", "Corona", "Bujia moto", "Filtro moto"] },
+    { name: "Repuestos Vehiculos Chinos", subs: ["Great Wall", "Chery", "JAC", "Changan", "Geely", "MG", "Maxus", "BYD", "Dongfeng", "Lifan"] },
+    { name: "OEM y Originales", subs: ["OEM", "Original", "Alternativo premium", "Alternativo economico", "Kit original"] }
+  ];
+
+  function normalizeKey(s) {
+    return String(s || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function getSubcategorySuggestions(category) {
+    var key = normalizeKey(category);
+    var list = [];
+    var seen = {};
+
+    function add(v) {
+      var val = String(v || "").trim();
+      if (!val) return;
+      var k = normalizeKey(val);
+      if (seen[k]) return;
+      seen[k] = true;
+      list.push(val);
+    }
+
+    CATEGORY_SUBS.forEach(function (entry) {
+      if (normalizeKey(entry.name) === key) {
+        (entry.subs || []).forEach(add);
+      }
+    });
+
+    products.forEach(function (p) {
+      if (normalizeKey(p.categoria) === key) add(p.subcategoria);
+    });
+
+    return list;
+  }
+
+  function refreshCategoryDatalist() {
+    var data = document.getElementById("catlist");
+    if (!data) return;
+    data.innerHTML = "";
+    var seen = {};
+    function add(v) {
+      var val = String(v || "").trim();
+      if (!val) return;
+      var key = normalizeKey(val);
+      if (seen[key]) return;
+      seen[key] = true;
+      var opt = document.createElement("option");
+      opt.value = val;
+      data.appendChild(opt);
+    }
+    CATEGORY_SUBS.forEach(function (entry) {
+      add(entry.name);
+    });
+    products.forEach(function (p) {
+      add(p.categoria);
+    });
+  }
+
+  function refreshSubcatDatalist(idx) {
+    var data = listEl.querySelector("#subcatlist-" + idx);
+    if (!data || !products[idx]) return;
+    data.innerHTML = "";
+    getSubcategorySuggestions(products[idx].categoria).forEach(function (name) {
+      var opt = document.createElement("option");
+      opt.value = name;
+      data.appendChild(opt);
+    });
+  }
+
+  function render() {
+    listEl.innerHTML = "";
+    refreshCategoryDatalist();
+    products.forEach(function (p, i) {
+      var card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML =
+        '<header><h3>Publicación ' +
+        (i + 1) +
+        '</h3><button type="button" class="btn btn-sm btn-ghost" data-del="' +
+        i +
+        '">Eliminar</button></header>' +
+        '<div class="grid">' +
+        '<div><label>Título *</label><input type="text" data-f="titulo" data-i="' +
+        i +
+        '" placeholder="Como en Mercado Libre" /></div>' +
+        "</div>" +
+        '<div class="grid grid-2" style="margin-top:0.5rem">' +
+        '<div><label>Categoría</label><input type="text" data-f="categoria" data-i="' +
+        i +
+        '" placeholder="Ej.: Accesorios para Vehículos" list="catlist" /></div>' +
+        '<div><label>Subcategoría</label><input type="text" data-f="subcategoria" data-i="' +
+        i +
+        '" placeholder="Ej.: Terminal dirección" list="subcatlist-' +
+        i +
+        '" /><datalist id="subcatlist-' +
+        i +
+        '"></datalist></div>' +
+        "</div>" +
+        '<div class="grid grid-2" style="margin-top:0.5rem">' +
+        '<div><label>Marca</label><input type="text" data-f="marca" data-i="' +
+        i +
+        '" placeholder="Vehículo o marca de la pieza" /></div>' +
+        '<div><label>Código / SKU</label><input type="text" data-f="codigo" data-i="' +
+        i +
+        '" placeholder="Código de parte o ML" /></div>' +
+        "</div>" +
+        '<div style="margin-top:0.5rem"><label>Origen</label><input type="text" data-f="origen" data-i="' +
+        i +
+        '" list="origen-sugerencias" placeholder="Original, Alternativo, OEM…" /></div>' +
+        '<div class="grid" style="margin-top:0.5rem">' +
+        '<div><label>Descripción</label><textarea data-f="descripcion" data-i="' +
+        i +
+        '" placeholder="Texto de la publicación (resumen o completo)"></textarea></div>' +
+        "</div>" +
+        '<div class="grid grid-2" style="margin-top:0.5rem">' +
+        '<div><label>Valor (precio)</label><input type="text" data-f="valor" data-i="' +
+        i +
+        '" placeholder="Ej.: $ 29.990 o 29990" /></div>' +
+        '<div><label>Link publicación Mercado Libre</label><input type="text" data-f="url" data-i="' +
+        i +
+        '" placeholder="URL del ítem o de tu tienda" /></div>' +
+        "</div>" +
+        '<div style="margin-top:0.5rem">' +
+        '<label>Imágenes (URLs, una por línea)</label>' +
+        '<div class="file-row" style="margin-bottom:0.35rem">' +
+        '<input type="file" class="editor-file-input" accept="image/*" multiple data-img-input data-i="' +
+        i +
+        '" tabindex="-1" />' +
+        '<button type="button" class="btn btn-sm btn-ghost" data-img-btn data-i="' +
+        i +
+        '">Elegir imágenes en tu PC</button>' +
+        '<span style="font-size:0.75rem;color:var(--muted)">Se agregan rutas <code>images/productos/</code> — copia los archivos a esa carpeta del proyecto.</span>' +
+        "</div>" +
+        '<textarea data-f="imagenesText" data-i="' +
+        i +
+        '" style="min-height:5rem" placeholder="Pega aquí las URLs de las fotos (primera = portada en la web)"></textarea>' +
+        "<div class=\"warn-box\"><strong>Importante:</strong> si eliges imágenes desde tu PC, el editor solo guarda la ruta. Debes copiar manualmente esas fotos a <code>images/productos/</code> antes de actualizar la web.</div>" +
+        "<p class=\"hint\">URLs de internet o rutas locales al repo. Si elegiste archivos arriba, después copia esas fotos a <code>images/productos/</code> con el mismo nombre.</p>" +
+        "</div>";
+
+      listEl.appendChild(card);
+
+      card.querySelectorAll("input[data-f], textarea[data-f]").forEach(function (inp) {
+        var f = inp.getAttribute("data-f");
+        var idx = parseInt(inp.getAttribute("data-i"), 10);
+        inp.value = products[idx][f] != null ? String(products[idx][f]) : "";
+        inp.addEventListener("input", function () {
+          products[idx][f] = inp.value;
+          if (f === "categoria") refreshSubcatDatalist(idx);
+        });
+      });
+
+      refreshSubcatDatalist(i);
+
+      card.querySelector("[data-del]").addEventListener("click", function () {
+        if (products.length <= 1) {
+          showMsg("Agrega otro producto antes de eliminar este.", false);
+          return;
+        }
+        products.splice(i, 1);
+        render();
+        updateCount();
+      });
+    });
+    updateCount();
+  }
+
+  function safeFileName(name) {
+    var n = String(name || "").replace(/^[\\/]+|[\\/]+$/g, "").replace(/\\/g, "/");
+    var parts = n.split("/");
+    return parts[parts.length - 1] || "";
+  }
+
+  listEl.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-img-btn]");
+    if (!btn || !listEl.contains(btn)) return;
+    e.preventDefault();
+    var idx = btn.getAttribute("data-i");
+    var inp = listEl.querySelector('input[data-img-input][data-i="' + idx + '"]');
+    if (inp) inp.click();
+  });
+
+  listEl.addEventListener("change", function (e) {
+    var inp = e.target;
+    if (!inp.matches || !inp.matches("input[data-img-input]")) return;
+    var idx = parseInt(inp.getAttribute("data-i"), 10);
+    if (isNaN(idx) || !products[idx]) return;
+    var files = inp.files;
+    if (!files || !files.length) return;
+    var prefix = "images/productos/";
+    var lines = [];
+    for (var j = 0; j < files.length; j++) {
+      var fn = safeFileName(files[j].name);
+      if (fn) lines.push(prefix + fn);
+    }
+    if (!lines.length) {
+      inp.value = "";
+      return;
+    }
+    var textarea = listEl.querySelector('textarea[data-f="imagenesText"][data-i="' + idx + '"]');
+    var cur = textarea ? (textarea.value || "").trim() : "";
+    var add = lines.join("\n");
+    var next = cur ? cur + "\n" + add : add;
+    if (textarea) {
+      textarea.value = next;
+      products[idx].imagenesText = next;
+    } else {
+      products[idx].imagenesText = next;
+    }
+    inp.value = "";
+    showMsg(lines.length === 1 ? "Ruta agregada. Ahora copia esa foto real a images/productos/." : "Rutas agregadas. Ahora copia esas fotos reales a images/productos/.", true);
+  });
+
+  document.getElementById("btn-add").addEventListener("click", function () {
+    products.push(emptyProduct());
+    render();
+  });
+
+  document.getElementById("btn-clear").addEventListener("click", function () {
+    if (!window.confirm("¿Vaciar toda la lista?")) return;
+    products = [emptyProduct()];
+    render();
+  });
+
+  document.getElementById("file-in").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var data = JSON.parse(reader.result);
+        if (!Array.isArray(data)) throw new Error("El archivo debe ser una lista [ ... ]");
+        products = data.map(normalizeLoaded);
+        if (products.length === 0) products.push(emptyProduct());
+        render();
+        showMsg("Archivo cargado.", true);
+      } catch (err) {
+        showMsg("Error al leer JSON: " + err.message, false);
+      }
+    };
+    reader.readAsText(file, "UTF-8");
+    e.target.value = "";
+  });
+
+  function linesToImagenes(text) {
+    function normalizeImageLine(raw) {
+      var s = String(raw || "").trim();
+      if (!s) return "";
+
+      // Quita comillas accidentales al pegar.
+      s = s.replace(/^['"]+|['"]+$/g, "");
+
+      // Normaliza separadores tipo Windows.
+      s = s.replace(/\\/g, "/");
+
+      // Intenta decodificar URLs escapadas (%20, etc.) sin romper texto normal.
+      try {
+        s = decodeURIComponent(s);
+      } catch (err) {}
+
+      // Mantener URLs web o data/blob tal cual.
+      if (/^(https?:)?\/\//i.test(s) || /^(data:|blob:)/i.test(s)) return s;
+
+      // Si viene como /images/..., pasar a ruta relativa del proyecto.
+      if (/^\/images\//i.test(s)) return s.replace(/^\//, "");
+
+      // Si ya viene como images/..., se respeta.
+      if (/^images\//i.test(s)) return s;
+
+      // Si solo viene nombre de archivo, lo ubicamos en images/productos/.
+      if (s.indexOf("/") === -1) return "images/productos/" + s;
+
+      // Cualquier otra ruta relativa se mantiene.
+      return s;
+    }
+
+    var out = [];
+    var seen = {};
+    (text || "")
+      .split(/\r?\n/)
+      .forEach(function (line) {
+        var normalized = normalizeImageLine(line);
+        if (!normalized) return;
+        if (seen[normalized]) return;
+        seen[normalized] = true;
+        out.push(normalized);
+      });
+    return out;
+  }
+
+  function hasRepoImagePaths(rows) {
+    return rows.some(function (p) {
+      var imgs = linesToImagenes(p.imagenesText);
+      return imgs.some(function (s) {
+        return /^images\/productos\//i.test(String(s || "").trim());
+      });
+    });
+  }
+
+  function getExportRows() {
+    return products.filter(function (p) {
+      return (p.titulo || "").trim().length > 0;
+    });
+  }
+
+  function rowToJson(p) {
+    var imgs = linesToImagenes(p.imagenesText);
+    var o = {
+      titulo: (p.titulo || "").trim(),
+      categoria: (p.categoria || "").trim(),
+      subcategoria: (p.subcategoria || "").trim(),
+      marca: (p.marca || "").trim(),
+      codigo: (p.codigo || "").trim(),
+      origen: (p.origen || "").trim(),
+      descripcion: (p.descripcion || "").trim(),
+      valor: (p.valor || "").trim(),
+      url: (p.url || "").trim(),
+    };
+    if (imgs.length) {
+      o.imagenes = imgs;
+      o.imagen = imgs[0];
+    } else {
+      o.imagenes = [];
+      o.imagen = "";
+    }
+    return o;
+  }
+
+  function toJson() {
+    var out = getExportRows().map(rowToJson);
+    return JSON.stringify(out, null, 2);
+  }
+
+  document.getElementById("btn-download").addEventListener("click", function () {
+    var rows = getExportRows();
+    if (rows.length === 0) {
+      showMsg("Agrega al menos un producto con título.", false);
+      return;
+    }
+    var blob = new Blob([toJson()], { type: "application/json;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "productos.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    var msg = "Listo. Copia el archivo sobre data/productos.json.";
+    if (hasRepoImagePaths(rows)) {
+      msg += " Si usaste imágenes de tu PC, recuerda copiarlas a images/productos/.";
+    }
+    showMsg(msg, true);
+  });
+
+  document.getElementById("btn-copy").addEventListener("click", function () {
+    var rows = getExportRows();
+    if (rows.length === 0) {
+      showMsg("Agrega al menos un producto con título.", false);
+      return;
+    }
+    navigator.clipboard.writeText(toJson()).then(
+      function () {
+        var msg = "JSON copiado.";
+        if (hasRepoImagePaths(rows)) {
+          msg += " No olvides copiar las imágenes reales a images/productos/.";
+        }
+        showMsg(msg, true);
+      },
+      function () {
+        showMsg("No se pudo copiar. Usa Descargar.", false);
+      }
+    );
+  });
+
+  products.push(emptyProduct());
+  render();
+})();
+  </script>
+  <datalist id="catlist">
+    <option value="Accesorios para Vehículos"></option>
+    <option value="Repuestos Autos y Camionetas"></option>
+    <option value="Frenos"></option>
+    <option value="Motor"></option>
+    <option value="Suspensión y Dirección"></option>
+  </datalist>
+</body>
+</html>

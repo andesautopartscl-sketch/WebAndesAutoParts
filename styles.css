@@ -816,6 +816,27 @@ a {
   border-radius: var(--radius-pill);
 }
 
+.card-price {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.card-ml-meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.card-origen {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .card-desc {
   margin: 0 0 0.85rem;
   font-size: 0.9rem;
@@ -1067,7 +1088,12 @@ a {
   background: var(--cream);
 }
 
-#contacto {
+#contacto,
+#productos,
+#nosotros,
+#tips,
+#catalogo,
+#faq {
   scroll-margin-top: calc(var(--header-h) + 12px);
 }
 
@@ -1873,7 +1899,8 @@ a {
   border: 1px solid rgba(26, 43, 75, 0.08);
 }
 
-.about-card h2 {
+.about-card h2,
+.about-card h3 {
   margin: 0 0 0.5rem;
   font-size: 1.1rem;
   color: var(--navy);
@@ -1985,4 +2012,191 @@ a {
   color: var(--accent-hover);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Catálogo (productos desde JSON) */
+.section-catalog-page {
+  padding-block: clamp(2rem, 4vw, 3rem);
+}
+
+.catalog-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.catalog-search-wrap {
+  flex: 1;
+  min-width: min(100%, 240px);
+}
+
+.catalog-search-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: 1px solid rgba(26, 43, 75, 0.15);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.catalog-search-input:focus {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.catalog-filter-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 160px;
+}
+
+.catalog-filter-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.catalog-select {
+  padding: 0.6rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  border: 1px solid rgba(26, 43, 75, 0.15);
+  border-radius: var(--radius);
+  background: var(--white);
+  cursor: pointer;
+}
+
+.catalog-meta {
+  margin: 0 0 1.25rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.catalog-empty,
+.catalog-error {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+}
+
+.catalog-error {
+  color: var(--accent-muted);
+  font-weight: 600;
+}
+
+.badge-count--muted {
+  background: rgba(26, 43, 75, 0.08);
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.page-catalog .card-image-wrap img[src$="logo_andes.png"],
+#productos .card-image-wrap img[src$="logo_andes.png"] {
+  object-fit: contain;
+  padding: 1.5rem;
+  background: var(--cream-alt);
+}
+
+/* Pie: enlaces legales */
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.footer-legal a {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-legal a:hover {
+  color: var(--white);
+}
+
+.footer-legal a[aria-current="page"] {
+  color: var(--white);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-legal-sep {
+  color: rgba(255, 255, 255, 0.35);
+  user-select: none;
+}
+
+/* Páginas legales */
+.page-legal {
+  background: var(--cream);
+}
+
+.legal-section {
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+}
+
+.legal-content {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.legal-title {
+  font-size: clamp(1.5rem, 4vw, 1.85rem);
+  color: var(--navy);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.legal-updated {
+  margin: 0 0 1.75rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.legal-content h2 {
+  margin: 1.75rem 0 0.65rem;
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+
+.legal-content p {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.legal-list {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.legal-list li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-note {
+  font-size: 0.88rem !important;
+  color: var(--text-muted) !important;
+  font-style: italic;
+}
+
+.legal-back {
+  margin-top: 2rem !important;
+  margin-bottom: 0 !important;
 }
