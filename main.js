@@ -117,6 +117,55 @@
     );
   })();
 
+  (function initContactFormProductionAjax() {
+    var form = document.getElementById("contact-form-home");
+    if (!form) return;
+    var host = (window.location.hostname || "").toLowerCase();
+    var isLocal =
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "[::1]" ||
+      host === "::1";
+    if (isLocal) return;
+
+    form.addEventListener(
+      "submit",
+      function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        fd.delete("_next");
+        var submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch("https://formsubmit.co/ajax/andesautopartscl@gmail.com", {
+          method: "POST",
+          body: fd,
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json().catch(function () {
+              return {};
+            });
+          })
+          .then(function () {
+            window.location.href = new URL(
+              "gracias.html",
+              new URL(".", window.location.href)
+            ).href;
+          })
+          .catch(function () {
+            alert(
+              "No se pudo enviar el mensaje. Escríbenos por WhatsApp (+56 9 2615 2826) o a andesautopartscl@gmail.com."
+            );
+          })
+          .finally(function () {
+            if (submitBtn) submitBtn.disabled = false;
+          });
+      },
+      true
+    );
+  })();
+
   (function initCookieBanner() {
     var banner = document.getElementById("cookie-banner");
     var btn = document.getElementById("cookie-accept");
