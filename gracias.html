@@ -50,6 +50,10 @@
       <p class="section-label">Listo</p>
       <h1 class="section-title">Gracias por escribirnos</h1>
       <p class="section-desc">Recibimos tu mensaje. Te responderemos pronto en horario hábil.</p>
+      <div id="wa-followup" class="thanks-wa" hidden>
+        <p class="thanks-wa__text">Si quieres continuar por WhatsApp con el mismo texto, pulsa:</p>
+        <a id="wa-open-link" href="https://wa.me/56926152826" class="btn btn-wa btn-lg" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+      </div>
       <a href="index.html" class="btn btn-primary btn-lg">Volver al inicio</a>
     </div>
   </main>
@@ -113,6 +117,21 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get("wa") !== "1") return;
+        var u = sessionStorage.getItem("andes_wa_url");
+        if (!u) return;
+        sessionStorage.removeItem("andes_wa_url");
+        var box = document.getElementById("wa-followup");
+        var link = document.getElementById("wa-open-link");
+        if (link) link.href = u;
+        if (box) box.removeAttribute("hidden");
+      } catch (e) {}
+    })();
+  </script>
   <script src="main.js"></script>
 </body>
 </html>

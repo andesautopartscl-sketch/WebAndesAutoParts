@@ -65,15 +65,22 @@
         var nombre = String(fd.get("nombre") || "").trim();
         var email = String(fd.get("email") || "").trim();
         var telefono = String(fd.get("telefono") || "").trim();
+        var patente = String(fd.get("patente") || "").trim();
+        var chasis = String(fd.get("chasis") || "").trim();
         var mensaje = String(fd.get("mensaje") || "").trim();
         var body =
+          "Nuevo mensaje (prueba local)\n\n" +
           "Nombre: " +
           nombre +
-          "\nEmail: " +
+          "\nCorreo: " +
           email +
           "\nTeléfono: " +
-          telefono +
-          "\n\nMensaje:\n" +
+          (telefono || "—") +
+          "\nPatente: " +
+          (patente || "—") +
+          "\nChasis: " +
+          (chasis || "—") +
+          "\n\nConsulta:\n" +
           mensaje;
         var subject = encodeURIComponent("Mensaje web — Andes Auto Parts (prueba local)");
         var mailto =
@@ -110,6 +117,8 @@
         var nombre = String(fd.get("nombre") || "").trim();
         var email = String(fd.get("email") || "").trim();
         var telefono = String(fd.get("telefono") || "").trim();
+        var patente = String(fd.get("patente") || "").trim();
+        var chasis = String(fd.get("chasis") || "").trim();
         var mensaje = String(fd.get("mensaje") || "").trim();
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
@@ -122,16 +131,45 @@
         var wa = String(cfg.whatsappNumber || "56926152826").replace(/\D/g, "");
 
         function buildWhatsAppText() {
+          var lines = [
+            "Hola Andes Auto Parts,",
+            "",
+            "Nombre: " + nombre,
+            "Correo: " + email,
+            "Teléfono: " + (telefono || "—"),
+          ];
+          if (patente) lines.push("Patente: " + patente);
+          if (chasis) lines.push("Chasis: " + chasis);
+          lines.push("", "Consulta:", mensaje);
+          return lines.join("\n");
+        }
+
+        function buildSellerEmailBody() {
+          var t = telefono || "(no indicado)";
+          var p = patente || "(no indicada)";
+          var c = chasis || "(no indicado)";
+          var m = mensaje || "(sin texto)";
           return (
-            "Hola Andes Auto Parts,\n\n" +
+            "Nuevo contacto desde la web — Andes Auto Parts\n\n" +
+            "DATOS DEL CLIENTE\n" +
+            "────────────────\n" +
             "Nombre: " +
             nombre +
-            "\nEmail: " +
+            "\nCorreo: " +
             email +
             "\nTeléfono: " +
-            telefono +
-            "\n\nMensaje:\n" +
-            mensaje
+            t +
+            "\nPatente: " +
+            p +
+            "\nN° de chasis: " +
+            c +
+            "\n\n" +
+            "CONSULTA\n" +
+            "────────\n" +
+            m +
+            "\n\n" +
+            "—\n" +
+            "Podés responder a este correo para contestar al cliente (según tu cliente de correo)."
           );
         }
 
@@ -144,21 +182,16 @@
           );
         }
 
-        function openWhatsAppNewTab() {
-          window.open(whatsAppUrl(), "_blank", "noopener,noreferrer");
-        }
-
-        function openWhatsAppThenGracias() {
-          var w = window.open(whatsAppUrl(), "_blank", "noopener,noreferrer");
-          if (!w) {
-            window.location.href = url;
-          } else {
-            window.location.href = graciasPageUrl();
-          }
+        function goGraciasConWhatsApp() {
+          try {
+            sessionStorage.setItem("andes_wa_url", whatsAppUrl());
+          } catch (err) {}
+          var base = graciasPageUrl().split("#")[0];
+          window.location.href =
+            base.indexOf("?") >= 0 ? base + "&wa=1" : base + "?wa=1";
         }
 
         if (key) {
-          var waPopup = window.open("about:blank", "_blank", "noopener,noreferrer");
           fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
@@ -167,11 +200,14 @@
             },
             body: JSON.stringify({
               access_key: key,
-              subject: "Mensaje web — Andes Auto Parts",
+              subject: "Nuevo contacto web — Andes Auto Parts",
+              from_name: nombre,
               name: nombre,
               email: email,
-              message:
-                "Teléfono: " + telefono + "\n\n" + mensaje,
+              phone: telefono,
+              patente: patente,
+              chasis: chasis,
+              message: buildSellerEmailBody(),
             }),
           })
             .then(function (res) {
@@ -187,32 +223,17 @@
               );
             })
             .then(function () {
-              var url = whatsAppUrl();
-              if (waPopup && !waPopup.closed) {
-                try {
-                  waPopup.location.href = url;
-                } catch (err) {
-                  openWhatsAppNewTab();
-                }
-              } else {
-                openWhatsAppNewTab();
-              }
-              window.location.href = graciasPageUrl();
+              goGraciasConWhatsApp();
             })
             .catch(function () {
-              if (waPopup && !waPopup.closed) {
-                try {
-                  waPopup.close();
-                } catch (err) {}
-              }
-              openWhatsAppThenGracias();
+              goGraciasConWhatsApp();
             })
             .finally(function () {
               if (submitBtn) submitBtn.disabled = false;
             });
         } else {
           try {
-            openWhatsAppThenGracias();
+            goGraciasConWhatsApp();
           } finally {
             if (submitBtn) submitBtn.disabled = false;
           }

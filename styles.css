@@ -1942,6 +1942,25 @@ a {
   margin-top: 1.25rem;
 }
 
+.thanks-wa {
+  margin: 1.5rem auto 0;
+  max-width: 420px;
+  padding: 1.25rem 1rem;
+  border-radius: var(--radius);
+  background: var(--cream);
+  border: 1px solid rgba(26, 43, 75, 0.1);
+}
+
+.thanks-wa__text {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.thanks-inner .thanks-wa .btn {
+  margin-top: 0;
+}
+
 /* Tips / noticias */
 .page-tips .section {
   padding-block: clamp(2rem, 5vw, 3.5rem);
