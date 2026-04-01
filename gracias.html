@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260401" />
+  <link rel="stylesheet" href="styles.css?v=20260402" />
 </head>
 <body class="page-contact">
   <header class="site-header" id="top">
@@ -122,24 +122,45 @@
       try {
         var params = new URLSearchParams(window.location.search);
         if (params.get("wa") !== "1") return;
-        var u = params.get("u") || "";
-        if (!u) {
+
+        var u = "";
+        var hash = window.location.hash || "";
+        if (hash.indexOf("#u=") === 0) {
           try {
-            u = sessionStorage.getItem("andes_wa_url") || localStorage.getItem("andes_wa_url") || "";
+            u = decodeURIComponent(hash.slice(3));
           } catch (e) {}
         }
-        if (!u) return;
+        if (!u) u = params.get("u") || "";
+        if (!u) {
+          try {
+            u =
+              sessionStorage.getItem("andes_wa_url") ||
+              localStorage.getItem("andes_wa_url") ||
+              "";
+          } catch (e) {}
+        }
+
+        var fallback = "https://wa.me/56926152826";
+        if (!u || u.indexOf("https://wa.me/") !== 0) u = fallback;
+
         try {
           sessionStorage.removeItem("andes_wa_url");
           localStorage.removeItem("andes_wa_url");
         } catch (e) {}
+
         var box = document.getElementById("wa-followup");
         var link = document.getElementById("wa-open-link");
-        if (link) link.href = u;
+        if (link) {
+          link.href = u;
+          link.addEventListener("click", function (ev) {
+            ev.preventDefault();
+            window.location.assign(u);
+          });
+        }
         if (box) box.removeAttribute("hidden");
       } catch (e) {}
     })();
   </script>
-  <script src="main.js?v=20260401"></script>
+  <script src="main.js?v=20260402"></script>
 </body>
 </html>

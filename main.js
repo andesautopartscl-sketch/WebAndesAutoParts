@@ -188,13 +188,10 @@
             sessionStorage.setItem("andes_wa_url", u);
             localStorage.setItem("andes_wa_url", u);
           } catch (err) {}
-          var base = graciasPageUrl().split("#")[0];
+          var base = graciasPageUrl().split("#")[0].split("?")[0];
           var sep = base.indexOf("?") >= 0 ? "&" : "?";
-          var href = base + sep + "wa=1";
-          if (u.length <= 1600) {
-            href += "&u=" + encodeURIComponent(u);
-          }
-          window.location.href = href;
+          window.location.href =
+            base + sep + "wa=1#u=" + encodeURIComponent(u);
         }
 
         if (key) {
