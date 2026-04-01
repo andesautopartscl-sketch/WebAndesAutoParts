@@ -49,6 +49,74 @@
   bindContactForm(document.getElementById("contact-form"));
   bindContactForm(document.getElementById("contact-form-home"));
 
+  (function initFormSubmitNext() {
+    var form = document.getElementById("contact-form-home");
+    if (!form) return;
+    var next = form.querySelector('input[name="_next"]');
+    if (!next) return;
+    var proto = window.location.protocol;
+    if (proto === "http:" || proto === "https:") {
+      try {
+        next.value = new URL(
+          "gracias.html",
+          new URL(".", window.location.href)
+        ).href;
+      } catch (err) {
+        next.value =
+          window.location.origin.replace(/\/$/, "") + "/gracias.html";
+      }
+    }
+  })();
+
+  (function initContactFormLocalDev() {
+    var form = document.getElementById("contact-form-home");
+    if (!form) return;
+    var action = (form.getAttribute("action") || "").trim();
+    if (action.indexOf("formsubmit.co") === -1) return;
+
+    var host = (window.location.hostname || "").toLowerCase();
+    var isLocal =
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "[::1]" ||
+      host === "::1";
+
+    if (!isLocal) return;
+
+    form.addEventListener(
+      "submit",
+      function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        var nombre = String(fd.get("nombre") || "").trim();
+        var email = String(fd.get("email") || "").trim();
+        var telefono = String(fd.get("telefono") || "").trim();
+        var mensaje = String(fd.get("mensaje") || "").trim();
+        var body =
+          "Nombre: " +
+          nombre +
+          "\nEmail: " +
+          email +
+          "\nTeléfono: " +
+          telefono +
+          "\n\nMensaje:\n" +
+          mensaje;
+        var subject = encodeURIComponent("Mensaje web — Andes Auto Parts (prueba local)");
+        var mailto =
+          "mailto:andesautopartscl@gmail.com?subject=" +
+          subject +
+          "&body=" +
+          encodeURIComponent(body);
+        alert(
+          "Modo local: al aceptar, se abrirá tu correo con el mensaje listo.\n\n" +
+            "Así evitamos el error de red con servicios externos. En GitHub Pages el envío es directo con FormSubmit."
+        );
+        window.location.href = mailto;
+      },
+      true
+    );
+  })();
+
   (function initCookieBanner() {
     var banner = document.getElementById("cookie-banner");
     var btn = document.getElementById("cookie-accept");
