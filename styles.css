@@ -489,15 +489,94 @@ a {
   border-radius: 50%;
 }
 
+.hero-title-wrap {
+  position: relative;
+  margin: 0 auto 1.2rem;
+  width: 100%;
+  max-width: min(38rem, 100%);
+}
+
+.hero-title-wrap::before {
+  content: "";
+  display: block;
+  width: 3.25rem;
+  height: 4px;
+  margin: 0 auto 1rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--accent) 0%, #ff8a95 50%, rgba(255, 255, 255, 0.35) 100%);
+  box-shadow: 0 0 24px rgba(230, 57, 70, 0.55);
+}
+
 .hero-title {
-  margin: 0 0 1.1rem;
-  font-size: clamp(2.1rem, 5.2vw, 3.15rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-family: var(--font);
   font-weight: 800;
-  line-height: 1.12;
-  color: var(--white);
-  letter-spacing: -0.03em;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   text-wrap: balance;
-  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 2px 32px rgba(0, 0, 0, 0.4);
+}
+
+.hero-title__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.4rem 0.55rem;
+}
+
+.hero-title__row--top {
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+}
+
+.hero-title__row--bottom {
+  font-size: clamp(1.95rem, 5vw, 3.05rem);
+}
+
+.hero-title__word {
+  color: var(--white);
+  font-weight: 800;
+}
+
+.hero-title__muted {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 600;
+  font-size: 0.88em;
+  letter-spacing: -0.02em;
+}
+
+.hero-title__pill {
+  display: inline-block;
+  padding: 0.1em 0.5em 0.14em;
+  border-radius: 0.45em;
+  color: var(--white);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(145deg, #e85d68 0%, var(--accent) 38%, var(--accent-hover) 100%);
+  box-shadow:
+    0 4px 18px rgba(230, 57, 70, 0.45),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.12) inset;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.hero-title__pill--lg {
+  padding: 0.12em 0.52em 0.16em;
+  font-size: 1.06em;
+  box-shadow:
+    0 6px 20px rgba(230, 57, 70, 0.5),
+    0 2px 0 rgba(255, 255, 255, 0.14) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-wrap::before {
+    box-shadow: none;
+  }
 }
 
 .text-accent {
