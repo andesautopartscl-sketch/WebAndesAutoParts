@@ -561,28 +561,17 @@ a {
   opacity: 0.95;
 }
 
-.hero-title__pill {
-  display: inline-block;
-  padding: 0.1em 0.5em 0.14em;
-  border-radius: 0.45em;
-  color: var(--white);
+.hero-title__accent {
+  color: var(--accent);
   font-weight: 800;
   letter-spacing: -0.04em;
-  background: linear-gradient(145deg, #e85d68 0%, var(--accent) 38%, var(--accent-hover) 100%);
-  box-shadow:
-    0 4px 18px rgba(230, 57, 70, 0.45),
-    0 2px 0 rgba(255, 255, 255, 0.12) inset,
-    0 -1px 0 rgba(0, 0, 0, 0.12) inset;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.2),
+    0 0 28px rgba(230, 57, 70, 0.35);
 }
 
-.hero-title__pill--lg {
-  padding: 0.12em 0.52em 0.16em;
+.hero-title__accent--lg {
   font-size: 1.06em;
-  box-shadow:
-    0 6px 20px rgba(230, 57, 70, 0.5),
-    0 2px 0 rgba(255, 255, 255, 0.14) inset,
-    0 -1px 0 rgba(0, 0, 0, 0.15) inset;
 }
 
 @media (prefers-reduced-motion: reduce) {
