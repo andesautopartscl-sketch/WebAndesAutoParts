@@ -502,65 +502,15 @@ a {
   max-width: 100%;
 }
 
-.hero-title__head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  max-width: 100%;
-}
-
-.hero-title__head::before {
+.hero-title-wrap::before {
   content: "";
   display: block;
   width: 3.25rem;
   height: 4px;
-  margin: 0 auto 0;
+  margin: 0 auto 1rem;
   border-radius: var(--radius-pill);
   background: linear-gradient(90deg, var(--accent) 0%, #ff8a95 50%, rgba(255, 255, 255, 0.35) 100%);
   box-shadow: 0 0 24px rgba(230, 57, 70, 0.55);
-  order: -1;
-}
-
-@media (min-width: 640px) {
-  .hero-title__head {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: clamp(1rem, 3vw, 1.75rem);
-  }
-
-  .hero-title__head::before {
-    flex: 0 0 100%;
-    order: 0;
-    margin-bottom: 0.35rem;
-  }
-
-  .hero-title__logo {
-    order: 1;
-  }
-
-  .hero-title__head .hero-title {
-    order: 2;
-    flex: 1 1 min(100%, 28rem);
-    min-width: min(100%, 16rem);
-  }
-}
-
-.hero-title__logo {
-  width: clamp(52px, 5vw, 72px);
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: contain;
-  border-radius: 18px;
-  padding: 0.45rem;
-  background: linear-gradient(160deg, #ffffff 0%, #f1f5f9 100%);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.38),
-    0 0 0 1px rgba(255, 255, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  flex-shrink: 0;
 }
 
 .hero-title {
@@ -598,32 +548,6 @@ a {
   font-weight: 800;
 }
 
-.hero-title__word--brand {
-  color: var(--white);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  text-shadow:
-    0 2px 1px rgba(0, 0, 0, 0.25),
-    0 0 28px rgba(255, 255, 255, 0.18);
-}
-
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .hero-title__word--brand {
-    background: linear-gradient(
-      168deg,
-      #ffffff 0%,
-      #e8eef8 38%,
-      #ffffff 52%,
-      #d4dce8 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: none;
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
-  }
-}
-
 .hero-title__muted {
   color: rgba(255, 255, 255, 0.88);
   font-weight: 600;
@@ -656,7 +580,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-title__head::before {
+  .hero-title-wrap::before {
     box-shadow: none;
   }
 }
