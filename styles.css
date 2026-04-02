@@ -18,6 +18,7 @@
   --radius: 14px;
   --radius-pill: 999px;
   --font: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-hero: "Syne", "Plus Jakarta Sans", system-ui, sans-serif;
   --header-h: 72px;
   --mobile-bar-h: 52px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -519,12 +520,15 @@ a {
   align-items: center;
   gap: 0.55rem;
   margin: 0;
-  font-family: var(--font);
+  font-family: var(--font-hero);
   font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   text-wrap: balance;
   text-shadow: 0 2px 32px rgba(0, 0, 0, 0.4);
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .hero-title__row {
@@ -536,23 +540,25 @@ a {
 }
 
 .hero-title__row--top {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
+  font-size: clamp(1.7rem, 4.1vw, 2.45rem);
 }
 
 .hero-title__row--bottom {
-  font-size: clamp(1.95rem, 5vw, 3.05rem);
+  font-size: clamp(2rem, 5.1vw, 3.15rem);
 }
 
 .hero-title__word {
   color: var(--white);
   font-weight: 800;
+  letter-spacing: -0.05em;
 }
 
 .hero-title__muted {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
-  font-size: 0.88em;
-  letter-spacing: -0.02em;
+  font-size: 0.86em;
+  letter-spacing: -0.03em;
+  opacity: 0.95;
 }
 
 .hero-title__pill {
@@ -561,7 +567,7 @@ a {
   border-radius: 0.45em;
   color: var(--white);
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   background: linear-gradient(145deg, #e85d68 0%, var(--accent) 38%, var(--accent-hover) 100%);
   box-shadow:
     0 4px 18px rgba(230, 57, 70, 0.45),
