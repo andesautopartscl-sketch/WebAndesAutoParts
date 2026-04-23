@@ -324,7 +324,6 @@
       window.location.hostname === "127.0.0.1";
 
     function withCacheBust(url) {
-      if (!isLocalHost) return url;
       var sep = url.indexOf("?") === -1 ? "?" : "&";
       return url + sep + "v=" + Date.now();
     }
@@ -561,7 +560,8 @@
     }
 
     fetch(withCacheBust("data/productos.json"), {
-      cache: isLocalHost ? "no-store" : "default",
+      // Prevent stale CDN/browser cache from showing outdated product lists.
+      cache: "no-store",
     })
       .then(function (res) {
         if (!res.ok) throw new Error("No se pudo cargar el catálogo.");
