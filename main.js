@@ -572,13 +572,18 @@
         allProducts = data;
         fillCategories(allProducts);
         var params = parseParams();
-        if (searchInput && params.q) searchInput.value = params.q;
+        if (searchInput) {
+          // Avoid stale browser-restored filters hiding products on first load.
+          searchInput.value = params.q || "";
+        }
         if (catSelect && params.cat) {
           var wanted = params.cat;
           var found = Array.prototype.slice.call(catSelect.options).find(function (o) {
             return norm(o.value) === norm(wanted);
           });
           if (found) catSelect.value = found.value;
+        } else if (catSelect) {
+          catSelect.value = "";
         }
         render(allProducts);
         var heroQ = document.getElementById("q");
