@@ -467,6 +467,9 @@
     };
 
     var activeVehicleSearch = null;
+    var BRAND_LOGO_QUICK = {
+      Haval: { label: "Haval", keywords: ["haval"] },
+    };
     var allProducts = [];
     var PLACEHOLDER_IMG = "logo_andes.png";
     var PAGE_SIZE = 12;
@@ -719,6 +722,54 @@
       scrollToCatalogTop();
     }
 
+    function applyBrandLogoFilter(brandKey) {
+      if (!brandKey) return;
+      if (vehicleTextInput) vehicleTextInput.value = "";
+      if (vehicleModelSelect) vehicleModelSelect.value = "";
+      if (vehicleYearSelect) vehicleYearSelect.value = "";
+      if (searchInput) searchInput.value = "";
+      if (catSelect) catSelect.value = "";
+
+      if (VEHICLE_BRANDS[brandKey]) {
+        if (vehicleBrandSelect) vehicleBrandSelect.value = brandKey;
+        populateVehicleModels(brandKey);
+        activeVehicleSearch = buildVehicleFilterFromForm();
+      } else if (BRAND_LOGO_QUICK[brandKey]) {
+        if (vehicleBrandSelect) vehicleBrandSelect.value = "";
+        populateVehicleModels("");
+        var quick = BRAND_LOGO_QUICK[brandKey];
+        activeVehicleSearch = {
+          label: quick.label,
+          keywords: dedupeKeywords(quick.keywords),
+          year: "",
+        };
+      } else {
+        return;
+      }
+
+      syncVehicleUrl();
+      render(allProducts, { resetPage: true });
+      scrollToCatalogTop();
+    }
+
+    function initBrandLogoGrid() {
+      var grid = document.getElementById("brand-logo-grid");
+      if (!grid) return;
+
+      grid.querySelectorAll(".brand-logo-card__img").forEach(function (img) {
+        img.addEventListener("error", function () {
+          var card = img.closest(".brand-logo-card");
+          if (card) card.classList.add("brand-logo-card--no-img");
+        });
+      });
+
+      grid.addEventListener("click", function (e) {
+        var card = e.target.closest("[data-brand]");
+        if (!card) return;
+        applyBrandLogoFilter(card.getAttribute("data-brand"));
+      });
+    }
+
     function initVehicleSearchUi() {
       populateVehicleBrandOptions();
       populateVehicleYears();
@@ -741,6 +792,9 @@
         });
       }
     }
+
+    initVehicleSearchUi();
+    initBrandLogoGrid();
 
     function applyVehicleParamsFromUrl(params) {
       if (!params) return false;
@@ -1153,7 +1207,6 @@
         if (!Array.isArray(data)) throw new Error("Formato inválido.");
         allProducts = data;
         fillCategories(allProducts);
-        initVehicleSearchUi();
         var params = parseParams();
         var hasVehicleSearch = applyVehicleParamsFromUrl(params);
         if (searchInput) {

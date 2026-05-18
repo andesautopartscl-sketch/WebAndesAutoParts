@@ -746,43 +746,116 @@ a.btn-ml:visited {
   border-bottom: 1px solid rgba(26, 43, 75, 0.06);
 }
 
-.brand-pills {
-  display: flex;
-  flex-wrap: wrap;
+.brand-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 130px);
   justify-content: center;
-  gap: 0.5rem 0.65rem;
-  max-width: 800px;
+  gap: 16px;
+  max-width: 100%;
   margin: 0 auto 1.25rem;
 }
 
-.brand-pill {
-  display: inline-block;
-  padding: 0.4rem 0.85rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--navy);
+.brand-logo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 130px;
+  min-height: 110px;
+  padding: 0.85rem 0.65rem 0.7rem;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
   background: var(--white);
-  border: 1px solid rgba(26, 43, 75, 0.1);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(26, 43, 75, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(26, 43, 75, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.specialty-note {
+.brand-logo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(26, 43, 75, 0.14);
+}
+
+.brand-logo-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.brand-logo-card__img-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60px;
+  margin-bottom: 0.45rem;
+}
+
+.brand-logo-card__img {
+  display: block;
+  max-width: 100%;
+  height: 60px;
+  object-fit: contain;
+}
+
+.brand-logo-card--no-img .brand-logo-card__img {
+  display: none;
+}
+
+.brand-logo-card--no-img .brand-logo-card__img-wrap::after {
+  content: attr(data-fallback-name);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.brand-logo-card__name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #6b7280;
+}
+
+.brand-logo-foot {
   margin: 0;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
 }
 
-.specialty-note a {
+.brand-logo-foot a {
   font-weight: 600;
   color: var(--navy);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.specialty-note a:hover {
+.brand-logo-foot a:hover {
   color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .brand-logo-grid {
+    grid-template-columns: repeat(3, 130px);
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-logo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-inline: 0.25rem;
+  }
+
+  .brand-logo-card {
+    width: 100%;
+    max-width: 160px;
+    margin-inline: auto;
+  }
 }
 
 /* Buscador por marca / modelo / año */
