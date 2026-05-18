@@ -1,0 +1,4 @@
+ML_ACCESS_TOKEN=APP_USR-reemplazar
+ML_CLIENT_SECRET=reemplazar
+GITHUB_TOKEN=ghp_reemplazar
+WORKER_SYNC_SECRET=elige-una-clave-larga-aleatoria

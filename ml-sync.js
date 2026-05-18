@@ -4,7 +4,9 @@
  * Uso: node ml-sync.js  |  npm run sync-ml
  *
  * Primera vez: define ML_AUTH_CODE en .env (código OAuth de un solo uso).
- * Siguientes ejecuciones: usa ML_REFRESH_TOKEN guardado en .env.
+ * Siguientes ejecuciones: usa ML_REFRESH_TOKEN (renueva el access_token).
+ * Si solo tienes ML_ACCESS_TOKEN válido, se usa para sincronizar; el refresh_token
+ * solo se obtiene al intercambiar ML_AUTH_CODE en POST /oauth/token (no viene en /users/me).
  */
 
 const fs = require("fs");
@@ -36,6 +38,20 @@ function loadEnvFile(filePath) {
 }
 
 function saveEnvFile(filePath, vars) {
+  loadEnvFile(filePath);
+  const merged = {
+    ML_CLIENT_ID: vars.ML_CLIENT_ID || process.env.ML_CLIENT_ID,
+    ML_CLIENT_SECRET: vars.ML_CLIENT_SECRET || process.env.ML_CLIENT_SECRET,
+    ML_REDIRECT_URI: vars.ML_REDIRECT_URI || process.env.ML_REDIRECT_URI,
+    ML_ACCESS_TOKEN: vars.ML_ACCESS_TOKEN || process.env.ML_ACCESS_TOKEN,
+    ML_REFRESH_TOKEN: vars.ML_REFRESH_TOKEN || process.env.ML_REFRESH_TOKEN,
+  };
+  if (vars.clearAuthCode) {
+    delete merged.ML_AUTH_CODE;
+  } else if (vars.ML_AUTH_CODE) {
+    merged.ML_AUTH_CODE = vars.ML_AUTH_CODE;
+  }
+
   const keys = [
     "ML_CLIENT_ID",
     "ML_CLIENT_SECRET",
@@ -46,16 +62,27 @@ function saveEnvFile(filePath, vars) {
   ];
   const lines = [
     "# Credenciales Mercado Libre — no subir a GitHub",
-    "# Obtén ML_AUTH_CODE una sola vez tras autorizar la app en developers.mercadolibre.com",
+    "# ML_REFRESH_TOKEN: se obtiene solo al intercambiar ML_AUTH_CODE en POST /oauth/token",
     "",
   ];
   for (const key of keys) {
-    if (vars[key] != null && String(vars[key]).trim() !== "") {
-      lines.push(`${key}=${vars[key]}`);
+    if (merged[key] != null && String(merged[key]).trim() !== "") {
+      lines.push(`${key}=${merged[key]}`);
     }
   }
   lines.push("");
   fs.writeFileSync(filePath, lines.join("\n"), "utf8");
+}
+
+function authUrl(clientId, redirectUri, site = "cl") {
+  const host = site === "cl" ? "auth.mercadolibre.cl" : "auth.mercadolibre.com.ar";
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    scope: "offline_access read write",
+  });
+  return `https://${host}/authorization?${params}`;
 }
 
 async function apiRequest(url, options = {}) {
@@ -104,7 +131,15 @@ async function refreshAccessToken({ clientId, clientSecret, refreshToken }) {
   });
 }
 
-async function getAccessToken(env) {
+async function validateAccessToken(accessToken) {
+  const me = await apiRequest(`${API}/users/me`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!me.id) throw new Error("ML_ACCESS_TOKEN inválido o expirado");
+  return me;
+}
+
+async function resolveTokens(env) {
   const clientId = env.ML_CLIENT_ID;
   const clientSecret = env.ML_CLIENT_SECRET;
   const redirectUri = env.ML_REDIRECT_URI;
@@ -120,9 +155,15 @@ async function getAccessToken(env) {
       clientSecret,
       refreshToken: env.ML_REFRESH_TOKEN,
     });
+    if (!tokens.refresh_token) {
+      console.warn(
+        "La API no devolvió refresh_token; se conserva el anterior en .env."
+      );
+    }
     return {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token || env.ML_REFRESH_TOKEN,
+      usedAuthCode: false,
     };
   }
 
@@ -137,14 +178,43 @@ async function getAccessToken(env) {
       code: env.ML_AUTH_CODE,
       redirectUri,
     });
+    if (!tokens.refresh_token) {
+      console.warn(
+        "Respuesta OAuth sin refresh_token. scope recibido:",
+        tokens.scope || "(vacío)"
+      );
+      console.warn(
+        "Para obtener refresh_token, autoriza con scope offline_access (ver URL al final del script)."
+      );
+    }
+    if (!tokens.access_token) {
+      throw new Error("Mercado Libre no devolvió access_token.");
+    }
     return {
       access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
+      refresh_token: tokens.refresh_token || null,
+      usedAuthCode: true,
+    };
+  }
+
+  if (env.ML_ACCESS_TOKEN) {
+    console.log("Validando ML_ACCESS_TOKEN con /users/me…");
+    const me = await validateAccessToken(env.ML_ACCESS_TOKEN);
+    console.log(
+      `Token válido para vendedor ${me.id} (${me.nickname || ""}).`
+    );
+    console.log(
+      "Nota: /users/me no incluye refresh_token. Para GitHub Actions necesitas un nuevo ML_AUTH_CODE."
+    );
+    return {
+      access_token: env.ML_ACCESS_TOKEN,
+      refresh_token: env.ML_REFRESH_TOKEN || null,
+      usedAuthCode: false,
     };
   }
 
   throw new Error(
-    "Define ML_REFRESH_TOKEN o ML_AUTH_CODE en .env para autenticar con Mercado Libre"
+    "Define ML_REFRESH_TOKEN, ML_AUTH_CODE o ML_ACCESS_TOKEN en .env"
   );
 }
 
@@ -259,7 +329,7 @@ async function main() {
   loadEnvFile(ENV_PATH);
   const env = { ...process.env };
 
-  const tokens = await getAccessToken(env);
+  const tokens = await resolveTokens(env);
   const accessToken = tokens.access_token;
   const refreshToken = tokens.refresh_token;
 
@@ -287,8 +357,23 @@ async function main() {
     ML_REDIRECT_URI: env.ML_REDIRECT_URI,
     ML_ACCESS_TOKEN: accessToken,
     ML_REFRESH_TOKEN: refreshToken,
+    clearAuthCode: tokens.usedAuthCode,
   });
-  console.log("Tokens actualizados en .env (ML_AUTH_CODE ya no es necesario).");
+
+  if (refreshToken) {
+    console.log("Tokens actualizados en .env (incluye ML_REFRESH_TOKEN).");
+  } else {
+    console.log("ML_ACCESS_TOKEN actualizado en .env.");
+    console.log(
+      "Falta ML_REFRESH_TOKEN. Genera uno nuevo autorizando la app y agrega ML_AUTH_CODE al .env:"
+    );
+    if (env.ML_CLIENT_ID && env.ML_REDIRECT_URI) {
+      console.log(authUrl(env.ML_CLIENT_ID, env.ML_REDIRECT_URI, "cl"));
+    }
+    console.log(
+      "Luego ejecuta npm run sync-ml de nuevo para intercambiar el código."
+    );
+  }
 }
 
 main().catch((err) => {

@@ -1,0 +1,12 @@
+{
+  "name": "andes-autoparts-ml-sync-worker",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "kv:create": "wrangler kv namespace create TOKEN_KV && wrangler kv namespace create TOKEN_KV --preview"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.0"
+  }
+}

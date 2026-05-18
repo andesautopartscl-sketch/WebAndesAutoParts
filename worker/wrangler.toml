@@ -1,0 +1,27 @@
+name = "andes-autoparts-ml-sync"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# Variables públicas (no sensibles)
+[vars]
+ML_CLIENT_ID = "2004412570250603"
+ML_REDIRECT_URI = "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/"
+GITHUB_OWNER = "andesautopartscl-sketch"
+GITHUB_REPO = "WebAndesAutoParts"
+GITHUB_BRANCH = "main"
+GITHUB_FILE_PATH = "data/productos.json"
+
+# KV para ML_ACCESS_TOKEN (permite POST /update-token en runtime)
+# Tras crear el namespace, reemplaza id y preview_id:
+#   npx wrangler kv namespace create TOKEN_KV
+#   npx wrangler kv namespace create TOKEN_KV --preview
+[[kv_namespaces]]
+binding = "TOKEN_KV"
+id = "36d3f5ea6b074512a4906890f596b3ac"
+preview_id = "0c60c3b6712f4df6b699e3f15fd2bcdf"
+
+# Secrets (configurar con wrangler secret put o renew-token.sh):
+#   ML_ACCESS_TOKEN      — token OAuth de Mercado Libre
+#   ML_CLIENT_SECRET     — secreto de la app ML
+#   GITHUB_TOKEN         — Personal Access Token (repo contents: write)
+#   WORKER_SYNC_SECRET   — clave para proteger /sync y /update-token

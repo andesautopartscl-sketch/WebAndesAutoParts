@@ -2,53 +2,49 @@ name: Sincronizar catálogo Mercado Libre
 
 on:
   schedule:
-    # 08:00 hora de Chile (aprox. UTC-3) → 11:00 UTC
+    # 08:00 hora de Chile (UTC-3 aprox.) → 11:00 UTC
     - cron: "0 11 * * *"
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Crear .env desde secretos
+      - name: Sincronizar vía Cloudflare Worker
+        env:
+          WORKER_URL: ${{ secrets.WORKER_SYNC_URL }}
+          WORKER_SECRET: ${{ secrets.WORKER_SYNC_SECRET }}
         run: |
-          cat > .env << EOF
-          ML_CLIENT_ID=${{ secrets.ML_CLIENT_ID }}
-          ML_CLIENT_SECRET=${{ secrets.ML_CLIENT_SECRET }}
-          ML_REDIRECT_URI=${{ secrets.ML_REDIRECT_URI }}
-          ML_REFRESH_TOKEN=${{ secrets.ML_REFRESH_TOKEN }}
-          EOF
-
-      - name: Sincronizar publicaciones
-        run: npm run sync-ml
-
-      - name: Guardar refresh_token actualizado
-        if: success()
-        run: |
-          RT=$(grep '^ML_REFRESH_TOKEN=' .env | cut -d= -f2-)
-          if [ -n "$RT" ]; then
-            echo "::notice::Si ML_REFRESH_TOKEN cambió, actualiza el secreto en GitHub."
+          set -euo pipefail
+          if [ -z "${WORKER_URL:-}" ]; then
+            echo "::error::Falta el secreto WORKER_SYNC_URL en GitHub (URL del Worker, ej. https://andes-autoparts-ml-sync.xxx.workers.dev)"
+            exit 1
           fi
-
-      - name: Commit y push de productos.json
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/productos.json
-          if git diff --staged --quiet; then
-            echo "Sin cambios en el catálogo."
-          else
-            git commit -m "chore: actualizar catálogo desde Mercado Libre"
-            git push
+          if [ -z "${WORKER_SECRET:-}" ]; then
+            echo "::error::Falta el secreto WORKER_SYNC_SECRET en GitHub"
+            exit 1
           fi
+          BASE="${WORKER_URL%/}"
+          echo "Llamando a ${BASE}/sync ..."
+          HTTP_CODE=$(curl -sS -o /tmp/sync-response.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${WORKER_SECRET}" \
+            "${BASE}/sync")
+          cat /tmp/sync-response.json
+          echo ""
+          if [ "$HTTP_CODE" = "401" ]; then
+            ERROR=$(node -pe "try{JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).error}catch(e){''}" 2>/dev/null || true)
+            if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
+              echo "::error::Token ML expirado - renovar manualmente. Ejecuta renew-token.sh en tu PC."
+              exit 1
+            fi
+          fi
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Sync falló con HTTP ${HTTP_CODE}"
+            exit 1
+          fi
+          OK=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).ok" 2>/dev/null || echo false)
+          if [ "$OK" != "true" ]; then
+            echo "::error::El Worker respondió ok=false"
+            exit 1
+          fi
+          echo "::notice::Catálogo sincronizado correctamente"
