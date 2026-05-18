@@ -753,17 +753,17 @@
     }
 
     function initBrandLogoGrid() {
-      var grid = document.getElementById("brand-logo-grid");
-      if (!grid) return;
+      var carousel = document.getElementById("brand-carousel");
+      if (!carousel) return;
 
-      grid.querySelectorAll(".brand-logo-card__img").forEach(function (img) {
+      carousel.querySelectorAll(".brand-logo-card__img").forEach(function (img) {
         img.addEventListener("error", function () {
           var card = img.closest(".brand-logo-card");
           if (card) card.classList.add("brand-logo-card--no-img");
         });
       });
 
-      grid.addEventListener("click", function (e) {
+      carousel.addEventListener("click", function (e) {
         var card = e.target.closest("[data-brand]");
         if (!card) return;
         applyBrandLogoFilter(card.getAttribute("data-brand"));

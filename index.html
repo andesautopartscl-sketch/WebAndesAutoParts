@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260523" />
+  <link rel="stylesheet" href="styles.css?v=20260524" />
   <!-- Coordenadas en JSON-LD: si el pin en Google Maps / Business difiere, actualiza latitude/longitude aquí -->
   <script type="application/ld+json">
   {
@@ -205,67 +205,135 @@
           <h2 class="section-title">Repuestos para estas marcas</h2>
           <p class="section-desc">Haz clic en una marca para ver repuestos compatibles en nuestro catálogo. Conocemos códigos de motor, chasis y equipamiento para SUV, pick-ups y sedanes de origen chino e indio.</p>
         </header>
-        <div class="brand-logo-grid" id="brand-logo-grid" role="list" aria-label="Marcas de vehículos que atendemos">
+        <div class="brand-carousel" id="brand-carousel">
+          <div class="brand-carousel__viewport">
+                        <div class="brand-carousel__track" aria-hidden="false">
+                            <div class="brand-carousel__group" role="list" aria-label="Marcas de vehículos que atendemos">
           <button type="button" class="brand-logo-card" data-brand="Great Wall" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="GWM">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/GWM_logo_2021.svg/320px-GWM_logo_2021.svg.png" alt="Great Wall / GWM" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/gwm.png" alt="Great Wall / GWM" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Great Wall / GWM</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Haval" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Haval">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Haval_logo.svg/320px-Haval_logo.svg.png" alt="Haval" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/haval.png" alt="Haval" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Haval</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Chery" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Chery">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Chery_Auto_logo.svg/320px-Chery_Auto_logo.svg.png" alt="Chery" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/chery.png" alt="Chery" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Chery</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Changan" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Changan">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Changan_Auto_logo.svg/320px-Changan_Auto_logo.svg.png" alt="Changan" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/changan.png" alt="Changan" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Changan</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="JAC" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="JAC">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/New_Jac_motors_logo.png/320px-New_Jac_motors_logo.png" alt="JAC" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/jac.png" alt="JAC" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">JAC</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Geely" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Geely">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Geely_Auto_logo.svg/320px-Geely_Auto_logo.svg.png" alt="Geely" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/geely.png" alt="Geely" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Geely</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="BYD" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="BYD">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/BYD_Auto_logo.svg/320px-BYD_Auto_logo.svg.png" alt="BYD" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/byd.png" alt="BYD" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">BYD</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="MG" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="MG">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/MG_Motor_logo.svg/320px-MG_Motor_logo.svg.png" alt="MG" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/mg.png" alt="MG" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">MG</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Maxus" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Maxus">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/MAXUS_logo.svg/320px-MAXUS_logo.svg.png" alt="Maxus" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/maxus.png" alt="Maxus" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Maxus</span>
           </button>
           <button type="button" class="brand-logo-card" data-brand="Mahindra" role="listitem">
             <span class="brand-logo-card__img-wrap" data-fallback-name="Mahindra">
-              <img class="brand-logo-card__img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mahindra_logo.svg/320px-Mahindra_logo.svg.png" alt="Mahindra" width="160" height="60" loading="lazy" decoding="async" />
+              <img class="brand-logo-card__img" src="images/marcas/mahindra.png" alt="Mahindra" width="140" height="80" loading="lazy" decoding="async" />
             </span>
             <span class="brand-logo-card__name">Mahindra</span>
           </button>
+              </div>
+              <div class="brand-carousel__group" role="presentation" aria-hidden="true">
+          <button type="button" class="brand-logo-card" data-brand="Great Wall" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="GWM">
+              <img class="brand-logo-card__img" src="images/marcas/gwm.png" alt="Great Wall / GWM" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Great Wall / GWM</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Haval" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Haval">
+              <img class="brand-logo-card__img" src="images/marcas/haval.png" alt="Haval" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Haval</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Chery" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Chery">
+              <img class="brand-logo-card__img" src="images/marcas/chery.png" alt="Chery" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Chery</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Changan" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Changan">
+              <img class="brand-logo-card__img" src="images/marcas/changan.png" alt="Changan" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Changan</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="JAC" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="JAC">
+              <img class="brand-logo-card__img" src="images/marcas/jac.png" alt="JAC" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">JAC</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Geely" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Geely">
+              <img class="brand-logo-card__img" src="images/marcas/geely.png" alt="Geely" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Geely</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="BYD" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="BYD">
+              <img class="brand-logo-card__img" src="images/marcas/byd.png" alt="BYD" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">BYD</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="MG" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="MG">
+              <img class="brand-logo-card__img" src="images/marcas/mg.png" alt="MG" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">MG</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Maxus" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Maxus">
+              <img class="brand-logo-card__img" src="images/marcas/maxus.png" alt="Maxus" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Maxus</span>
+          </button>
+          <button type="button" class="brand-logo-card" data-brand="Mahindra" role="listitem">
+            <span class="brand-logo-card__img-wrap" data-fallback-name="Mahindra">
+              <img class="brand-logo-card__img" src="images/marcas/mahindra.png" alt="Mahindra" width="140" height="80" loading="lazy" decoding="async" />
+            </span>
+            <span class="brand-logo-card__name">Mahindra</span>
+          </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <p class="brand-logo-foot">
@@ -843,6 +911,6 @@
   </div>
 
   <script src="contact-config.js?v=20260402"></script>
-  <script src="main.js?v=20260523"></script>
+  <script src="main.js?v=20260524"></script>
 </body>
 </html>

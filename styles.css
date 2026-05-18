@@ -746,13 +746,57 @@ a.btn-ml:visited {
   border-bottom: 1px solid rgba(26, 43, 75, 0.06);
 }
 
-.brand-logo-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 130px);
-  justify-content: center;
+.section-specialty .brand-carousel {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.brand-carousel {
+  margin: 0 0 1.25rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.brand-carousel__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.brand-carousel__track {
+  display: flex;
+  width: max-content;
+  animation: brand-marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.brand-carousel:hover .brand-carousel__track {
+  animation-play-state: paused;
+}
+
+.brand-carousel__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
   gap: 16px;
-  max-width: 100%;
-  margin: 0 auto 1.25rem;
+  padding-right: 16px;
+}
+
+@keyframes brand-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .brand-logo-card {
@@ -760,9 +804,10 @@ a.btn-ml:visited {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
   width: 130px;
-  min-height: 110px;
-  padding: 0.85rem 0.65rem 0.7rem;
+  min-height: 118px;
+  padding: 0.75rem 0.65rem 0.65rem;
   font-family: inherit;
   text-align: center;
   cursor: pointer;
@@ -775,7 +820,7 @@ a.btn-ml:visited {
     box-shadow 0.2s ease;
 }
 
-.brand-logo-card:hover {
+.brand-carousel:hover .brand-logo-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(26, 43, 75, 0.14);
 }
@@ -790,14 +835,14 @@ a.btn-ml:visited {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 60px;
-  margin-bottom: 0.45rem;
+  height: 80px;
+  margin-bottom: 0.4rem;
 }
 
 .brand-logo-card__img {
   display: block;
   max-width: 100%;
-  height: 60px;
+  height: 80px;
   object-fit: contain;
 }
 
@@ -838,23 +883,23 @@ a.btn-ml:visited {
   color: var(--accent);
 }
 
-@media (max-width: 900px) {
-  .brand-logo-grid {
-    grid-template-columns: repeat(3, 130px);
-  }
-}
-
-@media (max-width: 560px) {
-  .brand-logo-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding-inline: 0.25rem;
-  }
-
-  .brand-logo-card {
+@media (prefers-reduced-motion: reduce) {
+  .brand-carousel__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
     width: 100%;
-    max-width: 160px;
-    margin-inline: auto;
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .brand-carousel__group[aria-hidden="true"] {
+    display: none;
+  }
+
+  .brand-carousel {
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 
