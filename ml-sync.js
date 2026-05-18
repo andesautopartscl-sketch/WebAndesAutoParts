@@ -250,41 +250,38 @@ async function fetchAllActiveItemIds(sellerId, accessToken) {
   return ids;
 }
 
-async function fetchItemsBatch(itemIds, accessToken) {
-  if (!itemIds.length) return [];
-  const attrs = [
-    "id",
-    "title",
-    "price",
-    "currency_id",
-    "pictures",
-    "permalink",
-    "category_id",
-    "available_quantity",
-    "condition",
-  ].join(",");
-  const url = `${API}/items?ids=${itemIds.join(",")}&attributes=${attrs}`;
-  const rows = await apiRequest(url, {
+async function fetchItemDetail(itemId, accessToken) {
+  return apiRequest(`${API}/items/${itemId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  return rows
-    .filter((row) => row.code === 200 && row.body)
-    .map((row) => row.body);
 }
 
 async function fetchAllItemDetails(itemIds, accessToken) {
   const items = [];
-  const chunkSize = 20;
-  for (let i = 0; i < itemIds.length; i += chunkSize) {
-    const chunk = itemIds.slice(i, i + chunkSize);
-    const batch = await fetchItemsBatch(chunk, accessToken);
+  const concurrency = 8;
+  for (let i = 0; i < itemIds.length; i += concurrency) {
+    const chunk = itemIds.slice(i, i + concurrency);
+    const batch = await Promise.all(
+      chunk.map((id) => fetchItemDetail(id, accessToken))
+    );
     items.push(...batch);
     console.log(`Detalle: ${items.length} / ${itemIds.length}`);
-    if (i + chunkSize < itemIds.length) {
-      await new Promise((r) => setTimeout(r, 200));
+    if (i + concurrency < itemIds.length) {
+      await new Promise((r) => setTimeout(r, 150));
     }
   }
   return items;
+}
+
+function extractSku(item) {
+  const attrs = item.attributes || [];
+  for (const attr of attrs) {
+    if (attr.id === "SELLER_SKU" || attr.id === "SKU") {
+      const val = String(attr.value_name || attr.value_id || "").trim();
+      if (val) return val;
+    }
+  }
+  return "";
 }
 
 const categoryCache = new Map();
@@ -314,6 +311,7 @@ function mainImage(item) {
 function mapItem(item, categoryName) {
   return {
     id: item.id,
+    sku: extractSku(item),
     titulo: item.title || "",
     precio: Number(item.price) || 0,
     moneda: item.currency_id || "CLP",
@@ -346,6 +344,10 @@ async function main() {
   }
 
   productos.sort((a, b) => a.titulo.localeCompare(b.titulo, "es"));
+
+  const withSku = productos.filter((p) => p.sku).length;
+  const withoutSku = productos.length - withSku;
+  console.log(`SKU: ${withSku} con SKU, ${withoutSku} sin SKU (${productos.length} total)`);
 
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(productos, null, 2) + "\n", "utf8");

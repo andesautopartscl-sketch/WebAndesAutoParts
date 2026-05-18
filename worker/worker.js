@@ -102,37 +102,35 @@ async function fetchAllActiveItemIds(sellerId, accessToken) {
   return ids;
 }
 
-async function fetchItemsBatch(itemIds, accessToken) {
-  if (!itemIds.length) return [];
-  const attrs = [
-    "id",
-    "title",
-    "price",
-    "currency_id",
-    "pictures",
-    "permalink",
-    "category_id",
-    "available_quantity",
-    "condition",
-  ].join(",");
-  const rows = await mlFetch(
-    `${API}/items?ids=${itemIds.join(",")}&attributes=${attrs}`,
-    accessToken
-  );
-  return rows.filter((r) => r.code === 200 && r.body).map((r) => r.body);
+async function fetchItemDetail(itemId, accessToken) {
+  return mlFetch(`${API}/items/${itemId}`, accessToken);
 }
 
 async function fetchAllItemDetails(itemIds, accessToken) {
   const items = [];
-  const chunkSize = 20;
-  for (let i = 0; i < itemIds.length; i += chunkSize) {
-    const chunk = itemIds.slice(i, i + chunkSize);
-    items.push(...(await fetchItemsBatch(chunk, accessToken)));
-    if (i + chunkSize < itemIds.length) {
-      await new Promise((r) => setTimeout(r, 200));
+  const concurrency = 8;
+  for (let i = 0; i < itemIds.length; i += concurrency) {
+    const chunk = itemIds.slice(i, i + concurrency);
+    const batch = await Promise.all(
+      chunk.map((id) => fetchItemDetail(id, accessToken))
+    );
+    items.push(...batch);
+    if (i + concurrency < itemIds.length) {
+      await new Promise((r) => setTimeout(r, 150));
     }
   }
   return items;
+}
+
+function extractSku(item) {
+  const attrs = item.attributes || [];
+  for (const attr of attrs) {
+    if (attr.id === "SELLER_SKU" || attr.id === "SKU") {
+      const val = String(attr.value_name || attr.value_id || "").trim();
+      if (val) return val;
+    }
+  }
+  return "";
 }
 
 async function getCategoryName(categoryId, accessToken, cache) {
@@ -157,6 +155,7 @@ function mainImage(item) {
 function mapItem(item, categoryName) {
   return {
     id: item.id,
+    sku: extractSku(item),
     titulo: item.title || "",
     precio: Number(item.price) || 0,
     moneda: item.currency_id || "CLP",

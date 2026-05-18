@@ -785,8 +785,12 @@
       });
     }
 
+    function productSku(p) {
+      return (p.sku || p.codigo || "").trim();
+    }
+
     function codigoSku(p) {
-      return (p.codigo || p.sku || p.id || "").trim();
+      return productSku(p);
     }
 
     function productLink(p) {
@@ -893,14 +897,12 @@
     function matches(p, q, cat) {
       if (cat && norm(p.categoria) !== norm(cat)) return false;
       if (!q) return true;
+      var nq = norm(q);
+      if (norm(p.titulo).indexOf(nq) !== -1) return true;
+      var sku = productSku(p);
+      if (sku && norm(sku).indexOf(nq) !== -1) return true;
       var blob =
-        norm(p.titulo) +
-        " " +
         norm(p.descripcion) +
-        " " +
-        norm(codigoSku(p)) +
-        " " +
-        norm(p.id) +
         " " +
         norm(p.categoria) +
         " " +
@@ -913,7 +915,7 @@
         norm(p.valor) +
         " " +
         norm(formatPrecio(p));
-      return blob.indexOf(norm(q)) !== -1;
+      return blob.indexOf(nq) !== -1;
     }
 
     function renderProductCard(p, idx) {
