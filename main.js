@@ -381,7 +381,35 @@
     }
 
     function codigoSku(p) {
-      return (p.codigo || p.sku || "").trim();
+      return (p.codigo || p.sku || p.id || "").trim();
+    }
+
+    function productLink(p) {
+      return (p.link || p.url || "").trim();
+    }
+
+    function formatPrecio(p) {
+      if (p.precio != null && p.precio !== "") {
+        var n = Number(p.precio);
+        if (!isNaN(n)) {
+          var moneda = (p.moneda || "CLP").toUpperCase();
+          try {
+            return new Intl.NumberFormat("es-CL", {
+              style: "currency",
+              currency: moneda,
+              maximumFractionDigits: 0,
+            }).format(n);
+          } catch (err) {
+            return "$ " + n.toLocaleString("es-CL");
+          }
+        }
+      }
+      var valor = p.valor != null ? String(p.valor) : "";
+      valor = valor.trim();
+      if (!valor) return "";
+      return valor.indexOf("$") !== -1 || valor.indexOf("CLP") !== -1
+        ? valor
+        : "$ " + valor;
     }
 
     function primeraImagen(p) {
@@ -402,6 +430,8 @@
         " " +
         norm(codigoSku(p)) +
         " " +
+        norm(p.id) +
+        " " +
         norm(p.categoria) +
         " " +
         norm(p.subcategoria) +
@@ -410,7 +440,9 @@
         " " +
         norm(p.origen) +
         " " +
-        norm(p.valor);
+        norm(p.valor) +
+        " " +
+        norm(formatPrecio(p));
       return blob.indexOf(norm(q)) !== -1;
     }
 
@@ -442,35 +474,28 @@
         var titulo = (p.titulo || "Sin título").trim();
         var desc = (p.descripcion || "").trim();
         var img = primeraImagen(p) || PLACEHOLDER_IMG;
-        var url = (p.url || "").trim();
+        var url = productLink(p);
         var code = codigoSku(p);
+        var precioFmt = formatPrecio(p);
         var marca = (p.marca || "").trim();
         var subcat = (p.subcategoria || "").trim();
         var catLabel = (p.categoria || "").trim();
         var origen = (p.origen || "").trim();
-        var valor = (p.valor != null ? String(p.valor) : "").trim();
+        var stock =
+          p.stock != null && p.stock !== "" ? Number(p.stock) : null;
+        var esMl = Boolean(url && /mercadolibre\./i.test(url));
 
         var article = document.createElement("article");
-        article.className = "card card--photo";
+        article.className = "card card--photo" + (esMl ? " card--catalog-ml" : "");
 
         var headingId = "catalogo-prod-" + idx;
-
-        var link = document.createElement("a");
-        link.className = "card-link";
-        link.setAttribute("aria-labelledby", headingId);
-        if (url) {
-          link.href = url;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-        } else {
-          link.href = "#contacto";
-        }
 
         var wrap = document.createElement("div");
         wrap.className = "card-image-wrap";
         var image = document.createElement("img");
-        var srcPrimary = absoluteUrl(withCacheBust(img));
-        var srcPlain = absoluteUrl(img);
+        var isRemoteImg = /^https?:\/\//i.test(img);
+        var srcPrimary = isRemoteImg ? img : absoluteUrl(withCacheBust(img));
+        var srcPlain = isRemoteImg ? img : absoluteUrl(img);
         var srcFallback = absoluteUrl(PLACEHOLDER_IMG);
         image.src = srcPrimary;
         image.addEventListener("error", function () {
@@ -484,7 +509,7 @@
             image.src = srcFallback;
           }
         });
-        image.alt = "";
+        image.alt = titulo;
         image.width = 800;
         image.height = 480;
         image.loading = "lazy";
@@ -524,17 +549,22 @@
 
         var pDesc = document.createElement("p");
         pDesc.className = "card-desc";
-        pDesc.textContent = desc || "Consulta disponibilidad y compatibilidad.";
-
-        var cta = document.createElement("span");
-        cta.className = "card-cta";
-        cta.innerHTML = url ? "Ver en Mercado Libre <span aria-hidden=\"true\">→</span>" : "Cotizar <span aria-hidden=\"true\">→</span>";
+        if (desc) {
+          pDesc.textContent = desc;
+        } else if (stock != null && !isNaN(stock)) {
+          pDesc.textContent =
+            stock > 0
+              ? "Disponible en Mercado Libre · stock: " + stock
+              : "Consultar disponibilidad en Mercado Libre";
+        } else {
+          pDesc.textContent = "Consulta disponibilidad y compatibilidad.";
+        }
 
         body.appendChild(row);
-        if (valor) {
+        if (precioFmt) {
           var price = document.createElement("p");
           price.className = "card-price";
-          price.textContent = valor.indexOf("$") !== -1 || valor.indexOf("CLP") !== -1 ? valor : "$ " + valor;
+          price.textContent = precioFmt;
           body.appendChild(price);
         }
         if (metaParts.length) {
@@ -550,9 +580,41 @@
           body.appendChild(orig);
         }
         body.appendChild(pDesc);
-        body.appendChild(cta);
 
-        article.appendChild(link);
+        if (url && esMl) {
+          var mlBtn = document.createElement("a");
+          mlBtn.className = "btn btn-ml btn-sm card-ml-btn";
+          mlBtn.href = url;
+          mlBtn.target = "_blank";
+          mlBtn.rel = "noopener noreferrer";
+          mlBtn.textContent = "Ver en Mercado Libre";
+          body.appendChild(mlBtn);
+        } else if (url) {
+          var extBtn = document.createElement("a");
+          extBtn.className = "card-cta";
+          extBtn.href = url;
+          extBtn.target = "_blank";
+          extBtn.rel = "noopener noreferrer";
+          extBtn.innerHTML = "Ver producto <span aria-hidden=\"true\">→</span>";
+          body.appendChild(extBtn);
+        } else {
+          var cta = document.createElement("a");
+          cta.className = "card-cta";
+          cta.href = "#contacto";
+          cta.innerHTML = "Cotizar <span aria-hidden=\"true\">→</span>";
+          body.appendChild(cta);
+        }
+
+        if (!esMl && url) {
+          var link = document.createElement("a");
+          link.className = "card-link";
+          link.setAttribute("aria-labelledby", headingId);
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          article.appendChild(link);
+        }
+
         article.appendChild(wrap);
         article.appendChild(body);
         grid.appendChild(article);

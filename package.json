@@ -1,0 +1,11 @@
+{
+  "name": "web-andes-auto-parts",
+  "private": true,
+  "description": "Sitio Andes Auto Parts — sincronización con Mercado Libre",
+  "scripts": {
+    "sync-ml": "node ml-sync.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -911,6 +911,17 @@ a {
   border-radius: var(--radius-pill);
 }
 
+.card--catalog-ml .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-ml-btn {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
 .card-price {
   margin: 0 0 0.35rem;
   font-size: 1.05rem;
