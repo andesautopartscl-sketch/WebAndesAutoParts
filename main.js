@@ -319,6 +319,14 @@
 
     var allProducts = [];
     var PLACEHOLDER_IMG = "logo_andes.png";
+    var PAGE_SIZE = 12;
+    var currentPage = 1;
+    var paginationEl = document.getElementById("catalogo-pagination");
+    var pageStatusEl = document.getElementById("catalogo-page-status");
+    var prevBtn = document.getElementById("catalogo-prev");
+    var nextBtn = document.getElementById("catalogo-next");
+    var loadMoreWrap = document.getElementById("catalogo-load-more-wrap");
+    var loadMoreBtn = document.getElementById("catalogo-load-more");
     var isLocalHost =
       window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1";
@@ -385,7 +393,72 @@
     }
 
     function productLink(p) {
-      return (p.link || p.url || "").trim();
+      var url = (p.link || p.url || "").trim();
+      if (!url) return "";
+      if (!/^https?:\/\//i.test(url)) {
+        return "https://" + url.replace(/^\/+/, "");
+      }
+      return url;
+    }
+
+    function resetCatalogView() {
+      currentPage = 1;
+    }
+
+    function scrollToCatalogTop() {
+      var section = document.getElementById("productos");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function getFilteredProducts(products) {
+      var q = (searchInput && searchInput.value) || "";
+      var cat = (catSelect && catSelect.value) || "";
+      return products.filter(function (p) {
+        return matches(p, q, cat);
+      });
+    }
+
+    function getTotalPages(totalItems) {
+      return Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+    }
+
+    function updatePaginationUi(totalItems) {
+      var totalPages = getTotalPages(totalItems);
+      var hasMore = currentPage < totalPages;
+
+      if (paginationEl) {
+        paginationEl.hidden = totalItems <= PAGE_SIZE;
+      }
+      if (loadMoreWrap) {
+        loadMoreWrap.hidden = !hasMore;
+      }
+      if (pageStatusEl) {
+        pageStatusEl.textContent = "Página " + currentPage + " de " + totalPages;
+      }
+      if (prevBtn) {
+        prevBtn.disabled = currentPage <= 1;
+      }
+      if (nextBtn) {
+        nextBtn.disabled = !hasMore;
+      }
+      if (loadMoreBtn) {
+        loadMoreBtn.disabled = !hasMore;
+      }
+    }
+
+    function goToPrevPage(totalItems, scroll) {
+      if (currentPage <= 1) return;
+      currentPage -= 1;
+      if (scroll) scrollToCatalogTop();
+    }
+
+    function goToNextPage(totalItems, scroll) {
+      var totalPages = getTotalPages(totalItems);
+      if (currentPage >= totalPages) return;
+      currentPage += 1;
+      if (scroll) scrollToCatalogTop();
     }
 
     function formatPrecio(p) {
@@ -446,31 +519,7 @@
       return blob.indexOf(norm(q)) !== -1;
     }
 
-    function render(products) {
-      grid.innerHTML = "";
-      var q = (searchInput && searchInput.value) || "";
-      var cat = (catSelect && catSelect.value) || "";
-      var filtered = products.filter(function (p) {
-        return matches(p, q, cat);
-      });
-
-      if (meta) {
-        meta.textContent =
-          filtered.length === products.length
-            ? products.length + " producto" + (products.length !== 1 ? "s" : "")
-            : "Mostrando " +
-              filtered.length +
-              " de " +
-              products.length +
-              " producto" +
-              (products.length !== 1 ? "s" : "");
-      }
-
-      if (emptyEl) {
-        emptyEl.hidden = filtered.length > 0;
-      }
-
-      filtered.forEach(function (p, idx) {
+    function renderProductCard(p, idx) {
         var titulo = (p.titulo || "Sin título").trim();
         var desc = (p.descripcion || "").trim();
         var img = primeraImagen(p) || PLACEHOLDER_IMG;
@@ -512,9 +561,20 @@
         image.alt = titulo;
         image.width = 800;
         image.height = 480;
-        image.loading = "lazy";
+        image.loading = idx < 6 ? "eager" : "lazy";
         image.decoding = "async";
-        wrap.appendChild(image);
+        if (url && esMl) {
+          var imgLink = document.createElement("a");
+          imgLink.className = "card-image-link";
+          imgLink.href = url;
+          imgLink.target = "_blank";
+          imgLink.rel = "noopener noreferrer";
+          imgLink.setAttribute("aria-label", "Ver en Mercado Libre: " + titulo);
+          imgLink.appendChild(image);
+          wrap.appendChild(imgLink);
+        } else {
+          wrap.appendChild(image);
+        }
 
         var body = document.createElement("div");
         body.className = "card-body";
@@ -587,6 +647,7 @@
           mlBtn.href = url;
           mlBtn.target = "_blank";
           mlBtn.rel = "noopener noreferrer";
+          mlBtn.setAttribute("aria-label", "Ver en Mercado Libre: " + titulo);
           mlBtn.textContent = "Ver en Mercado Libre";
           body.appendChild(mlBtn);
         } else if (url) {
@@ -617,8 +678,69 @@
 
         article.appendChild(wrap);
         article.appendChild(body);
-        grid.appendChild(article);
+        return article;
+    }
+
+    function render(products, options) {
+      options = options || {};
+      grid.innerHTML = "";
+      var filtered = getFilteredProducts(products);
+      var totalItems = filtered.length;
+
+      if (options.resetPage) {
+        resetCatalogView();
+      }
+      var totalPages = getTotalPages(totalItems);
+      if (currentPage > totalPages) {
+        currentPage = totalPages;
+      }
+      if (currentPage < 1) {
+        currentPage = 1;
+      }
+
+      var start = (currentPage - 1) * PAGE_SIZE;
+      var visible = filtered.slice(start, start + PAGE_SIZE);
+
+      if (meta) {
+        var base =
+          filtered.length === products.length
+            ? products.length + " producto" + (products.length !== 1 ? "s" : "")
+            : filtered.length +
+              " de " +
+              products.length +
+              " producto" +
+              (products.length !== 1 ? "s" : "");
+        if (totalItems > PAGE_SIZE) {
+          meta.textContent =
+            "Mostrando " +
+            (start + 1) +
+            "–" +
+            (start + visible.length) +
+            " de " +
+            totalItems +
+            " · " +
+            base +
+            " · Página " +
+            currentPage +
+            " de " +
+            totalPages;
+        } else {
+          meta.textContent =
+            visible.length === filtered.length
+              ? base
+              : "Mostrando " + visible.length + " de " + base;
+        }
+      }
+
+      if (emptyEl) {
+        emptyEl.hidden = totalItems > 0;
+      }
+
+      visible.forEach(function (p, idx) {
+        grid.appendChild(renderProductCard(p, idx));
       });
+
+      updatePaginationUi(totalItems);
     }
 
     fetch(withCacheBust("data/productos.json"), {
@@ -647,7 +769,7 @@
         } else if (catSelect) {
           catSelect.value = "";
         }
-        render(allProducts);
+        render(allProducts, { resetPage: true });
         var heroQ = document.getElementById("q");
         if (heroQ && params.q) heroQ.value = params.q;
         var prodSection = document.getElementById("productos");
@@ -659,11 +781,32 @@
         }
         if (searchInput) {
           searchInput.addEventListener("input", function () {
-            render(allProducts);
+            render(allProducts, { resetPage: true });
           });
         }
         if (catSelect) {
           catSelect.addEventListener("change", function () {
+            render(allProducts, { resetPage: true });
+          });
+        }
+        if (prevBtn) {
+          prevBtn.addEventListener("click", function () {
+            var total = getFilteredProducts(allProducts).length;
+            goToPrevPage(total, true);
+            render(allProducts);
+          });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener("click", function () {
+            var total = getFilteredProducts(allProducts).length;
+            goToNextPage(total, true);
+            render(allProducts);
+          });
+        }
+        if (loadMoreBtn) {
+          loadMoreBtn.addEventListener("click", function () {
+            var total = getFilteredProducts(allProducts).length;
+            goToNextPage(total, true);
             render(allProducts);
           });
         }

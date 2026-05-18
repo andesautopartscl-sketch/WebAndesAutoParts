@@ -363,6 +363,14 @@
         </div>
         <p class="catalog-meta" id="catalogo-meta" aria-live="polite"></p>
         <div class="cards-grid cards-grid--3" id="catalogo-grid"></div>
+        <nav class="catalog-pagination" id="catalogo-pagination" aria-label="Paginación del catálogo" hidden>
+          <button type="button" class="btn btn-outline catalog-page-btn" id="catalogo-prev" disabled>← Anterior</button>
+          <p class="catalog-page-status" id="catalogo-page-status">Página 1 de 1</p>
+          <button type="button" class="btn btn-outline catalog-page-btn" id="catalogo-next" disabled>Siguiente →</button>
+        </nav>
+        <p class="catalog-load-more-wrap" id="catalogo-load-more-wrap" hidden>
+          <button type="button" class="btn btn-primary catalog-load-more" id="catalogo-load-more">Cargar 12 más</button>
+        </p>
         <p class="catalog-empty" id="catalogo-empty" hidden>No hay productos que coincidan. Prueba otra búsqueda o categoría.</p>
         <p class="catalog-error" id="catalogo-error" hidden></p>
       </div>
@@ -730,6 +738,6 @@
   </div>
 
   <script src="contact-config.js?v=20260402"></script>
-  <script src="main.js?v=20260518"></script>
+  <script src="main.js?v=20260519"></script>
 </body>
 </html>
