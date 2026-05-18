@@ -316,7 +316,157 @@
     var meta = document.getElementById("catalogo-meta");
     var emptyEl = document.getElementById("catalogo-empty");
     var errEl = document.getElementById("catalogo-error");
+    var vehicleForm = document.getElementById("vehicle-search-form");
+    var vehicleTextInput = document.getElementById("vehicle-search-text");
+    var vehicleBrandSelect = document.getElementById("vehicle-brand");
+    var vehicleModelSelect = document.getElementById("vehicle-model");
+    var vehicleYearSelect = document.getElementById("vehicle-year");
+    var vehicleClearBtn = document.getElementById("vehicle-search-clear");
+    var vehicleResultEl = document.getElementById("vehicle-result");
+    var vehicleResultMsg = document.getElementById("vehicle-result-msg");
+    var vehicleNoResultEl = document.getElementById("vehicle-no-result");
+    var vehicleWaLink = document.getElementById("vehicle-wa-link");
 
+    var VEHICLE_BRANDS = {
+      "Great Wall": {
+        keywords: ["great wall", "gwm", "haval", "wingle", "steed", "poer", "cannon", "pao"],
+        models: {
+          "Haval H2": ["haval h2", "h2"],
+          "Haval H6": ["haval h6", "h6"],
+          "Haval Jolion": ["jolion", "haval jolion"],
+          "Wingle 5": ["wingle 5", "wingle"],
+          "Wingle 7": ["wingle 7", "wingle"],
+          Poer: ["poer"],
+          Cannon: ["cannon"],
+          Steed: ["steed"],
+        },
+      },
+      Chery: {
+        keywords: ["chery", "tiggo", "arrizo", "orinoco"],
+        models: {
+          "Tiggo 2": ["tiggo 2", "tiggo2"],
+          "Tiggo 3": ["tiggo 3", "tiggo3"],
+          "Tiggo 4": ["tiggo 4", "tiggo4"],
+          "Tiggo 7": ["tiggo 7", "tiggo7"],
+          "Tiggo 8": ["tiggo 8", "tiggo8"],
+          "Arrizo 3": ["arrizo 3", "arrizo"],
+          "Arrizo 5": ["arrizo 5", "arrizo"],
+          QQ: ["qq", "chery qq"],
+        },
+      },
+      JAC: {
+        keywords: ["jac", "t6", "t8", "sei", "frison"],
+        models: {
+          T6: ["jac t6", "t6"],
+          T8: ["jac t8", "t8"],
+          T9: ["jac t9", "t9"],
+          S2: ["jac s2", "s2"],
+          S3: ["jac s3", "s3"],
+          S5: ["jac s5", "s5"],
+          Refine: ["refine", "jac refine"],
+        },
+      },
+      Changan: {
+        keywords: ["changan", "hunter", "alsvin", "uni"],
+        models: {
+          "CS35 Plus": ["cs35", "changan cs35"],
+          "CS55 Plus": ["cs55", "changan cs55"],
+          "CS75 Plus": ["cs75", "changan cs75"],
+          Hunter: ["hunter", "changan hunter"],
+          Alsvin: ["alsvin"],
+          "UNI-T": ["uni-t", "unit"],
+          "UNI-K": ["uni-k", "unik"],
+        },
+      },
+      Geely: {
+        keywords: ["geely", "emgrand", "coolray", "okavango"],
+        models: {
+          Coolray: ["coolray"],
+          Azkarra: ["azkarra"],
+          Okavango: ["okavango"],
+          Emgrand: ["emgrand"],
+          "Geometry C": ["geometry"],
+        },
+      },
+      BYD: {
+        keywords: ["byd", "han", "tang", "dolphin", "seal"],
+        models: {
+          Dolphin: ["dolphin"],
+          Seal: ["seal"],
+          Han: ["han", "byd han"],
+          Tang: ["tang", "byd tang"],
+          "Song Plus": ["song plus", "song"],
+          "Yuan Plus": ["yuan plus", "yuan"],
+        },
+      },
+      MG: {
+        keywords: ["mg", "mg3", "mg5", "zs", "hs"],
+        models: {
+          MG3: ["mg3"],
+          MG5: ["mg5"],
+          ZS: ["mg zs", "zs"],
+          HS: ["mg hs", "hs"],
+          RX5: ["rx5", "mg rx5"],
+        },
+      },
+      Mahindra: {
+        keywords: ["mahindra", "scorpio", "bolero", "xuv"],
+        models: {
+          Scorpio: ["scorpio"],
+          "XUV500": ["xuv500", "xuv 500"],
+          "XUV300": ["xuv300", "xuv 300"],
+          Bolero: ["bolero"],
+          KUV100: ["kuv100", "kuv"],
+          Pickup: ["mahindra pickup", "pickup mahindra"],
+        },
+      },
+      Tata: {
+        keywords: ["tata", "xenon", "safari", "tiago", "indica"],
+        models: {
+          Xenon: ["xenon", "tata xenon"],
+          Safari: ["safari", "tata safari"],
+          Tiago: ["tiago"],
+          Indica: ["indica"],
+        },
+      },
+      Maxus: {
+        keywords: ["maxus", "t60", "t70", "euniq"],
+        models: {
+          T60: ["maxus t60", "t60"],
+          T70: ["maxus t70", "t70"],
+          D60: ["maxus d60", "d60"],
+          G10: ["maxus g10", "g10"],
+          Euniq: ["euniq"],
+        },
+      },
+      Dongfeng: {
+        keywords: ["dongfeng", "df", "rich", "joyear", "glory"],
+        models: {
+          Rich: ["rich", "dongfeng rich"],
+          Joyear: ["joyear"],
+          AX7: ["ax7", "dongfeng ax7"],
+          S30: ["s30"],
+        },
+      },
+      Kaiyi: {
+        keywords: ["kaiyi", "x3", "x5", "e5"],
+        models: {
+          X3: ["kaiyi x3", "x3"],
+          "X3 Pro": ["x3 pro", "kaiyi x3"],
+          E5: ["kaiyi e5", "e5"],
+        },
+      },
+      JMC: {
+        keywords: ["jmc", "vigus", "boarding"],
+        models: {
+          Vigus: ["vigus", "jmc vigus"],
+          Boarding: ["boarding", "jmc boarding"],
+          N900: ["n900", "jmc n900"],
+        },
+      },
+    };
+
+    var activeVehicleSearch = null;
     var allProducts = [];
     var PLACEHOLDER_IMG = "logo_andes.png";
     var PAGE_SIZE = 12;
@@ -362,7 +512,256 @@
       return {
         q: u.searchParams.get("q") || "",
         cat: u.searchParams.get("cat") || "",
+        marca: u.searchParams.get("marca") || "",
+        modelo: u.searchParams.get("modelo") || "",
+        anio: u.searchParams.get("anio") || "",
+        vehiculo: u.searchParams.get("vehiculo") || "",
       };
+    }
+
+    function dedupeKeywords(list) {
+      var seen = {};
+      var out = [];
+      list.forEach(function (kw) {
+        var k = norm(kw).trim();
+        if (!k || seen[k]) return;
+        seen[k] = true;
+        out.push(k);
+      });
+      return out;
+    }
+
+    function tokenizeSearchText(text) {
+      return (text || "")
+        .toLowerCase()
+        .split(/[\s,;/]+/)
+        .map(function (t) {
+          return t.trim();
+        })
+        .filter(Boolean);
+    }
+
+    function populateVehicleYears() {
+      if (!vehicleYearSelect) return;
+      for (var y = 2026; y >= 2010; y -= 1) {
+        var opt = document.createElement("option");
+        opt.value = String(y);
+        opt.textContent = String(y);
+        vehicleYearSelect.appendChild(opt);
+      }
+    }
+
+    function populateVehicleBrandOptions() {
+      if (!vehicleBrandSelect) return;
+      Object.keys(VEHICLE_BRANDS)
+        .sort(function (a, b) {
+          return a.localeCompare(b, "es");
+        })
+        .forEach(function (brand) {
+          var opt = document.createElement("option");
+          opt.value = brand;
+          opt.textContent = brand;
+          vehicleBrandSelect.appendChild(opt);
+        });
+    }
+
+    function populateVehicleModels(brand) {
+      if (!vehicleModelSelect) return;
+      vehicleModelSelect.innerHTML = "";
+      var defaultOpt = document.createElement("option");
+      defaultOpt.value = "";
+      defaultOpt.textContent = brand ? "Selecciona modelo" : "Primero elige marca";
+      vehicleModelSelect.appendChild(defaultOpt);
+      vehicleModelSelect.disabled = !brand;
+      if (!brand || !VEHICLE_BRANDS[brand]) return;
+      Object.keys(VEHICLE_BRANDS[brand].models)
+        .sort(function (a, b) {
+          return a.localeCompare(b, "es");
+        })
+        .forEach(function (modelName) {
+          var opt = document.createElement("option");
+          opt.value = modelName;
+          opt.textContent = modelName;
+          vehicleModelSelect.appendChild(opt);
+        });
+    }
+
+    function buildVehicleFilterFromForm() {
+      var brand = vehicleBrandSelect ? vehicleBrandSelect.value : "";
+      var model = vehicleModelSelect ? vehicleModelSelect.value : "";
+      var year = vehicleYearSelect ? vehicleYearSelect.value : "";
+      var freeText = vehicleTextInput ? (vehicleTextInput.value || "").trim() : "";
+      var keywords = [];
+      var labelParts = [];
+
+      if (brand && VEHICLE_BRANDS[brand]) {
+        keywords = keywords.concat(VEHICLE_BRANDS[brand].keywords);
+        labelParts.push(brand);
+      }
+      if (brand && model && VEHICLE_BRANDS[brand] && VEHICLE_BRANDS[brand].models[model]) {
+        keywords = keywords.concat(VEHICLE_BRANDS[brand].models[model]);
+        labelParts.push(model);
+      } else if (model) {
+        keywords = keywords.concat(tokenizeSearchText(model));
+        labelParts.push(model);
+      }
+      if (freeText) {
+        keywords = keywords.concat(tokenizeSearchText(freeText));
+        if (!labelParts.length) labelParts.push(freeText);
+      }
+      if (year) {
+        labelParts.push(year);
+        keywords.push(year);
+      }
+
+      keywords = dedupeKeywords(
+        keywords.filter(function (kw) {
+          return kw.length >= 2;
+        })
+      );
+      if (!keywords.length) return null;
+
+      return {
+        label: labelParts.join(" ") || freeText || brand,
+        keywords: keywords,
+        year: year || "",
+      };
+    }
+
+    function matchesVehicleTitle(p, keywords) {
+      if (!keywords || !keywords.length) return true;
+      var title = norm(p.titulo || "");
+      return keywords.some(function (kw) {
+        return title.indexOf(kw) !== -1;
+      });
+    }
+
+    function updateVehicleResultUi(totalItems) {
+      var filter = activeVehicleSearch;
+      if (!filter) {
+        if (vehicleResultEl) vehicleResultEl.hidden = true;
+        if (vehicleNoResultEl) vehicleNoResultEl.hidden = true;
+        return;
+      }
+      if (totalItems > 0) {
+        if (vehicleResultEl) {
+          vehicleResultEl.hidden = false;
+          if (vehicleResultMsg) {
+            vehicleResultMsg.textContent =
+              totalItems +
+              " repuesto" +
+              (totalItems !== 1 ? "s" : "") +
+              " encontrados para " +
+              filter.label;
+          }
+        }
+        if (vehicleNoResultEl) vehicleNoResultEl.hidden = true;
+      } else {
+        if (vehicleResultEl) vehicleResultEl.hidden = true;
+        if (vehicleNoResultEl) {
+          vehicleNoResultEl.hidden = false;
+          if (vehicleWaLink) {
+            var waText =
+              "Hola, busco repuestos para " +
+              filter.label +
+              ". ¿Me pueden ayudar a encontrar la pieza correcta?";
+            vehicleWaLink.href =
+              "https://wa.me/56926152826?text=" + encodeURIComponent(waText);
+          }
+        }
+      }
+    }
+
+    function syncVehicleUrl() {
+      if (!window.history || !window.history.replaceState) return;
+      var u = new URL(window.location.href);
+      u.searchParams.delete("marca");
+      u.searchParams.delete("modelo");
+      u.searchParams.delete("anio");
+      u.searchParams.delete("vehiculo");
+      if (activeVehicleSearch && vehicleBrandSelect && vehicleBrandSelect.value) {
+        u.searchParams.set("marca", vehicleBrandSelect.value);
+      }
+      if (activeVehicleSearch && vehicleModelSelect && vehicleModelSelect.value) {
+        u.searchParams.set("modelo", vehicleModelSelect.value);
+      }
+      if (activeVehicleSearch && vehicleYearSelect && vehicleYearSelect.value) {
+        u.searchParams.set("anio", vehicleYearSelect.value);
+      }
+      if (activeVehicleSearch && vehicleTextInput && vehicleTextInput.value.trim()) {
+        u.searchParams.set("vehiculo", vehicleTextInput.value.trim());
+      }
+      window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+    }
+
+    function clearVehicleSearch(scroll) {
+      activeVehicleSearch = null;
+      if (vehicleTextInput) vehicleTextInput.value = "";
+      if (vehicleBrandSelect) vehicleBrandSelect.value = "";
+      populateVehicleModels("");
+      if (vehicleYearSelect) vehicleYearSelect.value = "";
+      if (searchInput) searchInput.value = "";
+      if (catSelect) catSelect.value = "";
+      syncVehicleUrl();
+      render(allProducts, { resetPage: true });
+      if (scroll) scrollToCatalogTop();
+    }
+
+    function runVehicleSearch() {
+      var filter = buildVehicleFilterFromForm();
+      if (!filter) {
+        if (vehicleTextInput) vehicleTextInput.focus();
+        return;
+      }
+      activeVehicleSearch = filter;
+      syncVehicleUrl();
+      render(allProducts, { resetPage: true });
+      scrollToCatalogTop();
+    }
+
+    function initVehicleSearchUi() {
+      populateVehicleBrandOptions();
+      populateVehicleYears();
+      populateVehicleModels("");
+
+      if (vehicleBrandSelect) {
+        vehicleBrandSelect.addEventListener("change", function () {
+          populateVehicleModels(vehicleBrandSelect.value);
+        });
+      }
+      if (vehicleForm) {
+        vehicleForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          runVehicleSearch();
+        });
+      }
+      if (vehicleClearBtn) {
+        vehicleClearBtn.addEventListener("click", function () {
+          clearVehicleSearch(true);
+        });
+      }
+    }
+
+    function applyVehicleParamsFromUrl(params) {
+      if (!params) return false;
+      if (params.vehiculo && vehicleTextInput) {
+        vehicleTextInput.value = params.vehiculo;
+      }
+      if (params.marca && vehicleBrandSelect) {
+        vehicleBrandSelect.value = params.marca;
+        populateVehicleModels(params.marca);
+      }
+      if (params.modelo && vehicleModelSelect) {
+        vehicleModelSelect.value = params.modelo;
+      }
+      if (params.anio && vehicleYearSelect) {
+        vehicleYearSelect.value = params.anio;
+      }
+      if (params.marca || params.modelo || params.vehiculo) {
+        activeVehicleSearch = buildVehicleFilterFromForm();
+        return Boolean(activeVehicleSearch);
+      }
+      return false;
     }
 
     function fillCategories(products) {
@@ -411,9 +810,15 @@
     }
 
     function getFilteredProducts(products) {
+      var list = products;
+      if (activeVehicleSearch && activeVehicleSearch.keywords.length) {
+        list = list.filter(function (p) {
+          return matchesVehicleTitle(p, activeVehicleSearch.keywords);
+        });
+      }
       var q = (searchInput && searchInput.value) || "";
       var cat = (catSelect && catSelect.value) || "";
-      return products.filter(function (p) {
+      return list.filter(function (p) {
         return matches(p, q, cat);
       });
     }
@@ -696,9 +1101,19 @@
       var start = (currentPage - 1) * PAGE_SIZE;
       var visible = filtered.slice(start, start + PAGE_SIZE);
 
+      updateVehicleResultUi(totalItems);
+
       if (meta) {
-        if (totalItems === 0) {
+        if (activeVehicleSearch && totalItems === 0) {
+          meta.textContent = "";
+          meta.hidden = true;
+        } else {
+          meta.hidden = false;
+        }
+        if (totalItems === 0 && !activeVehicleSearch) {
           meta.textContent = "Sin productos en el catálogo";
+        } else if (totalItems === 0 && activeVehicleSearch) {
+          meta.textContent = "";
         } else if (totalItems > PAGE_SIZE) {
           meta.textContent =
             "Mostrando " +
@@ -714,7 +1129,7 @@
       }
 
       if (emptyEl) {
-        emptyEl.hidden = totalItems > 0;
+        emptyEl.hidden = totalItems > 0 || Boolean(activeVehicleSearch);
       }
 
       visible.forEach(function (p, idx) {
@@ -736,7 +1151,9 @@
         if (!Array.isArray(data)) throw new Error("Formato inválido.");
         allProducts = data;
         fillCategories(allProducts);
+        initVehicleSearchUi();
         var params = parseParams();
+        var hasVehicleSearch = applyVehicleParamsFromUrl(params);
         if (searchInput) {
           // Avoid stale browser-restored filters hiding products on first load.
           searchInput.value = params.q || "";
@@ -756,7 +1173,10 @@
         var prodSection = document.getElementById("productos");
         if (
           prodSection &&
-          (params.q || params.cat || window.location.hash === "#productos")
+          (params.q ||
+            params.cat ||
+            hasVehicleSearch ||
+            window.location.hash === "#productos")
         ) {
           prodSection.scrollIntoView({ behavior: "smooth" });
         }

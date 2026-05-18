@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260411" />
+  <link rel="stylesheet" href="styles.css?v=20260521" />
   <!-- Coordenadas en JSON-LD: si el pin en Google Maps / Business difiere, actualiza latitude/longitude aquí -->
   <script type="application/ld+json">
   {
@@ -234,6 +234,55 @@
       </div>
     </section>
 
+    <section class="vehicle-search" id="buscador-vehiculo" aria-labelledby="vehicle-search-title">
+      <div class="container vehicle-search__inner">
+        <header class="vehicle-search__head">
+          <p class="vehicle-search__kicker">Buscador por vehículo</p>
+          <h2 class="vehicle-search__title" id="vehicle-search-title">Encuentra repuestos para tu auto chino o indio</h2>
+          <p class="vehicle-search__lead">Selecciona marca, modelo y año o escribe directamente. Filtramos nuestro catálogo de Mercado Libre por compatibilidad en el título del producto.</p>
+        </header>
+
+        <form class="vehicle-search__form" id="vehicle-search-form" novalidate>
+          <label class="vehicle-search__field vehicle-search__field--wide">
+            <span class="visually-hidden">Buscar por marca o modelo</span>
+            <input
+              type="search"
+              id="vehicle-search-text"
+              class="vehicle-search__input"
+              placeholder="Busca por marca o modelo: ej. Great Wall, Chery Tiggo, JAC T8..."
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="vehicle-search__selects">
+            <label class="vehicle-search__field">
+              <span class="vehicle-search__label">Marca</span>
+              <select id="vehicle-brand" class="vehicle-search__select" aria-label="Marca del vehículo">
+                <option value="">Selecciona marca</option>
+              </select>
+            </label>
+            <label class="vehicle-search__field">
+              <span class="vehicle-search__label">Modelo</span>
+              <select id="vehicle-model" class="vehicle-search__select" aria-label="Modelo del vehículo" disabled>
+                <option value="">Primero elige marca</option>
+              </select>
+            </label>
+            <label class="vehicle-search__field">
+              <span class="vehicle-search__label">Año</span>
+              <select id="vehicle-year" class="vehicle-search__select" aria-label="Año del vehículo">
+                <option value="">Año</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="vehicle-search__actions">
+            <button type="submit" class="btn btn-primary btn-lg vehicle-search__submit">Buscar repuestos</button>
+            <button type="button" class="btn btn-outline-white btn-lg" id="vehicle-search-clear">Ver todos los productos</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
     <section class="section section-catalog" id="catalogo">
       <div class="container">
         <header class="section-head">
@@ -360,6 +409,13 @@
               <option value="">Todas</option>
             </select>
           </label>
+        </div>
+        <div class="vehicle-result" id="vehicle-result" hidden>
+          <p class="vehicle-result__msg" id="vehicle-result-msg" aria-live="polite"></p>
+        </div>
+        <div class="vehicle-no-result" id="vehicle-no-result" hidden>
+          <p class="vehicle-no-result__text">No encontramos repuestos para ese modelo. Escríbenos por WhatsApp y te ayudamos.</p>
+          <a href="https://wa.me/56926152826" class="btn btn-wa btn-lg" id="vehicle-wa-link" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
         </div>
         <p class="catalog-meta" id="catalogo-meta" aria-live="polite"></p>
         <div class="cards-grid cards-grid--3" id="catalogo-grid"></div>
@@ -735,6 +791,6 @@
   </div>
 
   <script src="contact-config.js?v=20260402"></script>
-  <script src="main.js?v=20260520"></script>
+  <script src="main.js?v=20260521"></script>
 </body>
 </html>
