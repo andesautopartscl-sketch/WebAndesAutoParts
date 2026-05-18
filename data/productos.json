@@ -3576,18 +3576,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1762058957",
-    "sku": "JX207AA",
-    "titulo": "Neblineros Delanteros (par) Jac X200 2.0 2016-2025",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_652247-MLC99105852189_112025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1762058957-neblineros-delanteros-par-jac-x200-20-2016-2025-_JM",
-    "categoria": "Faros Auxiliares",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1759887761",
     "sku": "Kit141AA",
     "titulo": "Neblineros Delanteros (par) Jmc Vigus Work 2.5 2021-2023 Transparente",
@@ -5173,7 +5161,7 @@
   },
   {
     "id": "MLC1903378407",
-    "sku": "",
+    "sku": "VGP3103AA",
     "titulo": "Sensor Posición De Cigueñal (ckp) Jmc Vigus 5 2.4/ Plus 2.4",
     "precio": 44990,
     "moneda": "CLP",
