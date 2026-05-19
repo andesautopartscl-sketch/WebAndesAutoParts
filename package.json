@@ -4,6 +4,7 @@
   "description": "Sitio Andes Auto Parts — sincronización con Mercado Libre",
   "scripts": {
     "sync-ml": "node ml-sync.js",
+    "backfill-skus": "node scripts/backfill-skus.js",
     "deploy-worker": "npm install --prefix worker && npm run deploy --prefix worker"
   },
   "engines": {

@@ -275,11 +275,20 @@ async function fetchAllItemDetails(itemIds, accessToken) {
 
 function extractSku(item) {
   const attrs = item.attributes || [];
-  for (const attr of attrs) {
-    if (attr.id === "SELLER_SKU" || attr.id === "SKU") {
-      const val = String(attr.value_name || attr.value_id || "").trim();
-      if (val) return val;
-    }
+  const skuAttr = attrs.find(
+    (a) =>
+      a.id === "SELLER_SKU" ||
+      a.id === "SKU" ||
+      (a.name && a.name.toLowerCase().includes("sku"))
+  );
+  if (skuAttr) {
+    const val = String(
+      skuAttr.value_name || skuAttr.values?.[0]?.name || skuAttr.value_id || ""
+    ).trim();
+    if (val) return val;
+  }
+  if (item.seller_custom_field) {
+    return String(item.seller_custom_field).trim();
   }
   return "";
 }
