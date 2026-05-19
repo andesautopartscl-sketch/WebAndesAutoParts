@@ -2,6 +2,7 @@
  * Cloudflare Worker — sincroniza catálogo ML → GitHub (data/productos.json)
  * GET  /sync         — sincroniza y commitea vía GitHub API
  * POST /update-token — guarda ML_ACCESS_TOKEN en KV (renovación)
+ * GET  /auth-url     — URL de autorización ML para renovar token
  * GET  /health       — estado del servicio
  */
 
@@ -35,6 +36,40 @@ function toBase64Utf8(str) {
   let binary = "";
   for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
   return btoa(binary);
+}
+
+function buildMlAuthUrl(env) {
+  const clientId = env.ML_CLIENT_ID || "2004412570250603";
+  const redirectUri =
+    env.ML_REDIRECT_URI ||
+    "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/";
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    scope: "offline_access read write",
+  });
+  return `https://auth.mercadolibre.cl/authorization?${params.toString()}`;
+}
+
+function handleAuthUrl(env) {
+  const authUrl = buildMlAuthUrl(env);
+  return json({
+    ok: true,
+    auth_url: authUrl,
+    client_id: env.ML_CLIENT_ID || "2004412570250603",
+    redirect_uri:
+      env.ML_REDIRECT_URI ||
+      "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/",
+    scope: "offline_access read write",
+    renew_script: "./renew-token-quick.sh",
+    instructions: [
+      "Abre auth_url en el navegador (cuenta administrador del vendedor ML).",
+      "Tras autorizar, copia la URL completa de redirección o solo el parámetro code=TG-...",
+      "Ejecuta ./renew-token-quick.sh en tu PC y pega la URL o el código.",
+      "El script sube el token al Worker y prueba /sync automáticamente.",
+    ],
+  });
 }
 
 async function getMlAccessToken(env) {
@@ -277,12 +312,16 @@ async function handleSync(env) {
     });
   } catch (err) {
     if (err.code === "TOKEN_EXPIRED") {
+      const authUrl = buildMlAuthUrl(env);
       return json(
         {
           ok: false,
           error: "TOKEN_EXPIRED",
-          message: "Token ML expirado - renovar manualmente",
-          hint: "Ejecuta: ./renew-token.sh",
+          message:
+            "Token ML expirado (válido ~6 h). Renueva con ./renew-token-quick.sh",
+          auth_url: authUrl,
+          renew_script: "./renew-token-quick.sh",
+          hint: "Abre auth_url, autoriza, y ejecuta renew-token-quick.sh con el código TG-...",
           details: err.details,
         },
         401
@@ -364,8 +403,17 @@ export default {
         ok: true,
         service: "andes-autoparts-ml-sync",
         token_configured: hasToken,
-        endpoints: ["GET /sync", "POST /update-token", "GET /health"],
+        endpoints: [
+          "GET /sync",
+          "POST /update-token",
+          "GET /auth-url",
+          "GET /health",
+        ],
       });
+    }
+
+    if (path === "/auth-url" && request.method === "GET") {
+      return handleAuthUrl(env);
     }
 
     if (!checkAuth(request, env)) {
