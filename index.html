@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260524" />
+  <link rel="stylesheet" href="styles.css?v=20260525" />
   <!-- Coordenadas en JSON-LD: si el pin en Google Maps / Business difiere, actualiza latitude/longitude aquí -->
   <script type="application/ld+json">
   {
@@ -413,7 +413,7 @@
 
         <div class="cards-grid cards-grid--3">
           <article class="card card--photo">
-            <a href="index.html?cat=Frenos#productos" class="card-link" aria-labelledby="cat-frenos"></a>
+            <a href="index.html?grupo=Frenos#productos" class="card-link" aria-labelledby="cat-frenos"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/frenos.png" alt="Repuestos de frenos" width="800" height="480" loading="lazy" />
             </div>
@@ -428,7 +428,7 @@
           </article>
 
           <article class="card card--photo">
-            <a href="index.html?cat=Motor#productos" class="card-link" aria-labelledby="cat-motor"></a>
+            <a href="index.html?grupo=Motor#productos" class="card-link" aria-labelledby="cat-motor"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/motor.png" alt="Repuestos de motor" width="800" height="480" loading="lazy" />
             </div>
@@ -443,7 +443,7 @@
           </article>
 
           <article class="card card--photo">
-            <a href="index.html?cat=Suspensi%C3%B3n#productos" class="card-link" aria-labelledby="cat-susp"></a>
+            <a href="index.html?grupo=Suspensi%C3%B3n#productos" class="card-link" aria-labelledby="cat-susp"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/Suspension.png" alt="Repuestos de suspensión" width="800" height="480" loading="lazy" />
             </div>
@@ -464,7 +464,7 @@
       <div class="container">
         <div class="cards-grid cards-grid--3">
           <article class="card card--photo">
-            <a href="index.html?cat=El%C3%A9ctrico#productos" class="card-link" aria-labelledby="cat-elec"></a>
+            <a href="index.html?grupo=El%C3%A9ctrico#productos" class="card-link" aria-labelledby="cat-elec"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/electrico.png" alt="Repuestos eléctricos automotrices" width="800" height="480" loading="lazy" />
             </div>
@@ -479,7 +479,7 @@
           </article>
 
           <article class="card card--photo">
-            <a href="index.html?cat=Carrocer%C3%ADa#productos" class="card-link" aria-labelledby="cat-carro"></a>
+            <a href="index.html?grupo=Carrocer%C3%ADa#productos" class="card-link" aria-labelledby="cat-carro"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/Carroceria.png" alt="Repuestos de carrocería" width="800" height="480" loading="lazy" />
             </div>
@@ -494,7 +494,7 @@
           </article>
 
           <article class="card card--photo">
-            <a href="index.html?cat=Transmisi%C3%B3n#productos" class="card-link" aria-labelledby="cat-trans"></a>
+            <a href="index.html?grupo=Transmisi%C3%B3n#productos" class="card-link" aria-labelledby="cat-trans"></a>
             <div class="card-image-wrap">
               <img src="images/pagina%20principal/transmision.png" alt="Repuestos de transmisión" width="800" height="480" loading="lazy" />
             </div>
@@ -529,6 +529,10 @@
               <option value="">Todas</option>
             </select>
           </label>
+        </div>
+        <div class="catalog-category-banner" id="catalog-category-banner" hidden>
+          <p class="catalog-category-banner__msg" id="catalog-category-banner-msg" aria-live="polite"></p>
+          <button type="button" class="catalog-category-banner__clear" id="catalog-category-clear">Ver todos</button>
         </div>
         <div class="vehicle-result" id="vehicle-result" hidden>
           <p class="vehicle-result__msg" id="vehicle-result-msg" aria-live="polite"></p>
@@ -911,6 +915,6 @@
   </div>
 
   <script src="contact-config.js?v=20260402"></script>
-  <script src="main.js?v=20260524"></script>
+  <script src="main.js?v=20260525"></script>
 </body>
 </html>

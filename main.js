@@ -313,6 +313,9 @@
 
     var searchInput = document.getElementById("catalogo-search");
     var catSelect = document.getElementById("catalogo-cat");
+    var categoryBanner = document.getElementById("catalog-category-banner");
+    var categoryBannerMsg = document.getElementById("catalog-category-banner-msg");
+    var categoryClearBtn = document.getElementById("catalog-category-clear");
     var meta = document.getElementById("catalogo-meta");
     var emptyEl = document.getElementById("catalogo-empty");
     var errEl = document.getElementById("catalogo-error");
@@ -467,6 +470,16 @@
     };
 
     var activeVehicleSearch = null;
+    var activeCategoryGroup = null;
+    var CATEGORY_GROUP_NAMES = [
+      "Frenos",
+      "Motor",
+      "Suspensión",
+      "Eléctrico",
+      "Carrocería",
+      "Transmisión",
+    ];
+    var CATEGORY_GROUP_GHOST_VALUE = "__grupo__";
     var BRAND_LOGO_QUICK = {
       Haval: { label: "Haval", keywords: ["haval"] },
     };
@@ -515,11 +528,142 @@
       return {
         q: u.searchParams.get("q") || "",
         cat: u.searchParams.get("cat") || "",
+        grupo: u.searchParams.get("grupo") || "",
         marca: u.searchParams.get("marca") || "",
         modelo: u.searchParams.get("modelo") || "",
         anio: u.searchParams.get("anio") || "",
         vehiculo: u.searchParams.get("vehiculo") || "",
       };
+    }
+
+    function isKnownCategoryGroup(name) {
+      if (!name) return false;
+      var n = norm(name);
+      return CATEGORY_GROUP_NAMES.some(function (g) {
+        return norm(g) === n;
+      });
+    }
+
+    function classifyProductCategory(categoria) {
+      var c = (categoria || "").trim();
+      if (/freno|balat|pastilla|disco de freno|tambor|cilindro de fren|sensor.*abs/i.test(c)) {
+        return "Frenos";
+      }
+      if (
+        /amortiguador|suspensi|bandeja|barra estabilizadora|bieleta|bujes de susp|rotula|rótula|rodamiento|maza de rueda|montante|cazoleta|aislador|retenes de rueda|terminal|axial|balancin/i.test(
+          c
+        )
+      ) {
+        return "Suspensión";
+      }
+      if (/embrague|palier|poly v|tensor poly|volante de embrague|eje palier/i.test(c)) {
+        return "Transmisión";
+      }
+      if (/espejo|parachoques|pisadera|máscara|mascara|manilla|pedal/i.test(c)) {
+        return "Carrocería";
+      }
+      if (/faro|foco|sensor|motor de arranque|interruptor/i.test(c)) {
+        return "Eléctrico";
+      }
+      return "Motor";
+    }
+
+    function productMatchesCategoryGroup(p, groupName) {
+      return classifyProductCategory(p.categoria) === groupName;
+    }
+
+    function syncCategorySelectUi() {
+      if (!catSelect) return;
+      var ghost = catSelect.querySelector('option[data-group-ghost="1"]');
+      if (activeCategoryGroup) {
+        if (!ghost) {
+          ghost = document.createElement("option");
+          ghost.setAttribute("data-group-ghost", "1");
+          catSelect.insertBefore(ghost, catSelect.options[1] || null);
+        }
+        ghost.value = CATEGORY_GROUP_GHOST_VALUE;
+        ghost.textContent = "Grupo: " + activeCategoryGroup;
+        catSelect.value = CATEGORY_GROUP_GHOST_VALUE;
+      } else if (ghost) {
+        ghost.remove();
+        if (catSelect.value === CATEGORY_GROUP_GHOST_VALUE) {
+          catSelect.value = "";
+        }
+      }
+    }
+
+    function syncCategoryUrl() {
+      if (!window.history || !window.history.replaceState) return;
+      var u = new URL(window.location.href);
+      u.searchParams.delete("grupo");
+      u.searchParams.delete("cat");
+      if (activeCategoryGroup) {
+        u.searchParams.set("grupo", activeCategoryGroup);
+      } else if (catSelect && catSelect.value && catSelect.value !== CATEGORY_GROUP_GHOST_VALUE) {
+        u.searchParams.set("cat", catSelect.value);
+      }
+      window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+    }
+
+    function updateCategoryBannerUi(totalItems) {
+      if (!categoryBanner || !categoryBannerMsg) return;
+      if (activeCategoryGroup) {
+        categoryBanner.hidden = false;
+        categoryBannerMsg.textContent =
+          totalItems +
+          " producto" +
+          (totalItems !== 1 ? "s" : "") +
+          " en " +
+          activeCategoryGroup;
+      } else {
+        categoryBanner.hidden = true;
+        categoryBannerMsg.textContent = "";
+      }
+    }
+
+    function applyCategoryGroup(groupName) {
+      if (!isKnownCategoryGroup(groupName)) return;
+      activeCategoryGroup = groupName;
+      if (catSelect) catSelect.value = "";
+      syncCategorySelectUi();
+      syncCategoryUrl();
+      render(allProducts, { resetPage: true });
+      scrollToCatalogTop();
+    }
+
+    function clearCategoryFilter() {
+      activeCategoryGroup = null;
+      if (catSelect) catSelect.value = "";
+      syncCategorySelectUi();
+      syncCategoryUrl();
+      render(allProducts, { resetPage: true });
+    }
+
+    function applyCategoryParamsFromUrl(params) {
+      if (!params) return false;
+      if (params.grupo && isKnownCategoryGroup(params.grupo)) {
+        activeCategoryGroup = params.grupo;
+        syncCategorySelectUi();
+        return true;
+      }
+      if (params.cat && isKnownCategoryGroup(params.cat)) {
+        activeCategoryGroup = params.cat;
+        syncCategorySelectUi();
+        return true;
+      }
+      if (params.cat && catSelect) {
+        var wanted = params.cat;
+        var found = Array.prototype.slice.call(catSelect.options).find(function (o) {
+          return norm(o.value) === norm(wanted);
+        });
+        if (found) {
+          activeCategoryGroup = null;
+          catSelect.value = found.value;
+          syncCategorySelectUi();
+          return true;
+        }
+      }
+      return false;
     }
 
     function dedupeKeywords(list) {
@@ -704,8 +848,11 @@
       populateVehicleModels("");
       if (vehicleYearSelect) vehicleYearSelect.value = "";
       if (searchInput) searchInput.value = "";
+      activeCategoryGroup = null;
       if (catSelect) catSelect.value = "";
+      syncCategorySelectUi();
       syncVehicleUrl();
+      syncCategoryUrl();
       render(allProducts, { resetPage: true });
       if (scroll) scrollToCatalogTop();
     }
@@ -819,14 +966,17 @@
     }
 
     function fillCategories(products) {
+      if (!catSelect) return;
+      while (catSelect.options.length > 1) {
+        catSelect.remove(1);
+      }
       var seen = {};
       var list = [];
       products.forEach(function (p) {
-        var c = (p.categoria || "Sin categoría").trim();
-        if (!seen[c]) {
-          seen[c] = true;
-          list.push(c);
-        }
+        var c = (p.categoria || "").trim();
+        if (!c || seen[c]) return;
+        seen[c] = true;
+        list.push(c);
       });
       list.sort(function (a, b) {
         return a.localeCompare(b, "es");
@@ -949,7 +1099,11 @@
     }
 
     function matches(p, q, cat) {
-      if (cat && norm(p.categoria) !== norm(cat)) return false;
+      if (activeCategoryGroup) {
+        if (!productMatchesCategoryGroup(p, activeCategoryGroup)) return false;
+      } else if (cat && norm(p.categoria) !== norm(cat)) {
+        return false;
+      }
       if (!q) return true;
       var nq = norm(q);
       if (norm(p.titulo).indexOf(nq) !== -1) return true;
@@ -1158,17 +1312,23 @@
       var visible = filtered.slice(start, start + PAGE_SIZE);
 
       updateVehicleResultUi(totalItems);
+      updateCategoryBannerUi(totalItems);
 
       if (meta) {
         if (activeVehicleSearch && totalItems === 0) {
           meta.textContent = "";
           meta.hidden = true;
+        } else if (activeCategoryGroup) {
+          meta.hidden = true;
+          meta.textContent = "";
         } else {
           meta.hidden = false;
         }
-        if (totalItems === 0 && !activeVehicleSearch) {
+        if (totalItems === 0 && !activeVehicleSearch && !activeCategoryGroup) {
           meta.textContent = "Sin productos en el catálogo";
         } else if (totalItems === 0 && activeVehicleSearch) {
+          meta.textContent = "";
+        } else if (activeCategoryGroup) {
           meta.textContent = "";
         } else if (totalItems > PAGE_SIZE) {
           meta.textContent =
@@ -1209,18 +1369,10 @@
         fillCategories(allProducts);
         var params = parseParams();
         var hasVehicleSearch = applyVehicleParamsFromUrl(params);
+        var hasCategoryFilter = applyCategoryParamsFromUrl(params);
         if (searchInput) {
           // Avoid stale browser-restored filters hiding products on first load.
           searchInput.value = params.q || "";
-        }
-        if (catSelect && params.cat) {
-          var wanted = params.cat;
-          var found = Array.prototype.slice.call(catSelect.options).find(function (o) {
-            return norm(o.value) === norm(wanted);
-          });
-          if (found) catSelect.value = found.value;
-        } else if (catSelect) {
-          catSelect.value = "";
         }
         render(allProducts, { resetPage: true });
         var heroQ = document.getElementById("q");
@@ -1229,8 +1381,10 @@
         if (
           prodSection &&
           (params.q ||
+            params.grupo ||
             params.cat ||
             hasVehicleSearch ||
+            hasCategoryFilter ||
             window.location.hash === "#productos")
         ) {
           prodSection.scrollIntoView({ behavior: "smooth" });
@@ -1242,7 +1396,17 @@
         }
         if (catSelect) {
           catSelect.addEventListener("change", function () {
+            if (catSelect.value === CATEGORY_GROUP_GHOST_VALUE) return;
+            activeCategoryGroup = null;
+            syncCategorySelectUi();
+            syncCategoryUrl();
             render(allProducts, { resetPage: true });
+          });
+        }
+        if (categoryClearBtn) {
+          categoryClearBtn.addEventListener("click", function () {
+            clearCategoryFilter();
+            scrollToCatalogTop();
           });
         }
         if (prevBtn) {
