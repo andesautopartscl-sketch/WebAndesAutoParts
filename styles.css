@@ -41,9 +41,14 @@ html {
   .feature-card:hover {
     transform: none;
   }
-  .card:hover .card-image-wrap img,
-  .card:hover .producto-imagen-wrapper img {
+  .card:hover .card-image-wrap img {
     transform: none;
+  }
+  .producto-imagen-wrapper img {
+    transform: scale(1.08);
+  }
+  .card:hover .producto-imagen-wrapper img {
+    transform: scale(1.08);
   }
 }
 
@@ -1204,40 +1209,48 @@ a.btn-ml:visited {
 }
 
 /* Catálogo: card de producto */
-.producto-card {
+.card.producto-card {
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eeeeee;
+  background: #fff;
   display: flex;
   flex-direction: column;
   gap: 0;
   height: 100%;
-}
-
-.producto-info {
-  padding: 0 12px 12px;
   margin: 0;
-  margin-top: 0;
-  padding-top: 0;
+  padding: 0;
 }
 
+.card.producto-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.13);
+  transform: translateY(-3px);
+}
+
+.producto-info,
 .producto-card .card-body.producto-info {
-  padding: 0 12px 12px;
+  padding: 14px;
   margin: 0;
-  gap: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .producto-card.card--catalog-ml .card-body.producto-info {
-  gap: 0;
-  padding-top: 0;
-  margin-top: 0;
+  gap: 8px;
+  padding: 14px;
+  margin: 0;
 }
 
-/* Catálogo ML: imagen completa sin recorte */
+/* Catálogo ML: imagen a pantalla completa con zoom sutil */
 .producto-imagen-wrapper {
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f0f0f0;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1250,21 +1263,21 @@ a.btn-ml:visited {
   display: block;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .producto-imagen-wrapper img {
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  padding: 0;
-  display: block;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.08);
   transition: transform 0.3s ease;
+  display: block;
 }
 
 .producto-imagen-wrapper img:hover {
-  transform: scale(1.05);
+  transform: scale(1.14);
 }
 
 .card-body {
@@ -2787,8 +2800,9 @@ a.btn-ml:visited {
 #productos .card-image-wrap img[src$="logo_andes.png"],
 .producto-imagen-wrapper img[src$="logo_andes.png"] {
   object-fit: contain;
+  transform: scale(1);
   padding: 1.5rem;
-  background: #f0f0f0;
+  background: #ffffff;
 }
 
 /* Pie: enlaces legales */
