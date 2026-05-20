@@ -10,7 +10,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Sincronizar vía Cloudflare Worker
+      - name: Sincronizar vía Cloudflare Worker (paginado)
         env:
           WORKER_URL: ${{ secrets.WORKER_SYNC_URL }}
           WORKER_SECRET: ${{ secrets.WORKER_SYNC_SECRET }}
@@ -36,66 +36,92 @@ jobs:
             fi
           fi
 
-          echo "Llamando a ${BASE}/sync ..."
-          HTTP_CODE=$(curl -sS -o /tmp/sync-response.json -w "%{http_code}" \
-            -H "Authorization: Bearer ${WORKER_SECRET}" \
-            "${BASE}/sync")
-          cat /tmp/sync-response.json
-          echo ""
-
           parse_error() {
             node -pe "try{JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).error}catch(e){''}" 2>/dev/null || true
           }
 
-          if [ "$HTTP_CODE" = "401" ]; then
-            ERROR="$(parse_error)"
-            if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
-              echo ""
-              echo "=============================================="
-              echo " TOKEN ML EXPIRADO — RENOVACIÓN REQUERIDA"
-              echo "=============================================="
-              echo ""
-              echo "El access_token de Mercado Libre vence cada ~6 horas."
-              echo ""
-              echo "1) Abre esta URL y autoriza con la cuenta del vendedor:"
-              echo ""
-              echo "   ${AUTH_URL}"
-              echo ""
-              echo "2) En tu PC, desde el repositorio, ejecuta:"
-              echo ""
-              echo "   ./renew-token-quick.sh"
-              echo ""
-              echo "   Pega la URL de redirección (o el código TG-...) cuando lo pida."
-              echo "   El script sube el token al Worker y prueba el sync."
-              echo ""
-              echo "=============================================="
-              echo "::error::Token ML expirado. Renueva en: ${AUTH_URL} — luego ejecuta ./renew-token-quick.sh"
+          handle_http_error() {
+            local HTTP_CODE="$1"
+            if [ "$HTTP_CODE" = "401" ]; then
+              ERROR="$(parse_error)"
+              if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
+                echo ""
+                echo "=============================================="
+                echo " TOKEN ML EXPIRADO — RENOVACIÓN REQUERIDA"
+                echo "=============================================="
+                echo ""
+                echo "El access_token de Mercado Libre vence cada ~6 horas."
+                echo ""
+                echo "1) Abre esta URL y autoriza con la cuenta del vendedor:"
+                echo ""
+                echo "   ${AUTH_URL}"
+                echo ""
+                echo "2) En tu PC, desde el repositorio, ejecuta:"
+                echo ""
+                echo "   ./renew-token-quick.sh"
+                echo ""
+                echo "   Pega la URL de redirección (o el código TG-...) cuando lo pida."
+                echo "   El script sube el token al Worker y prueba el sync."
+                echo ""
+                echo "=============================================="
+                echo "::error::Token ML expirado. Renueva en: ${AUTH_URL} — luego ejecuta ./renew-token-quick.sh"
+                exit 1
+              fi
+            fi
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              ERROR="$(parse_error)"
+              if [ "$ERROR" = "MISSING_TOKEN" ]; then
+                echo ""
+                echo "::error::No hay token ML en el Worker. Ejecuta ./renew-token-quick.sh"
+                echo "URL de autorización: ${AUTH_URL}"
+                exit 1
+              fi
+              echo "::error::Sync falló con HTTP ${HTTP_CODE}"
               exit 1
             fi
-          fi
+          }
 
-          if [ "$HTTP_CODE" != "200" ]; then
-            ERROR="$(parse_error)"
-            if [ "$ERROR" = "MISSING_TOKEN" ]; then
-              echo ""
-              echo "::error::No hay token ML en el Worker. Ejecuta ./renew-token-quick.sh"
-              echo "URL de autorización: ${AUTH_URL}"
+          OFFSET=0
+          STEP=1
+          while true; do
+            echo "Llamando a ${BASE}/sync?offset=${OFFSET} (paso ${STEP}) ..."
+            HTTP_CODE=$(curl -sS -o /tmp/sync-response.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${WORKER_SECRET}" \
+              "${BASE}/sync?offset=${OFFSET}")
+            cat /tmp/sync-response.json
+            echo ""
+
+            handle_http_error "$HTTP_CODE"
+
+            OK=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).ok" 2>/dev/null || echo false)
+            if [ "$OK" != "true" ]; then
+              ERROR="$(parse_error)"
+              if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
+                echo "::error::Token ML expirado. Renueva: ${AUTH_URL} — ./renew-token-quick.sh"
+                exit 1
+              fi
+              echo "::error::El Worker respondió ok=false"
               exit 1
             fi
-            echo "::error::Sync falló con HTTP ${HTTP_CODE}"
-            exit 1
-          fi
 
-          OK=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).ok" 2>/dev/null || echo false)
-          if [ "$OK" != "true" ]; then
-            ERROR="$(parse_error)"
-            if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
-              echo "::error::Token ML expirado. Renueva: ${AUTH_URL} — ./renew-token-quick.sh"
+            DONE=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).done === true" 2>/dev/null || echo false)
+            if [ "$DONE" = "true" ]; then
+              PRODUCTS=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).products" 2>/dev/null || echo "?")
+              echo "::notice::Catálogo sincronizado correctamente (${PRODUCTS} productos, commit en GitHub)"
+              break
+            fi
+
+            NEXT=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).next_offset" 2>/dev/null || echo "")
+            ACC=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).accumulated" 2>/dev/null || echo "?")
+            TOTAL=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).total" 2>/dev/null || echo "?")
+            echo "::notice::Lote ${STEP} OK — acumulados ${ACC}/${TOTAL}, siguiente offset=${NEXT}"
+
+            if [ -z "$NEXT" ]; then
+              echo "::error::El Worker no devolvió next_offset"
               exit 1
             fi
-            echo "::error::El Worker respondió ok=false"
-            exit 1
-          fi
 
-          PRODUCTS=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/sync-response.json','utf8')).products" 2>/dev/null || echo "?")
-          echo "::notice::Catálogo sincronizado correctamente (${PRODUCTS} productos)"
+            OFFSET="$NEXT"
+            STEP=$((STEP + 1))
+          done

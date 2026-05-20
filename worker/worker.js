@@ -8,6 +8,15 @@
 
 const API = "https://api.mercadolibre.com";
 const KV_TOKEN_KEY = "ML_ACCESS_TOKEN";
+const KV_SYNC_IDS = "SYNC_ITEM_IDS";
+const KV_SYNC_PRODUCTOS = "SYNC_PARTIAL_PRODUCTOS";
+const KV_SYNC_META = "SYNC_META";
+
+const ITEMS_PER_INVOCATION = 200;
+const MULTI_ITEM_BATCH = 20;
+const SEARCH_PAGE_SIZE = 100;
+const ML_ITEM_ATTRS =
+  "id,title,price,currency_id,thumbnail,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -24,10 +33,10 @@ function unauthorized() {
 }
 
 function checkAuth(request, env) {
-  const secret = env.WORKER_SYNC_SECRET;
+  const secret = (env.WORKER_SYNC_SECRET || "").trim();
   if (!secret) return true;
   const auth = request.headers.get("Authorization") || "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  const token = (auth.startsWith("Bearer ") ? auth.slice(7) : auth).trim();
   return token === secret;
 }
 
@@ -87,6 +96,31 @@ async function setMlAccessToken(env, token) {
   await env.TOKEN_KV.put(KV_TOKEN_KEY, token);
 }
 
+async function kvGetJson(env, key) {
+  if (!env.TOKEN_KV) return null;
+  const raw = await env.TOKEN_KV.get(key);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+async function kvSetJson(env, key, value) {
+  if (!env.TOKEN_KV) throw new Error("TOKEN_KV no configurado en el Worker");
+  await env.TOKEN_KV.put(key, JSON.stringify(value));
+}
+
+async function clearSyncState(env) {
+  if (!env.TOKEN_KV) return;
+  await Promise.all([
+    env.TOKEN_KV.delete(KV_SYNC_IDS),
+    env.TOKEN_KV.delete(KV_SYNC_PRODUCTOS),
+    env.TOKEN_KV.delete(KV_SYNC_META),
+  ]);
+}
+
 async function mlFetch(url, accessToken) {
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -137,21 +171,20 @@ async function fetchAllActiveItemIds(sellerId, accessToken) {
   return ids;
 }
 
-async function fetchItemDetail(itemId, accessToken) {
-  return mlFetch(`${API}/items/${itemId}`, accessToken);
-}
-
-async function fetchAllItemDetails(itemIds, accessToken) {
+async function fetchItemsMulti(itemIds, accessToken) {
   const items = [];
-  const concurrency = 8;
-  for (let i = 0; i < itemIds.length; i += concurrency) {
-    const chunk = itemIds.slice(i, i + concurrency);
-    const batch = await Promise.all(
-      chunk.map((id) => fetchItemDetail(id, accessToken))
-    );
-    items.push(...batch);
-    if (i + concurrency < itemIds.length) {
-      await new Promise((r) => setTimeout(r, 150));
+  for (let i = 0; i < itemIds.length; i += MULTI_ITEM_BATCH) {
+    const chunk = itemIds.slice(i, i + MULTI_ITEM_BATCH);
+    const idsParam = chunk.map(encodeURIComponent).join(",");
+    const url =
+      `${API}/items?ids=${idsParam}` +
+      `&attributes=${encodeURIComponent(ML_ITEM_ATTRS)}`;
+    const data = await mlFetch(url, accessToken);
+    const entries = Array.isArray(data) ? data : [];
+    for (const entry of entries) {
+      if (entry && entry.code === 200 && entry.body) {
+        items.push(entry.body);
+      }
     }
   }
   return items;
@@ -177,56 +210,86 @@ function extractSku(item) {
   return "";
 }
 
-async function getCategoryName(categoryId, accessToken, cache) {
-  if (!categoryId) return "Sin categoría";
-  if (cache.has(categoryId)) return cache.get(categoryId);
-  try {
-    const cat = await mlFetch(`${API}/categories/${categoryId}`, accessToken);
-    const name = cat.name || categoryId;
-    cache.set(categoryId, name);
-    return name;
-  } catch {
-    cache.set(categoryId, categoryId);
-    return categoryId;
-  }
-}
-
-function mainImage(item) {
+function itemImage(item) {
+  if (item.thumbnail) return item.thumbnail;
   const pic = item.pictures && item.pictures[0];
   return pic ? pic.secure_url || pic.url || "" : "";
 }
 
-function mapItem(item, categoryName) {
+function mapItem(item) {
   return {
     id: item.id,
-    sku: extractSku(item),
+    sku: extractSku(item) || item.seller_sku || "",
     titulo: item.title || "",
     precio: Number(item.price) || 0,
     moneda: item.currency_id || "CLP",
-    imagen: mainImage(item),
+    imagen: itemImage(item),
     link: item.permalink || "",
-    categoria: categoryName,
+    categoria: item.category_id || "Sin categoría",
     stock: item.available_quantity != null ? item.available_quantity : 0,
     condicion: item.condition === "used" ? "used" : "new",
   };
 }
 
-async function buildCatalog(accessToken) {
+async function initSyncState(accessToken, env) {
   const { sellerId, nickname } = await fetchSellerId(accessToken);
   const itemIds = await fetchAllActiveItemIds(sellerId, accessToken);
-  const rawItems = await fetchAllItemDetails(itemIds, accessToken);
-  const categoryCache = new Map();
-  const productos = [];
-  for (const item of rawItems) {
-    const categoryName = await getCategoryName(
-      item.category_id,
-      accessToken,
-      categoryCache
-    );
-    productos.push(mapItem(item, categoryName));
+  await kvSetJson(env, KV_SYNC_IDS, itemIds);
+  await kvSetJson(env, KV_SYNC_PRODUCTOS, []);
+  await kvSetJson(env, KV_SYNC_META, {
+    sellerId,
+    nickname,
+    total: itemIds.length,
+    started_at: new Date().toISOString(),
+  });
+  return { itemIds, sellerId, nickname, total: itemIds.length };
+}
+
+async function processSyncBatch(accessToken, env, offset) {
+  let itemIds = await kvGetJson(env, KV_SYNC_IDS);
+  let meta = await kvGetJson(env, KV_SYNC_META);
+
+  if (offset === 0 && (!itemIds || !itemIds.length)) {
+    const init = await initSyncState(accessToken, env);
+    itemIds = init.itemIds;
+    meta = {
+      sellerId: init.sellerId,
+      nickname: init.nickname,
+      total: init.total,
+      started_at: new Date().toISOString(),
+    };
   }
-  productos.sort((a, b) => a.titulo.localeCompare(b.titulo, "es"));
-  return { productos, sellerId, nickname, count: productos.length };
+
+  if (!itemIds || !itemIds.length) {
+    throw new Error(
+      "Estado de sync no inicializado. Llama primero a /sync?offset=0"
+    );
+  }
+
+  if (!meta) {
+    meta = { total: itemIds.length };
+  }
+
+  const batchIds = itemIds.slice(offset, offset + ITEMS_PER_INVOCATION);
+  const rawItems = await fetchItemsMulti(batchIds, accessToken);
+  const mapped = rawItems.map(mapItem);
+  const partial = (await kvGetJson(env, KV_SYNC_PRODUCTOS)) || [];
+  partial.push(...mapped);
+  await kvSetJson(env, KV_SYNC_PRODUCTOS, partial);
+
+  const total = itemIds.length;
+  const nextOffset = offset + ITEMS_PER_INVOCATION;
+  const done = nextOffset >= total;
+
+  return {
+    productos: partial,
+    meta,
+    total,
+    offset,
+    processed: mapped.length,
+    nextOffset,
+    done,
+  };
 }
 
 async function githubGetFile(env) {
@@ -281,7 +344,7 @@ async function githubCommitCatalog(env, content) {
   return res.json();
 }
 
-async function handleSync(env) {
+async function handleSync(request, env) {
   const accessToken = await getMlAccessToken(env);
   if (!accessToken) {
     return json(
@@ -304,15 +367,55 @@ async function handleSync(env) {
     );
   }
 
+  const url = new URL(request.url);
+  const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+
   try {
-    const { productos, sellerId, nickname, count } = await buildCatalog(accessToken);
+    if (offset === 0) {
+      await clearSyncState(env);
+    } else {
+      const existingIds = await kvGetJson(env, KV_SYNC_IDS);
+      if (!existingIds || !existingIds.length) {
+        return json(
+          {
+            ok: false,
+            error: "SYNC_NOT_INITIALIZED",
+            message: "Debes iniciar con /sync?offset=0 antes de continuar",
+          },
+          400
+        );
+      }
+    }
+
+    const batch = await processSyncBatch(accessToken, env, offset);
+
+    if (!batch.done) {
+      return json({
+        ok: true,
+        done: false,
+        offset,
+        next_offset: batch.nextOffset,
+        total: batch.total,
+        accumulated: batch.productos.length,
+        processed_this_batch: batch.processed,
+        batch_size: ITEMS_PER_INVOCATION,
+        message: `Lote procesado. Llama a /sync?offset=${batch.nextOffset}`,
+      });
+    }
+
+    const productos = [...batch.productos];
+    productos.sort((a, b) => a.titulo.localeCompare(b.titulo, "es"));
     const fileContent = JSON.stringify(productos, null, 2) + "\n";
     const gh = await githubCommitCatalog(env, fileContent);
+    await clearSyncState(env);
+
     return json({
       ok: true,
-      products: count,
-      seller_id: sellerId,
-      seller_nickname: nickname,
+      done: true,
+      products: productos.length,
+      total: batch.total,
+      seller_id: batch.meta.sellerId,
+      seller_nickname: batch.meta.nickname,
       github: {
         commit_sha: gh.commit && gh.commit.sha,
         content_sha: gh.content && gh.content.sha,
@@ -413,7 +516,7 @@ export default {
         service: "andes-autoparts-ml-sync",
         token_configured: hasToken,
         endpoints: [
-          "GET /sync",
+          "GET /sync?offset=0 (paginado, máx 200 ítems por llamada)",
           "POST /update-token",
           "GET /auth-url",
           "GET /health",
@@ -430,7 +533,7 @@ export default {
     }
 
     if (path === "/sync" && request.method === "GET") {
-      return handleSync(env);
+      return handleSync(request, env);
     }
 
     if (path === "/update-token" && request.method === "POST") {
