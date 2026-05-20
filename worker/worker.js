@@ -292,6 +292,13 @@ async function processSyncBatch(accessToken, env, offset) {
   };
 }
 
+function githubAuthHeader(env) {
+  const token = (env.GITHUB_TOKEN || "").trim();
+  return token.startsWith("ghp_") || token.startsWith("github_pat_")
+    ? `Bearer ${token}`
+    : `token ${token}`;
+}
+
 async function githubGetFile(env) {
   const filePath = env.GITHUB_FILE_PATH || "data/productos.json";
   const path = encodeURIComponent(filePath);
@@ -300,7 +307,7 @@ async function githubGetFile(env) {
     `/contents/${path}?ref=${encodeURIComponent(env.GITHUB_BRANCH || "main")}`;
   const res = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      Authorization: githubAuthHeader(env),
       Accept: "application/vnd.github+json",
       "User-Agent": "andes-autoparts-ml-sync-worker",
       "X-GitHub-Api-Version": "2022-11-28",
@@ -329,7 +336,7 @@ async function githubCommitCatalog(env, content) {
   const res = await fetch(url, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      Authorization: githubAuthHeader(env),
       Accept: "application/vnd.github+json",
       "Content-Type": "application/json",
       "User-Agent": "andes-autoparts-ml-sync-worker",
