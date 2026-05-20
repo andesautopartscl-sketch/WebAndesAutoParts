@@ -511,11 +511,44 @@ a.btn-ml:visited {
 }
 
 .hero-lead {
-  margin: 0 0 1.5rem;
+  margin: 0 0 0;
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   line-height: 1.45;
   color: rgba(255, 255, 255, 0.72);
   max-width: 36ch;
+}
+
+.hero-marcas {
+  margin: 16px 0 20px;
+}
+
+.hero-marcas-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.hero-marcas-logos {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hero-marcas-logos img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.hero-marcas-logos img:hover {
+  opacity: 1;
 }
 
 .text-accent {
@@ -524,8 +557,13 @@ a.btn-ml:visited {
 
 .hero-right {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
+  gap: 0;
+  width: 100%;
+  max-width: 340px;
+  margin-inline: auto;
 }
 
 .hero-stats-panel {
@@ -533,7 +571,6 @@ a.btn-ml:visited {
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   width: 100%;
-  max-width: 340px;
   padding: 16px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -566,6 +603,25 @@ a.btn-ml:visited {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.5);
   line-height: 1.3;
+}
+
+.hero-trust-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hero-trust-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .hero-search {
@@ -632,6 +688,19 @@ a.btn-ml:visited {
 
 .hero-ctas .btn-outline-white.btn-lg {
   box-shadow: none;
+}
+
+.hero-ctas .btn-hero-wa.btn-lg {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.hero-ctas .btn-hero-wa.btn-lg:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .ml-badge {
