@@ -317,13 +317,25 @@ a.btn-ml:visited {
 }
 
 /* Hero */
-.hero {
+section#top,
+.hero,
+.hero-section {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hero,
+.hero-section,
+section#top.hero {
   position: relative;
-  min-height: min(92vh, 820px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 3rem 0 5.5rem;
+  padding: 80px 0 2.5rem;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .hero-carousel {
@@ -449,11 +461,12 @@ a.btn-ml:visited {
   grid-template-columns: 3fr 2fr;
   gap: 48px;
   align-items: center;
-  max-width: 1100px;
-  width: min(1100px, 100% - clamp(1.5rem, 4vw, 3rem));
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 60px 24px;
+  padding: 20px 48px 40px;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .hero-left {
@@ -743,10 +756,15 @@ a.btn-ml:visited {
 }
 
 @media (max-width: 768px) {
+  section#top.hero,
+  .hero.hero-section {
+    padding-top: 72px;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     gap: 32px;
-    padding: 48px 20px;
+    padding: 16px 20px 32px;
   }
 
   .hero-right {

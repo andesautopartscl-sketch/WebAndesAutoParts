@@ -8,6 +8,12 @@
     year.textContent = String(new Date().getFullYear());
   }
 
+  document.querySelectorAll(".hero-marcas-logos img").forEach(function (img) {
+    img.onerror = function () {
+      this.style.display = "none";
+    };
+  });
+
   function closeMenu() {
     if (!header || !toggle) return;
     header.classList.remove("is-open");
