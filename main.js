@@ -997,6 +997,14 @@
       return productSku(p);
     }
 
+    function productMlId(p) {
+      return String(p.id || "").trim();
+    }
+
+    function isMlCategoryId(label) {
+      return /^MLC\d+$/i.test(String(label || "").trim());
+    }
+
     function productLink(p) {
       var url = (p.link || p.url || "").trim();
       if (!url) return "";
@@ -1132,6 +1140,7 @@
         var img = primeraImagen(p) || PLACEHOLDER_IMG;
         var url = productLink(p);
         var code = codigoSku(p);
+        var mlId = productMlId(p);
         var precioFmt = formatPrecio(p);
         var marca = (p.marca || "").trim();
         var subcat = (p.subcategoria || "").trim();
@@ -1190,6 +1199,7 @@
         row.className = "card-title-row";
         var h3 = document.createElement("h3");
         h3.id = headingId;
+        h3.className = "producto-titulo";
         h3.textContent = titulo;
         row.appendChild(h3);
         if (code) {
@@ -1197,12 +1207,17 @@
           badge.className = "badge-count";
           badge.textContent = code;
           row.appendChild(badge);
+        } else if (esMl && mlId) {
+          var badgeId = document.createElement("span");
+          badgeId.className = "badge-count badge-count--muted";
+          badgeId.textContent = mlId;
+          row.appendChild(badgeId);
         } else if (marca) {
           var badgeM = document.createElement("span");
           badgeM.className = "badge-count badge-count--muted";
           badgeM.textContent = marca;
           row.appendChild(badgeM);
-        } else if (catLabel) {
+        } else if (catLabel && !isMlCategoryId(catLabel)) {
           var badgeCat = document.createElement("span");
           badgeCat.className = "badge-count badge-count--muted";
           badgeCat.textContent = catLabel;
@@ -1210,7 +1225,7 @@
         }
 
         var metaParts = [];
-        if (catLabel) metaParts.push(catLabel);
+        if (catLabel && !isMlCategoryId(catLabel)) metaParts.push(catLabel);
         if (subcat) metaParts.push(subcat);
         if (marca && !code) metaParts.push(marca);
 
@@ -1219,10 +1234,19 @@
         if (desc) {
           pDesc.textContent = desc;
         } else if (stock != null && !isNaN(stock)) {
-          pDesc.textContent =
-            stock > 0
-              ? "Disponible en Mercado Libre · stock: " + stock
-              : "Consultar disponibilidad en Mercado Libre";
+          if (esMl) {
+            pDesc.innerHTML =
+              stock > 0
+                ? '<span style="color:#22c55e">●</span> En stock (' +
+                  stock +
+                  " und.)"
+                : '<span style="color:#ef4444">●</span> Sin stock';
+          } else {
+            pDesc.textContent =
+              stock > 0
+                ? "Disponible · stock: " + stock
+                : "Consultar disponibilidad";
+          }
         } else {
           pDesc.textContent = "Consulta disponibilidad y compatibilidad.";
         }

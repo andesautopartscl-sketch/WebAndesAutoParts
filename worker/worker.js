@@ -16,7 +16,7 @@ const ITEMS_PER_INVOCATION = 200;
 const MULTI_ITEM_BATCH = 20;
 const SEARCH_PAGE_SIZE = 100;
 const ML_ITEM_ATTRS =
-  "id,title,price,currency_id,thumbnail,permalink,available_quantity,condition,seller_sku,attributes,category_id";
+  "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -210,10 +210,18 @@ function extractSku(item) {
   return "";
 }
 
+function mlHighResImageUrl(url) {
+  if (!url) return "";
+  return String(url)
+    .replace(/-I\.(jpe?g|webp|png)/gi, "-O.$1")
+    .replace(/^http:\/\//i, "https://");
+}
+
 function itemImage(item) {
-  if (item.thumbnail) return item.thumbnail;
   const pic = item.pictures && item.pictures[0];
-  return pic ? pic.secure_url || pic.url || "" : "";
+  const raw =
+    (pic && (pic.url || pic.secure_url)) || item.thumbnail || "";
+  return mlHighResImageUrl(raw);
 }
 
 function mapItem(item) {

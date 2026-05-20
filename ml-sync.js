@@ -311,10 +311,18 @@ async function getCategoryName(categoryId, accessToken) {
   }
 }
 
+function mlHighResImageUrl(url) {
+  if (!url) return "";
+  return String(url)
+    .replace(/-I\.(jpe?g|webp|png)/gi, "-O.$1")
+    .replace(/^http:\/\//i, "https://");
+}
+
 function mainImage(item) {
   const pic = item.pictures && item.pictures[0];
-  if (!pic) return "";
-  return pic.secure_url || pic.url || "";
+  const raw =
+    (pic && (pic.url || pic.secure_url)) || item.thumbnail || "";
+  return mlHighResImageUrl(raw);
 }
 
 function mapItem(item, categoryName) {
