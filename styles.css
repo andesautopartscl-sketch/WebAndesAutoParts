@@ -674,7 +674,7 @@ a.btn-ml:visited {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem 0.75rem;
-  margin-bottom: 2.25rem;
+  margin-bottom: 0;
 }
 
 .hero-ctas .btn-lg {
@@ -693,6 +693,45 @@ a.btn-ml:visited {
 
 .hero-ctas .btn-outline-white.btn-lg {
   box-shadow: none;
+}
+
+.ml-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 166, 80, 0.1);
+  border: 1px solid rgba(0, 166, 80, 0.3);
+  color: #00a650;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-top: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content--center .ml-badge {
+  margin-inline: auto;
+}
+
+.ml-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00a650;
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
 }
 
 .hero-trust {
