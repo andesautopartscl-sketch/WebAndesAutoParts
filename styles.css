@@ -2224,6 +2224,61 @@ a.btn-ml:visited {
   gap: 1.25rem;
 }
 
+.testimonio-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  border: 1px solid #eee;
+}
+
+.testimonio-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.testimonio-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a2e4a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.testimonio-nombre {
+  font-weight: 600;
+  color: #1a2e4a;
+  font-size: 14px;
+}
+
+.testimonio-estrellas {
+  color: #f59e0b;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.testimonio-texto {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+.testimonio-tag {
+  font-size: 11px;
+  color: #aaa;
+  font-weight: 500;
+}
+
 .testimonial-card {
   margin: 0;
   padding: 1.35rem 1.25rem;
