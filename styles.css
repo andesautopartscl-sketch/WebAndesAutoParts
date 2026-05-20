@@ -31,6 +31,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -59,6 +60,7 @@ body {
   line-height: 1.6;
   color: var(--text);
   background: var(--cream);
+  overflow-x: hidden;
 }
 
 img {
@@ -316,26 +318,22 @@ a.btn-ml:visited {
   letter-spacing: -0.01em;
 }
 
-/* Hero */
+/* Hero — pantalla completa (breakout si el padre está centrado) */
 section#top,
-.hero,
-.hero-section {
-  width: 100%;
-  max-width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.hero,
 .hero-section,
-section#top.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 80px 0 2.5rem;
-  overflow: hidden;
-  box-sizing: border-box;
+#top,
+.hero.hero-section {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 
 .hero-carousel {
@@ -454,19 +452,20 @@ section#top.hero {
     linear-gradient(to top, rgba(8, 12, 22, 0.65) 0%, transparent 42%);
 }
 
-.hero-content {
-  position: relative;
-  z-index: 3;
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 48px;
-  align-items: center;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px 48px 40px;
-  text-align: left;
-  box-sizing: border-box;
+.hero-content,
+.hero-inner {
+  position: relative !important;
+  z-index: 3 !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 100px 60px 60px !important;
+  display: grid !important;
+  grid-template-columns: 1.2fr 0.8fr !important;
+  gap: 48px !important;
+  align-items: center !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
 }
 
 .hero-left {
@@ -756,15 +755,11 @@ section#top.hero {
 }
 
 @media (max-width: 768px) {
-  section#top.hero,
-  .hero.hero-section {
-    padding-top: 72px;
-  }
-
-  .hero-content {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 16px 20px 32px;
+  .hero-content,
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 88px 24px 40px !important;
   }
 
   .hero-right {
