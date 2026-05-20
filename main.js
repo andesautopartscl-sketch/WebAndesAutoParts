@@ -1151,7 +1151,8 @@
         var esMl = Boolean(url && /mercadolibre\./i.test(url));
 
         var article = document.createElement("article");
-        article.className = "card card--photo" + (esMl ? " card--catalog-ml" : "");
+        article.className =
+          "card card--photo producto-card" + (esMl ? " card--catalog-ml" : "");
 
         var headingId = "catalogo-prod-" + idx;
 
@@ -1193,7 +1194,7 @@
         }
 
         var body = document.createElement("div");
-        body.className = "card-body";
+        body.className = "card-body producto-info";
 
         var row = document.createElement("div");
         row.className = "card-title-row";
