@@ -557,28 +557,23 @@ body {
 
 .hero-marcas-logos {
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .hero-marcas-logos img {
-  height: 24px;
+  height: 20px;
   width: auto;
+  max-width: 70px;
   object-fit: contain;
   filter: brightness(0) invert(1);
-  opacity: 0.5;
+  opacity: 0.6;
   transition: opacity 0.2s;
 }
 
 .hero-marcas-logos img:hover {
   opacity: 1;
-}
-
-/* GWM: PNG con fondo blanco — brightness(0) invert(1) lo vuelve un bloque gris */
-.hero-marcas-logos img[src*="gwm"] {
-  filter: invert(1);
-  mix-blend-mode: screen;
 }
 
 .text-accent {
