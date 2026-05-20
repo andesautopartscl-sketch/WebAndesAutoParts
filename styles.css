@@ -576,6 +576,14 @@ body {
   opacity: 1;
 }
 
+.hero-marcas-logos img[src*="jac"] {
+  height: 28px;
+}
+
+.hero-marcas-logos img[src*="changan"] {
+  height: 26px;
+}
+
 .text-accent {
   color: var(--accent);
 }
