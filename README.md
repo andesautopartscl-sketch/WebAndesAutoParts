@@ -185,6 +185,28 @@ Endpoints (requieren `Authorization: Bearer WORKER_SYNC_SECRET` salvo `/health`)
 
 ---
 
+## Formulario de contacto (EmailJS)
+
+El formulario de la sección **Contacto** envía correos a `andesautopartscl@gmail.com` vía [EmailJS](https://www.emailjs.com/). En el código quedan placeholders hasta que los configures:
+
+| Placeholder en `main.js` | Qué es |
+|--------------------------|--------|
+| `TU_PUBLIC_KEY` | Public Key de tu cuenta EmailJS |
+| `service_andes` | ID del Email Service (Gmail, etc.) |
+| `template_andes` | ID de la plantilla de correo |
+
+### Configuración en 5 pasos
+
+1. Crea una cuenta en [emailjs.com](https://www.emailjs.com/) e inicia sesión.
+2. **Email Services** → **Add New Service** → conecta Gmail (u otro) con `andesautopartscl@gmail.com` → anota el **Service ID** (úsalo como `service_andes` o actualiza el nombre en `main.js`).
+3. **Email Templates** → **Create New Template** → diseña el cuerpo con variables que coincidan con los `name` del formulario (`nombre`, `email`, `telefono`, `patente`, `chasis`, `mensaje`) → anota el **Template ID** (`template_andes`).
+4. **Account** → **API Keys** → copia la **Public Key** y reemplaza `TU_PUBLIC_KEY` en `main.js` (función `initContactFormEmailJS`).
+5. Sube los cambios a GitHub Pages, envía un mensaje de prueba desde el sitio y revisa la bandeja de entrada (y spam).
+
+En **localhost** el formulario sigue abriendo el cliente de correo (modo prueba); EmailJS solo corre en producción.
+
+---
+
 ## Estructura relevante
 
 ```

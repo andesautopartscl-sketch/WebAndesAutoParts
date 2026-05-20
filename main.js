@@ -98,9 +98,12 @@
     );
   })();
 
-  (function initContactFormProduction() {
-    var form = document.getElementById("contact-form-home");
-    if (!form) return;
+  (function initContactFormEmailJS() {
+    var form =
+      document.getElementById("contact-form-home") ||
+      document.querySelector("#contacto form, .contact-form, form[name='contacto']");
+    if (!form || typeof emailjs === "undefined") return;
+
     var host = (window.location.hostname || "").toLowerCase();
     var isLocal =
       host === "localhost" ||
@@ -109,141 +112,38 @@
       host === "::1";
     if (isLocal) return;
 
-    form.addEventListener(
-      "submit",
-      function (e) {
-        e.preventDefault();
-        var fd = new FormData(form);
-        var nombre = String(fd.get("nombre") || "").trim();
-        var email = String(fd.get("email") || "").trim();
-        var telefono = String(fd.get("telefono") || "").trim();
-        var patente = String(fd.get("patente") || "").trim();
-        var chasis = String(fd.get("chasis") || "").trim();
-        var mensaje = String(fd.get("mensaje") || "").trim();
-        var submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) submitBtn.disabled = true;
+    emailjs.init("TU_PUBLIC_KEY");
 
-        var cfg =
-          typeof window !== "undefined" && window.ANDES_CONTACT
-            ? window.ANDES_CONTACT
-            : {};
-        var key = (cfg.web3formsAccessKey || "").trim();
-        var wa = String(cfg.whatsappNumber || "56926152826").replace(/\D/g, "");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"], input[type="submit"]');
+      if (!btn) return;
+      var originalText = btn.textContent;
+      btn.textContent = "Enviando...";
+      btn.disabled = true;
 
-        function buildWhatsAppText() {
-          var lines = [
-            "Hola Andes Auto Parts,",
-            "",
-            "Nombre: " + nombre,
-            "Correo: " + email,
-            "Teléfono: " + (telefono || "—"),
-          ];
-          if (patente) lines.push("Patente: " + patente);
-          if (chasis) lines.push("Chasis: " + chasis);
-          lines.push("", "Consulta:", mensaje);
-          return lines.join("\n");
-        }
-
-        function buildSellerEmailBody() {
-          var t = telefono || "(no indicado)";
-          var p = patente || "(no indicada)";
-          var c = chasis || "(no indicado)";
-          var m = mensaje || "(sin texto)";
-          return (
-            "Nuevo contacto desde la web — Andes Auto Parts\n\n" +
-            "DATOS DEL CLIENTE\n" +
-            "────────────────\n" +
-            "Nombre: " +
-            nombre +
-            "\nCorreo: " +
-            email +
-            "\nTeléfono: " +
-            t +
-            "\nPatente: " +
-            p +
-            "\nN° de chasis: " +
-            c +
-            "\n\n" +
-            "CONSULTA\n" +
-            "────────\n" +
-            m +
-            "\n\n" +
-            "—\n" +
-            "Podés responder a este correo para contestar al cliente (según tu cliente de correo)."
-          );
-        }
-
-        function whatsAppUrl() {
-          return (
-            "https://wa.me/" +
-            wa +
-            "?text=" +
-            encodeURIComponent(buildWhatsAppText())
-          );
-        }
-
-        function goGraciasConWhatsApp() {
-          var u = whatsAppUrl();
-          try {
-            sessionStorage.setItem("andes_wa_url", u);
-            localStorage.setItem("andes_wa_url", u);
-          } catch (err) {}
-          var base = graciasPageUrl().split("#")[0].split("?")[0];
-          var sep = base.indexOf("?") >= 0 ? "&" : "?";
-          window.location.href =
-            base + sep + "wa=1#u=" + encodeURIComponent(u);
-        }
-
-        if (key) {
-          fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              access_key: key,
-              subject: "Nuevo contacto web — Andes Auto Parts",
-              from_name: nombre,
-              name: nombre,
-              email: email,
-              phone: telefono,
-              patente: patente,
-              chasis: chasis,
-              message: buildSellerEmailBody(),
-            }),
-          })
-            .then(function (res) {
-              return res.json().then(
-                function (data) {
-                  if (!res.ok || !data || data.success !== true) {
-                    throw new Error("fail");
-                  }
-                },
-                function () {
-                  throw new Error("fail");
-                }
-              );
-            })
-            .then(function () {
-              goGraciasConWhatsApp();
-            })
-            .catch(function () {
-              goGraciasConWhatsApp();
-            })
-            .finally(function () {
-              if (submitBtn) submitBtn.disabled = false;
-            });
-        } else {
-          try {
-            goGraciasConWhatsApp();
-          } finally {
-            if (submitBtn) submitBtn.disabled = false;
-          }
-        }
-      },
-      true
-    );
+      emailjs
+        .sendForm("service_andes", "template_andes", form)
+        .then(function () {
+          btn.textContent = "✓ Mensaje enviado";
+          btn.style.background = "#22c55e";
+          form.reset();
+          setTimeout(function () {
+            btn.textContent = originalText;
+            btn.style.background = "";
+            btn.disabled = false;
+          }, 4000);
+        })
+        .catch(function () {
+          btn.textContent = "Error al enviar";
+          btn.style.background = "#ef4444";
+          btn.disabled = false;
+          setTimeout(function () {
+            btn.textContent = originalText;
+            btn.style.background = "";
+          }, 3000);
+        });
+    });
   })();
 
   (function initCookieBanner() {
