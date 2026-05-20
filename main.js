@@ -1459,4 +1459,38 @@
         if (emptyEl) emptyEl.hidden = true;
       });
   })();
+
+  function animateCounters() {
+    var counters = document.querySelectorAll(".stat-number");
+    counters.forEach(function (counter) {
+      var target = parseInt(counter.dataset.target, 10);
+      var duration = 2000;
+      var step = target / (duration / 16);
+      var current = 0;
+      var timer = setInterval(function () {
+        current += step;
+        if (current >= target) {
+          counter.textContent = String(target);
+          clearInterval(timer);
+        } else {
+          counter.textContent = String(Math.floor(current));
+        }
+      }, 16);
+    });
+  }
+
+  var statsObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCounters();
+          statsObserver.disconnect();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  var statsBanner = document.querySelector(".stats-banner");
+  if (statsBanner) statsObserver.observe(statsBanner);
 })();
