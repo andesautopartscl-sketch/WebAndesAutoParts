@@ -316,8 +316,9 @@ a.btn-ml:visited {
   letter-spacing: -0.01em;
 }
 
-/* ===== HERO COMPLETO ===== */
-section#top {
+/* ===== HERO ===== */
+.hero.hero-section,
+section.hero {
   position: relative;
   width: 100vw;
   min-height: 100vh;
@@ -326,9 +327,25 @@ section#top {
   align-items: center;
   overflow: hidden;
   padding: 0;
+  box-sizing: border-box;
 }
 
-.hero-content {
+.hero .hero-carousel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero .hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero .hero-content {
   position: relative;
   z-index: 3;
   width: 100%;
@@ -342,28 +359,19 @@ section#top {
 }
 
 @media (max-width: 900px) {
-  .hero-content {
+  .hero .hero-content {
     grid-template-columns: 1fr;
     padding: 80px 24px 40px;
   }
 
-  .hero-right {
+  .hero .hero-right {
     display: none;
   }
 }
 
-/* Asegura que html y body no tengan overflow */
 html,
 body {
   overflow-x: hidden;
-  max-width: 100%;
-}
-
-.hero-carousel {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
 }
 
 .hero-slide {
@@ -460,10 +468,7 @@ body {
   }
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+.hero .hero-overlay {
   background:
     radial-gradient(ellipse 120% 80% at 50% 20%, rgba(26, 43, 75, 0.25) 0%, transparent 55%),
     linear-gradient(
