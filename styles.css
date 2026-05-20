@@ -41,7 +41,8 @@ html {
   .feature-card:hover {
     transform: none;
   }
-  .card:hover .card-image-wrap img {
+  .card:hover .card-image-wrap img,
+  .card:hover .producto-imagen-wrapper img {
     transform: none;
   }
 }
@@ -1198,6 +1199,39 @@ a.btn-ml:visited {
 }
 
 .card:hover .card-image-wrap img {
+  transform: scale(1.05);
+}
+
+/* Catálogo ML: imagen completa sin recorte */
+.producto-imagen-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f8f8f8;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.producto-imagen-wrapper .card-image-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.producto-imagen-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+  background: #f8f8f8;
+  transition: transform 0.3s ease;
+}
+
+.producto-imagen-wrapper img:hover {
   transform: scale(1.05);
 }
 
@@ -2700,10 +2734,11 @@ a.btn-ml:visited {
 }
 
 .page-catalog .card-image-wrap img[src$="logo_andes.png"],
-#productos .card-image-wrap img[src$="logo_andes.png"] {
+#productos .card-image-wrap img[src$="logo_andes.png"],
+.producto-imagen-wrapper img[src$="logo_andes.png"] {
   object-fit: contain;
   padding: 1.5rem;
-  background: var(--cream-alt);
+  background: #f8f8f8;
 }
 
 /* Pie: enlaces legales */

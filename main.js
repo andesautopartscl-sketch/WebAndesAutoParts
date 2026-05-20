@@ -1156,7 +1156,7 @@
         var headingId = "catalogo-prod-" + idx;
 
         var wrap = document.createElement("div");
-        wrap.className = "card-image-wrap";
+        wrap.className = "card-image-wrap producto-imagen-wrapper";
         var image = document.createElement("img");
         var isRemoteImg = /^https?:\/\//i.test(img);
         var srcPrimary = isRemoteImg ? img : absoluteUrl(withCacheBust(img));
