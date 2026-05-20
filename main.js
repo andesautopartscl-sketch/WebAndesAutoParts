@@ -1393,4 +1393,69 @@
 
   var statsBanner = document.querySelector(".stats-banner");
   if (statsBanner) statsObserver.observe(statsBanner);
+
+  var whatsappBtn = document.getElementById("whatsappBtn");
+  var whatsappBubble = document.getElementById("whatsappBubble");
+  var whatsappClose = document.getElementById("whatsappClose");
+  var whatsappBadge = document.getElementById("whatsappBadge");
+  var whatsappLink = document.getElementById("whatsappLink");
+  var waNumber =
+    typeof window !== "undefined" &&
+    window.ANDES_CONTACT &&
+    window.ANDES_CONTACT.whatsappNumber
+      ? String(window.ANDES_CONTACT.whatsappNumber).replace(/\D/g, "")
+      : "56926152826";
+
+  function setWhatsappBubbleOpen(open) {
+    if (!whatsappBubble || !whatsappBtn) return;
+    whatsappBubble.classList.toggle("open", open);
+    whatsappBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  if (whatsappBtn && whatsappBubble) {
+    whatsappBtn.addEventListener("click", function () {
+      var willOpen = !whatsappBubble.classList.contains("open");
+      setWhatsappBubbleOpen(willOpen);
+      if (whatsappBadge) whatsappBadge.style.display = "none";
+    });
+  }
+
+  if (whatsappClose) {
+    whatsappClose.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setWhatsappBubbleOpen(false);
+    });
+  }
+
+  function updateWhatsappMessage() {
+    var searchInput =
+      document.getElementById("busqueda") ||
+      document.getElementById("catalogo-search") ||
+      document.getElementById("q") ||
+      document.querySelector('input[type="search"], input[placeholder*="Buscar"]');
+    var searchValue = searchInput && searchInput.value ? searchInput.value.trim() : "";
+
+    var mensaje = "Hola, necesito un repuesto para mi auto.";
+    if (searchValue.length > 2) {
+      mensaje =
+        "Hola, busco repuestos de: " +
+        searchValue +
+        ". ¿Tienen disponibilidad?";
+    }
+
+    if (whatsappLink) {
+      whatsappLink.href =
+        "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(mensaje);
+    }
+  }
+
+  document.addEventListener("input", updateWhatsappMessage);
+  updateWhatsappMessage();
+
+  setTimeout(function () {
+    if (whatsappBubble && !whatsappBubble.classList.contains("open")) {
+      setWhatsappBubbleOpen(true);
+      if (whatsappBadge) whatsappBadge.style.display = "none";
+    }
+  }, 8000);
 })();
