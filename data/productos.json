@@ -1844,7 +1844,7 @@
     "imagen": "https://http2.mlstatic.com/D_658678-MLC106539486794_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2850883984-gomas-de-barra-estabilizadora-par-maxus-v80-25-2012-2023-_JM",
     "categoria": "MLC416687",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1963,6 +1963,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_637143-MLC107254447520_032026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1867911081-kit-correa-de-accesorios-gwm-wingle-567-20-turbo-_JM",
+    "categoria": "MLC373343",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1968295123",
+    "sku": "Kit203AA",
+    "titulo": "Kit De Accesorios (servicio) Jetour X70 1.5 / New X70 1.5",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_626270-MLC111952671253_052026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1968295123-kit-de-accesorios-servicio-jetour-x70-15-new-x70-15-_JM",
     "categoria": "MLC373343",
     "stock": 1,
     "condicion": "new"
@@ -2108,7 +2120,7 @@
     "imagen": "https://http2.mlstatic.com/D_871440-MLC87447243285_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1641509089-kit-de-distribucion-mg-gs-15-turbo-y-mg-rx5-15-turbo-_JM",
     "categoria": "MLC161650",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2288,7 +2300,7 @@
     "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3512,7 +3524,7 @@
     "imagen": "https://http2.mlstatic.com/D_995313-MLC83847211619_042025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2874416452-neblinero-trasero-central-gw-all-new-haval-h6-3ra-generacion-_JM",
     "categoria": "MLC376383",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3752,7 +3764,7 @@
     "imagen": "https://http2.mlstatic.com/D_721820-MLC100512129887_122025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1777592069-pastillas-de-freno-delanteras-ceramica-changan-cs35-plus-_JM",
     "categoria": "MLC22887",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -4616,6 +4628,18 @@
     "imagen": "https://http2.mlstatic.com/D_922741-MLC89002285448_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2849067146-rodamiento-de-masa-delantera-jmc-vigus-work-25-4x2-y-4x4-_JM",
     "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2971904496",
+    "sku": "Kit85AA",
+    "titulo": "Rodamiento De Maza Delantera (par) Jetour X70 1.5 Y X70 Plus",
+    "precio": 58990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_676547-MLC87581283738_072025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2971904496-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
+    "categoria": "MLC373438",
     "stock": 2,
     "condicion": "new"
   },
@@ -4627,18 +4651,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_722223-MLC87913511293_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2971878488-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
-    "categoria": "MLC373438",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2971904496",
-    "sku": "Kit85AA",
-    "titulo": "Rodamiento De Maza Delantera (par) Jetour X70 1.5 Y X70 Plus",
-    "precio": 58990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_676547-MLC87581283738_072025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2971904496-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
     "categoria": "MLC373438",
     "stock": 2,
     "condicion": "new"
@@ -4664,7 +4676,7 @@
     "imagen": "https://http2.mlstatic.com/D_746877-MLC107188020947_022026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2934388956-rodamientos-de-cazoletas-par-maxus-v80-25-2013-2024-_JM",
     "categoria": "MLC161578",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
