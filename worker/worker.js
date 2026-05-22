@@ -19,14 +19,26 @@ const SEARCH_PAGE_SIZE = 100;
 const ML_ITEM_ATTRS =
   "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
-function json(data, status = 200) {
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "https://andesautopartscl-sketch.github.io",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
+      ...CORS_HEADERS,
     },
   });
+}
+
+/** @deprecated alias — todas las respuestas JSON incluyen CORS */
+function json(data, status = 200) {
+  return jsonResponse(data, status);
 }
 
 function unauthorized() {
@@ -605,6 +617,10 @@ async function handleUpdateToken(request, env) {
 
 export default {
   async fetch(request, env) {
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
+
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, "") || "/";
 
