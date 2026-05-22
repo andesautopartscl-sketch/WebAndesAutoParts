@@ -76,7 +76,7 @@
     const REDIRECT_URI =
       "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/admin/renovar-token.html";
     const WORKER_URL = "https://andes-autoparts-ml-sync.andesautoparts.workers.dev";
-    const WORKER_SECRET = "AndesSync2024#SecureKey!";
+    const WORKER_AUTH = "Bearer AndesSync2024#SecureKey!";
     const AUTH_URL =
       "https://auth.mercadolibre.cl/authorization?response_type=code&client_id=" +
       CLIENT_ID +
@@ -105,14 +105,17 @@
     }
 
     async function exchangeCodeViaWorker(code) {
-      const res = await fetch(WORKER_URL + "/exchange-code", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + WORKER_SECRET,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code, redirect_uri: REDIRECT_URI }),
-      });
+      const res = await fetch(
+        "https://andes-autoparts-ml-sync.andesautoparts.workers.dev/exchange-code",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer AndesSync2024#SecureKey!",
+          },
+          body: JSON.stringify({ code: code, redirect_uri: REDIRECT_URI }),
+        }
+      );
       const data = await res.json().catch(function () {
         return {};
       });
@@ -148,8 +151,8 @@
       const res = await fetch(WORKER_URL + "/update-token", {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + WORKER_SECRET,
           "Content-Type": "application/json",
+          Authorization: WORKER_AUTH,
         },
         body: JSON.stringify({ access_token: accessToken }),
       });
@@ -165,7 +168,7 @@
       var offset = 0;
       while (true) {
         const res = await fetch(WORKER_URL + "/sync?offset=" + offset, {
-          headers: { Authorization: "Bearer " + WORKER_SECRET },
+          headers: { Authorization: WORKER_AUTH },
         });
         const data = await res.json().catch(function () {
           return {};
