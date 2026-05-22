@@ -27,6 +27,7 @@ jobs:
 
           BASE="${WORKER_URL%/}"
           AUTH_URL_DEFAULT="https://auth.mercadolibre.cl/authorization?response_type=code&client_id=2004412570250603&redirect_uri=https%3A%2F%2Fandesautopartscl-sketch.github.io%2FWebAndesAutoParts%2F&scope=offline_access+read+write"
+          ADMIN_RENEW_URL="https://andesautopartscl-sketch.github.io/WebAndesAutoParts/admin/renovar-token.html"
 
           AUTH_URL="$AUTH_URL_DEFAULT"
           if AUTH_JSON=$(curl -sS "${BASE}/auth-url" 2>/dev/null); then
@@ -52,19 +53,14 @@ jobs:
                 echo ""
                 echo "El access_token de Mercado Libre vence cada ~6 horas."
                 echo ""
-                echo "1) Abre esta URL y autoriza con la cuenta del vendedor:"
+                echo "Renueva el token con un clic (panel admin):"
                 echo ""
-                echo "   ${AUTH_URL}"
+                echo "   ${ADMIN_RENEW_URL}"
                 echo ""
-                echo "2) En tu PC, desde el repositorio, ejecuta:"
-                echo ""
-                echo "   ./renew-token-quick.sh"
-                echo ""
-                echo "   Pega la URL de redirección (o el código TG-...) cuando lo pida."
-                echo "   El script sube el token al Worker y prueba el sync."
+                echo "Alternativa manual: ./renew-token-quick.sh"
                 echo ""
                 echo "=============================================="
-                echo "::error::Token ML expirado. Renueva en: ${AUTH_URL} — luego ejecuta ./renew-token-quick.sh"
+                echo "::error::Token ML expirado. Renueva en: ${ADMIN_RENEW_URL}"
                 exit 1
               fi
             fi
@@ -73,8 +69,7 @@ jobs:
               ERROR="$(parse_error)"
               if [ "$ERROR" = "MISSING_TOKEN" ]; then
                 echo ""
-                echo "::error::No hay token ML en el Worker. Ejecuta ./renew-token-quick.sh"
-                echo "URL de autorización: ${AUTH_URL}"
+                echo "::error::No hay token ML en el Worker. Renueva en: ${ADMIN_RENEW_URL}"
                 exit 1
               fi
               echo "::error::Sync falló con HTTP ${HTTP_CODE}"
@@ -98,7 +93,7 @@ jobs:
             if [ "$OK" != "true" ]; then
               ERROR="$(parse_error)"
               if [ "$ERROR" = "TOKEN_EXPIRED" ]; then
-                echo "::error::Token ML expirado. Renueva: ${AUTH_URL} — ./renew-token-quick.sh"
+                echo "::error::Token ML expirado. Renueva en: ${ADMIN_RENEW_URL}"
                 exit 1
               fi
               echo "::error::El Worker respondió ok=false"

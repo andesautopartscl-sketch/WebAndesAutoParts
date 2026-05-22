@@ -1,7 +1,8 @@
 /**
  * Cloudflare Worker — sincroniza catálogo ML → GitHub (data/productos.json)
  * GET  /sync         — sincroniza y commitea vía GitHub API
- * POST /update-token — guarda ML_ACCESS_TOKEN en KV (renovación)
+ * POST /update-token   — guarda ML_ACCESS_TOKEN en KV (renovación)
+ * POST /exchange-code  — intercambia code OAuth por access_token (admin)
  * GET  /auth-url     — URL de autorización ML para renovar token
  * GET  /health       — estado del servicio
  */
@@ -465,6 +466,89 @@ async function handleSync(request, env) {
   }
 }
 
+async function handleExchangeCode(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: "INVALID_JSON" }, 400);
+  }
+
+  const code = (body.code || "").trim();
+  const redirectUri =
+    (body.redirect_uri || "").trim() ||
+    env.ML_REDIRECT_URI ||
+    "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/admin/renovar-token.html";
+
+  if (!code) {
+    return json({ ok: false, error: "MISSING_CODE", message: "Falta code de autorización ML" }, 400);
+  }
+
+  const clientSecret = (env.ML_CLIENT_SECRET || "").trim();
+  if (!clientSecret) {
+    return json(
+      {
+        ok: false,
+        error: "MISSING_CLIENT_SECRET",
+        message: "ML_CLIENT_SECRET no configurado en el Worker",
+      },
+      500
+    );
+  }
+
+  const tokenRes = await fetch(`${API}/oauth/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: env.ML_CLIENT_ID || "2004412570250603",
+      client_secret: clientSecret,
+      code,
+      redirect_uri: redirectUri,
+    }),
+  });
+
+  let tokenData;
+  try {
+    tokenData = await tokenRes.json();
+  } catch {
+    return json({ ok: false, error: "INVALID_ML_RESPONSE" }, 502);
+  }
+
+  if (!tokenRes.ok || !tokenData.access_token) {
+    return json(
+      {
+        ok: false,
+        error: tokenData.error || "OAUTH_FAILED",
+        message: tokenData.message || "No se pudo obtener access_token",
+      },
+      tokenRes.status >= 400 ? tokenRes.status : 400
+    );
+  }
+
+  try {
+    await setMlAccessToken(env, tokenData.access_token);
+  } catch (err) {
+    return json(
+      {
+        ok: false,
+        error: "KV_WRITE_FAILED",
+        message: err.message || String(err),
+      },
+      500
+    );
+  }
+
+  return json({
+    ok: true,
+    access_token: tokenData.access_token,
+    refresh_token: tokenData.refresh_token || null,
+    expires_in: tokenData.expires_in || null,
+    redirect_uri: redirectUri,
+    message: "Token guardado en KV",
+  });
+}
+
 async function handleUpdateToken(request, env) {
   let body;
   try {
@@ -533,6 +617,7 @@ export default {
         endpoints: [
           "GET /sync?offset=0 (paginado, máx 200 ítems por llamada)",
           "POST /update-token",
+          "POST /exchange-code",
           "GET /auth-url",
           "GET /health",
         ],
@@ -549,6 +634,10 @@ export default {
 
     if (path === "/sync" && request.method === "GET") {
       return handleSync(request, env);
+    }
+
+    if (path === "/exchange-code" && request.method === "POST") {
+      return handleExchangeCode(request, env);
     }
 
     if (path === "/update-token" && request.method === "POST") {
