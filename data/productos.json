@@ -48,6 +48,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1582637443",
+    "sku": "JC305AA",
+    "titulo": "Amortiguadores Traseros (par) Jac Refine 1.9 Y 2.8 2008-2016",
+    "precio": 60990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_833931-MLC82555057028_032025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1582637443-amortiguadores-traseros-par-jac-refine-19-y-28-2008-2016-_JM",
+    "categoria": "MLC22579",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2986654722",
     "sku": "Kit104AA",
     "titulo": "Amortiguadores Traseros (par) Jac Refine 2.8/1.9 2008-2016",
@@ -80,18 +92,6 @@
     "imagen": "https://http2.mlstatic.com/D_817298-MLC88720596392_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2852431324-amortiguadores-traseros-par-jmc-vigus-work-25-2019-2023-_JM",
     "categoria": "MLC22579",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1726951115",
-    "sku": "Kit127AA",
-    "titulo": "Axial De Dirección (par) Chery Tiggo 8 1.5/ Tiggo 8 Pro/max",
-    "precio": 35990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_626765-MLC95723661611_102025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1726951115-axial-de-direccion-par-chery-tiggo-8-15-tiggo-8-promax-_JM",
-    "categoria": "MLC425021",
     "stock": 1,
     "condicion": "new"
   },
@@ -1236,6 +1236,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2878493800",
+    "sku": "VG1010AA",
+    "titulo": "Correa De Accesorios (larga) Jmc Vigus Plus 2.4/ Vigus 5 2.4",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_848142-MLC101277936939_122025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2878493800-correa-de-accesorios-larga-jmc-vigus-plus-24-vigus-5-24-_JM",
+    "categoria": "MLC373343",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1602354539",
     "sku": "VGE6401AA",
     "titulo": "Correa De Accesorios (larga) Jmc Vigus Work 2.5 2019-2024",
@@ -1800,18 +1812,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1573165979",
-    "sku": "VG4018AA",
-    "titulo": "Foco Trasero Derecho Jmc Vigus Plus 2021-2024  Vigus Pro 2.0 Derecho/pasajero Rojo",
-    "precio": 85990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
-    "categoria": "MLC161713",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1573101353",
     "sku": "VG4017AA",
     "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
@@ -1964,18 +1964,6 @@
     "imagen": "https://http2.mlstatic.com/D_676197-MLC94912669596_102025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3230636422-juego-de-taquies-16-great-wall-wingle-6-24-bencinera-_JM",
     "categoria": "MLC441062",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1578233177",
-    "sku": "kit15AA",
-    "titulo": "Juego De Válvulas De Admisión Y Escape Chery Tiggo 8 1.5",
-    "precio": 72990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_830694-MLC99134183269_112025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1578233177-juego-de-valvulas-de-admision-y-escape-chery-tiggo-8-15-_JM",
-    "categoria": "MLC178771",
     "stock": 1,
     "condicion": "new"
   },
@@ -2304,18 +2292,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3901833414",
-    "sku": "Kit198AA",
-    "titulo": "Kit De Filtros (mantencion) Changan X7 Plus 1.5t 2023-2026",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2999319186",
     "sku": "Kit110AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 1.5",
@@ -2323,18 +2299,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_699278-MLC88984727327_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2999319186-kit-de-filtros-mantencion-chery-tiggo-4-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1771318471",
-    "sku": "Kit143AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 149990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_782108-MLC99934894463_112025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
     "condicion": "new"
@@ -2349,6 +2313,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 4,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1771318471",
+    "sku": "Kit143AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 149990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_782108-MLC99934894463_112025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2444,7 +2420,7 @@
     "imagen": "https://http2.mlstatic.com/D_987569-MLC93494479273_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3180465876-kit-de-filtros-mantencion-exeed-lx-15t-_JM",
     "categoria": "MLC377254",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2480,7 +2456,7 @@
     "imagen": "https://http2.mlstatic.com/D_898696-MLC87978487523_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2971909866-kit-de-filtros-mantencion-gwm-haval-h3-20-2010-2019-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3564,6 +3540,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1761970311",
+    "sku": "JTC012AA",
+    "titulo": "Neblineros Delanteros (par) Jac T6 2.0 2015-2025 Vidrio",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_869871-MLC98636921482_112025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1761970311-neblineros-delanteros-par-jac-t6-20-2015-2025-vidrio-_JM",
+    "categoria": "MLC433655",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1762058957",
     "sku": "JX207AA",
     "titulo": "Neblineros Delanteros (par) Jac X200 2.0 2016-2025",
@@ -4256,7 +4244,7 @@
     "imagen": "https://http2.mlstatic.com/D_674281-MLC82893940798_032025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2859762376-reten-trasero-de-ciguenal-maxus-c35-20-_JM",
     "categoria": "MLC373308",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4344,18 +4332,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978876696",
-    "sku": "X3558AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978954648",
     "sku": "X3558AAA",
     "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
@@ -4363,6 +4339,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978876696",
+    "sku": "X3558AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
     "categoria": "MLC373438",
     "stock": 3,
     "condicion": "new"
@@ -5028,18 +5016,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1970786841",
-    "sku": "JX265RC010AA",
-    "titulo": "Sensor De Posición Eje De Levas Jac T6 T8 X200 2.0 Diésel",
-    "precio": 34990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_979354-MLC111073813244_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1970786841-sensor-de-posicion-eje-de-levas-jac-t6-t8-x200-20-diesel-_JM",
-    "categoria": "MLC161577",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1970786897",
     "sku": "JX265RC010T9AA",
     "titulo": "Sensor De Posición Eje De Levas Jac T9 2.0 Diésel",
@@ -5144,7 +5120,7 @@
     "imagen": "https://http2.mlstatic.com/D_877337-MLC83182601051_032025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1588710381-sensor-de-temperatura-jmc-grand-avenue-23-bosch-_JM",
     "categoria": "MLC161668",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
