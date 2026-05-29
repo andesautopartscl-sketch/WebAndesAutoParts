@@ -96,6 +96,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1726951115",
+    "sku": "Kit127AA",
+    "titulo": "Axial De Dirección (par) Chery Tiggo 8 1.5/ Tiggo 8 Pro/max",
+    "precio": 35990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_626765-MLC95723661611_102025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1726951115-axial-de-direccion-par-chery-tiggo-8-15-tiggo-8-promax-_JM",
+    "categoria": "MLC425021",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3201060980",
     "sku": "T3P022AA",
     "titulo": "Axiales De Direccion (par) Chery Tiggo 3 New 1.5 / 3 Pro 1.5",
@@ -584,7 +596,7 @@
     "imagen": "https://http2.mlstatic.com/D_782649-MLC103884308585_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1814462045-bieletas-de-suspencion-delanteras-par-jac-j4-15-_JM",
     "categoria": "MLC179512",
-    "stock": 6,
+    "stock": 5,
     "condicion": "new"
   },
   {
@@ -956,7 +968,7 @@
     "imagen": "https://http2.mlstatic.com/D_930507-MLC87847689906_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978941822-bujias-punta-de-iridium-ngk-juego-changan-cx70-15-turbo-_JM",
     "categoria": "MLC441075",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -980,7 +992,7 @@
     "imagen": "https://http2.mlstatic.com/D_979695-MLC99152775984_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1767846601-bujias-punta-de-iridium-ngk-juego-chery-tiggo-7-7-pro-15-_JM",
     "categoria": "MLC441075",
-    "stock": 5,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -1812,6 +1824,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1573165979",
+    "sku": "VG4018AA",
+    "titulo": "Foco Trasero Derecho Jmc Vigus Plus 2021-2024  Vigus Pro 2.0 Derecho/pasajero Rojo",
+    "precio": 85990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
+    "categoria": "MLC161713",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1573101353",
     "sku": "VG4017AA",
     "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
@@ -1964,6 +1988,18 @@
     "imagen": "https://http2.mlstatic.com/D_676197-MLC94912669596_102025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3230636422-juego-de-taquies-16-great-wall-wingle-6-24-bencinera-_JM",
     "categoria": "MLC441062",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1578233177",
+    "sku": "kit15AA",
+    "titulo": "Juego De Válvulas De Admisión Y Escape Chery Tiggo 8 1.5",
+    "precio": 72990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_830694-MLC99134183269_112025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1578233177-juego-de-valvulas-de-admision-y-escape-chery-tiggo-8-15-_JM",
+    "categoria": "MLC178771",
     "stock": 1,
     "condicion": "new"
   },
@@ -2408,7 +2444,7 @@
     "imagen": "https://http2.mlstatic.com/D_726415-MLC101582326041_122025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3433064660-kit-de-filtros-mantencion-dongfeng-t5-evo-15t-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -2469,6 +2505,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2919282398-kit-de-filtros-mantencion-gwm-haval-jolion-15t-2020-2024-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3983900528",
+    "sku": "Kit200AA",
+    "titulo": "Kit De Filtros (mantencion) Haval Jolion 1.5 /jolion Pro 1.5",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_741299-MLC111789788517_052026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3983900528-kit-de-filtros-mantencion-haval-jolion-15-jolion-pro-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4608,18 +4656,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2971904496",
-    "sku": "Kit85AA",
-    "titulo": "Rodamiento De Maza Delantera (par) Jetour X70 1.5 Y X70 Plus",
-    "precio": 58990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_676547-MLC87581283738_072025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2971904496-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
-    "categoria": "MLC373438",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2971878488",
     "sku": "Kit86AA",
     "titulo": "Rodamiento De Maza Delantera (par) Jetour X70 1.5 Y X70 Plus",
@@ -4629,6 +4665,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2971878488-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
     "categoria": "MLC373438",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2971904496",
+    "sku": "Kit85AA",
+    "titulo": "Rodamiento De Maza Delantera (par) Jetour X70 1.5 Y X70 Plus",
+    "precio": 58990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_676547-MLC87581283738_072025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2971904496-rodamiento-de-maza-delantera-par-jetour-x70-15-y-x70-plus-_JM",
+    "categoria": "MLC373438",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5013,6 +5061,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1970774061-sensor-de-posicion-eje-de-levas-great-wall-poer-20-_JM",
     "categoria": "MLC161577",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1970786841",
+    "sku": "JX265RC010AA",
+    "titulo": "Sensor De Posición Eje De Levas Jac T6 T8 X200 2.0 Diésel",
+    "precio": 34990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_979354-MLC111073813244_052026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1970786841-sensor-de-posicion-eje-de-levas-jac-t6-t8-x200-20-diesel-_JM",
+    "categoria": "MLC161577",
+    "stock": 2,
     "condicion": "new"
   },
   {
