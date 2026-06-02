@@ -1584,6 +1584,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC4042601734",
+    "sku": "JO155AA",
+    "titulo": "Filtro Aceite Caja Automatica Haval Jolion 1.5 / H6 2da Gen",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_852406-MLC112624924011_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4042601734-filtro-aceite-caja-automatica-haval-jolion-15-h6-2da-gen-_JM",
+    "categoria": "MLC161558",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1917300911",
     "sku": "CS35034NEWAA",
     "titulo": "Filtro De Aceita Caja (aut) Changan Cs35 Plus New 1.4",
@@ -1627,6 +1639,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_893203-MLC109309000414_042026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3850891910-filtro-de-aceite-caja-aut-jetour-dashing-16-x70-plus-16-_JM",
+    "categoria": "MLC161558",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4042640376",
+    "sku": "DAR155AA",
+    "titulo": "Filtro De Aceite Caja Automatica Haval Dargo 2.0/ New H7 2.0",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_955156-MLC112624011969_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4042640376-filtro-de-aceite-caja-automatica-haval-dargo-20-new-h7-20-_JM",
     "categoria": "MLC161558",
     "stock": 1,
     "condicion": "new"
@@ -1821,6 +1845,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2904701328-foco-izquierdo-piloto-jmc-vigus-work-25-2019-2024-izquierdoconductor-rojo-_JM",
     "categoria": "MLC161713",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4042627670",
+    "sku": "G70001AA",
+    "titulo": "Foco Trasero Derecho (copiloto) Foton G7 2.0 Derecho/pasajero Rojo",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_643724-MLC112624934907_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4042627670-foco-trasero-derecho-copiloto-foton-g7-20-derechopasajero-rojo-_JM",
+    "categoria": "MLC161713",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4428,18 +4464,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978980404",
-    "sku": "CX7062AAA",
-    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_756518-MLC88182183255_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978915192",
     "sku": "CX7062AA",
     "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
@@ -4449,6 +4473,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2978915192-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
     "categoria": "MLC373438",
     "stock": 4,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978980404",
+    "sku": "CX7062AAA",
+    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_756518-MLC88182183255_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
     "condicion": "new"
   },
   {
