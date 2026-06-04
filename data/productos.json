@@ -2384,7 +2384,7 @@
     "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3612,18 +3612,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3230597226",
-    "sku": "Kit125AA",
-    "titulo": "Neblineros Delantero (par) Changan Hunter 2020-2024 Transparente",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_961286-MLC95347286039_102025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3230597226-neblineros-delantero-par-changan-hunter-2020-2024-transparente-_JM",
-    "categoria": "MLC433655",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1762022313",
     "sku": "BAIX04AA",
     "titulo": "Neblineros Delanteros (par) Baic X25 2015-2024 Vidrio",
@@ -4440,18 +4428,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978954648",
-    "sku": "X3558AAA",
-    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978876696",
     "sku": "X3558AA",
     "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
@@ -4459,6 +4435,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978954648",
+    "sku": "X3558AAA",
+    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
+    "precio": 65990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
     "categoria": "MLC373438",
     "stock": 3,
     "condicion": "new"
