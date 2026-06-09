@@ -536,7 +536,7 @@
     "imagen": "https://http2.mlstatic.com/D_764027-MLC110460506886_052026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1953783757-bieletas-barra-estabilizadora-del-par-dfm-joyear-x3-sx6-_JM",
     "categoria": "MLC179512",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -956,7 +956,7 @@
     "imagen": "https://http2.mlstatic.com/D_723115-MLC99153020254_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3363537176-bujias-punta-de-iridium-ngk-juego-chery-tiggo-2-pro-10t-_JM",
     "categoria": "MLC441075",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1232,7 +1232,7 @@
     "imagen": "https://http2.mlstatic.com/D_848142-MLC101277936939_122025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2878493800-correa-de-accesorios-larga-jmc-vigus-plus-24-vigus-5-24-_JM",
     "categoria": "MLC373343",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2352,18 +2352,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3373240270",
-    "sku": "Kit142AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 55990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1771318471",
     "sku": "Kit143AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2373,6 +2361,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3373240270",
+    "sku": "Kit142AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 55990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -2885,7 +2885,7 @@
     "titulo": "Kit De Filtros Great Wall H6 1.5 Turbo 2014-2019",
     "precio": 42990,
     "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_832480-MLC87725751353_072025-O.jpg",
+    "imagen": "https://http2.mlstatic.com/D_960796-MLC111821165822_062026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2966395048-kit-de-filtros-great-wall-h6-15-turbo-2014-2019-_JM",
     "categoria": "MLC377254",
     "stock": 1,
@@ -3008,7 +3008,7 @@
     "imagen": "https://http2.mlstatic.com/D_898546-MLC111547037621_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573114101-kit-de-filtros-mantencion-great-wall-wingle-7-20-diesel-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3020,7 +3020,7 @@
     "imagen": "https://http2.mlstatic.com/D_763979-MLC92789529058_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1582543653-kit-de-filtros-mantencion-great-wall-wingle-7-24-bencinera-_JM",
     "categoria": "MLC377254",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -5276,7 +5276,7 @@
     "imagen": "https://http2.mlstatic.com/D_941480-MLC93201433271_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2846798214-sensor-posicion-eje-de-leva-changan-hunter-19-original-_JM",
     "categoria": "MLC161577",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
