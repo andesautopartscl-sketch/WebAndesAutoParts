@@ -14,6 +14,22 @@
     };
   });
 
+  function updateDynamicProductCounts(count) {
+    if (!count || count < 1) return;
+    document.querySelectorAll("[data-dynamic-count='productos']").forEach(function (el) {
+      if (el.classList.contains("hero-lead")) {
+        el.textContent = count + "+ productos · Envío 24h · Garantía incluida";
+      } else if (el.classList.contains("hero-stat-value")) {
+        el.textContent = count + "+";
+      } else if (el.classList.contains("stat-number")) {
+        el.dataset.target = String(count);
+        if (!el.dataset.animated) {
+          el.textContent = String(count);
+        }
+      }
+    });
+  }
+
   function closeMenu() {
     if (!header || !toggle) return;
     header.classList.remove("is-open");
@@ -1367,19 +1383,6 @@
       });
   })();
 
-  function updateDynamicProductCounts(count) {
-    if (!count || count < 1) return;
-    document.querySelectorAll("[data-dynamic-count='productos']").forEach(function (el) {
-      if (el.classList.contains("hero-lead")) {
-        el.textContent = count + "+ productos · Envío 24h · Garantía incluida";
-      } else if (el.classList.contains("hero-stat-value")) {
-        el.textContent = count + "+";
-      } else if (el.classList.contains("stat-number")) {
-        el.dataset.target = String(count);
-      }
-    });
-  }
-
   function animateCounters() {
     var counters = document.querySelectorAll(".stat-number");
     counters.forEach(function (counter) {
@@ -1391,6 +1394,7 @@
         current += step;
         if (current >= target) {
           counter.textContent = String(target);
+          counter.dataset.animated = "1";
           clearInterval(timer);
         } else {
           counter.textContent = String(Math.floor(current));
