@@ -1297,6 +1297,7 @@
       .then(function (data) {
         if (!Array.isArray(data)) throw new Error("Formato inválido.");
         allProducts = data;
+        updateDynamicProductCounts(allProducts.length);
         fillCategories(allProducts);
         var params = parseParams();
         var hasVehicleSearch = applyVehicleParamsFromUrl(params);
@@ -1365,6 +1366,19 @@
         if (emptyEl) emptyEl.hidden = true;
       });
   })();
+
+  function updateDynamicProductCounts(count) {
+    if (!count || count < 1) return;
+    document.querySelectorAll("[data-dynamic-count='productos']").forEach(function (el) {
+      if (el.classList.contains("hero-lead")) {
+        el.textContent = count + "+ productos · Envío 24h · Garantía incluida";
+      } else if (el.classList.contains("hero-stat-value")) {
+        el.textContent = count + "+";
+      } else if (el.classList.contains("stat-number")) {
+        el.dataset.target = String(count);
+      }
+    });
+  }
 
   function animateCounters() {
     var counters = document.querySelectorAll(".stat-number");
