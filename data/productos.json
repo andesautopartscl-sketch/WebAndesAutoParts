@@ -12,6 +12,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2894854200",
+    "sku": "VG3001AA",
+    "titulo": "Amortiguadores Delanteros (par) Jmc Vigus Work 2.5 2019-2024",
+    "precio": 120990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_957569-MLC84803870295_052025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2894854200-amortiguadores-delanteros-par-jmc-vigus-work-25-2019-2024-_JM",
+    "categoria": "MLC22579",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1631773033",
     "sku": "kit66AA",
     "titulo": "Amortiguadores Delanteros (par) Maxus V80 2.5 2013-2024",
@@ -1915,6 +1927,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
+    "categoria": "MLC161713",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1573101353",
+    "sku": "VG4017AA",
+    "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
+    "precio": 85990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_833206-MLC110595662640_052026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1573101353-foco-trasero-izquierdo-jmc-vigus-plus-2021-2024-vigus-pro20-izquierdoconductor-rojo-_JM",
     "categoria": "MLC161713",
     "stock": 1,
     "condicion": "new"
@@ -4632,18 +4656,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978915192",
-    "sku": "CX7062AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_779667-MLC88182287851_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978915192-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
-    "categoria": "MLC373438",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978980404",
     "sku": "CX7062AAA",
     "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
@@ -4653,6 +4665,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
     "categoria": "MLC373438",
     "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978915192",
+    "sku": "CX7062AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
+    "precio": 65990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_779667-MLC88182287851_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978915192-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
+    "categoria": "MLC373438",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -5180,7 +5204,7 @@
     "imagen": "https://http2.mlstatic.com/D_956618-MLC100261489843_122025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3384749600-sensor-de-posicion-ciguenal-bosch-jmc-vigus-work-25-_JM",
     "categoria": "MLC161575",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
