@@ -872,7 +872,7 @@
     "imagen": "https://http2.mlstatic.com/D_813745-MLC82332816319_022025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1574444137-bujia-incandescente-juego-4-uni-jmc-carrying-28-2011-2024-_JM",
     "categoria": "MLC457306",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1232,7 +1232,7 @@
     "imagen": "https://http2.mlstatic.com/D_852517-MLC91515558771_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1578323645-cilindro-de-freno-great-wall-wingle-5-4x2-y-4x4-2012-2023-_JM",
     "categoria": "MLC176304",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1988,7 +1988,7 @@
     "imagen": "https://http2.mlstatic.com/D_658678-MLC106539486794_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2850883984-gomas-de-barra-estabilizadora-par-maxus-v80-25-2012-2023-_JM",
     "categoria": "MLC416687",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2031,7 +2031,7 @@
     "id": "MLC3180504818",
     "sku": "Kit117AA",
     "titulo": "Juego Bujías Punta De Iridium (ngk) Exeed Lx 1.5t",
-    "precio": 49990,
+    "precio": 54990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_664774-MLC93078779194_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3180504818-juego-bujias-punta-de-iridium-ngk-exeed-lx-15t-_JM",
@@ -3224,7 +3224,7 @@
     "imagen": "https://http2.mlstatic.com/D_898546-MLC111547037621_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573114101-kit-de-filtros-mantencion-great-wall-wingle-7-20-diesel-_JM",
     "categoria": "MLC377254",
-    "stock": 1,
+    "stock": 8,
     "condicion": "new"
   },
   {
@@ -3452,7 +3452,7 @@
     "imagen": "https://http2.mlstatic.com/D_852513-MLC89497854078_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2848911600-kit-rodamiento-de-masa-delantera-wingle-5-4x2-2012-2023-_JM",
     "categoria": "MLC373438",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3704,7 +3704,7 @@
     "imagen": "https://http2.mlstatic.com/D_715328-MLC86520840689_062025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2934493670-neblinero-delantero-der-o-izq-jmc-vigus-work-25-2021-2023-transparente-vidrio-_JM",
     "categoria": "MLC433655",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -5148,90 +5148,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3384736450",
-    "sku": "CH124AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Changan Hunter 1.9",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_986201-MLC100260930857_122025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3384736450-sensor-de-posicion-ciguenal-bosch-changan-hunter-19-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3386943206",
-    "sku": "JC6450AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac Refine 2.8/1.9",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_634643-MLC99857426116_122025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3386943206-sensor-de-posicion-ciguenal-bosch-jac-refine-2819-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3384620550",
-    "sku": "RM265AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac Refine M4 1.9t",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_959725-MLC100262589747_122025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3384620550-sensor-de-posicion-ciguenal-bosch-jac-refine-m4-19t-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3384671950",
-    "sku": "JX265AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac X200 2.0t",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_853246-MLC100262031085_122025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3384671950-sensor-de-posicion-ciguenal-bosch-jac-x200-20t-_JM",
-    "categoria": "MLC161575",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3384749600",
-    "sku": "JMC721AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Jmc Vigus Work 2.5",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_956618-MLC100261489843_122025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3384749600-sensor-de-posicion-ciguenal-bosch-jmc-vigus-work-25-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3384710916",
-    "sku": "MAXT721AA",
-    "titulo": "Sensor De Posicion Cigueñal (bosch) Maxus T60 2.8/ V80 2.5",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_939602-MLC99776006642_122025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3384710916-sensor-de-posicion-ciguenal-bosch-maxus-t60-28-v80-25-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1587166009",
-    "sku": "TOU086AA",
-    "titulo": "Sensor De Posición Cigüeñal Jmc Touring 2.8 (bosch) Original",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_760201-MLC83111231991_032025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1587166009-sensor-de-posicion-ciguenal-jmc-touring-28-bosch-original-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1915000401",
     "sku": "TAT036AA",
     "titulo": "Sensor De Posicion Cigueñal Tata Xenon 2.2 Turbo 2009-2019",
@@ -5241,18 +5157,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1915000401-sensor-de-posicion-ciguenal-tata-xenon-22-turbo-2009-2019-_JM",
     "categoria": "MLC161575",
     "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3843384312",
-    "sku": "JC6450AA",
-    "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 1.6 Toneladas",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_782667-MLC109241069032_042026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3843384312-sensor-de-posicion-de-ciguenal-jmc-carrying-16-toneladas-_JM",
-    "categoria": "MLC161575",
-    "stock": 3,
     "condicion": "new"
   },
   {
@@ -5304,6 +5208,30 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1867780279",
+    "sku": "T890069AA",
+    "titulo": "Sensor De Presion Diferencial (bosch) Jac T8 2.0 Diesel",
+    "precio": 79990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_729371-MLC113587310257_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1867780279-sensor-de-presion-diferencial-bosch-jac-t8-20-diesel-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1867729661",
+    "sku": "T690069AA",
+    "titulo": "Sensor De Presion Diferencial (bosh) Jac T6 2.0 Diesel",
+    "precio": 79990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_911539-MLC107954575247_032026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1867729661-sensor-de-presion-diferencial-bosh-jac-t6-20-diesel-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2847329480",
     "sku": "JC446018AA",
     "titulo": "Sensor De Presión Diferencial Jmc Carrying 2.8 Diésel",
@@ -5312,6 +5240,30 @@
     "imagen": "https://http2.mlstatic.com/D_978354-MLC89848916463_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2847329480-sensor-de-presion-diferencial-jmc-carrying-28-diesel-_JM",
     "categoria": "MLC441059",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2841643308",
+    "sku": "GM900691AA",
+    "titulo": "Sensor De Presión Diferencial Jmc Gran Avenue 2.3 Original",
+    "precio": 100990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_845848-MLC82009738550_022025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2841643308-sensor-de-presion-diferencial-jmc-gran-avenue-23-original-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2841550974",
+    "sku": "GM900693AA",
+    "titulo": "Sensor De Presión Diferencial Original Maxus T60,g10 Y G90",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_965416-MLC88805614126_082025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2841550974-sensor-de-presion-diferencial-original-maxus-t60g10-y-g90-_JM",
+    "categoria": "MLC416795",
     "stock": 1,
     "condicion": "new"
   },
@@ -5348,18 +5300,6 @@
     "imagen": "https://http2.mlstatic.com/D_863243-MLC83159533277_032025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1588401943-sensor-map-mahindra-xuv500-22-bencinera-2019-2024-_JM",
     "categoria": "MLC161573",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3583743694",
-    "sku": "CH124DF6AA",
-    "titulo": "Sensor Posición De Cigueñal (bosch) Dongfeng Df612 2.8",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_711196-MLC107341960297_022026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3583743694-sensor-posicion-de-ciguenal-bosch-dongfeng-df612-28-_JM",
-    "categoria": "MLC161575",
     "stock": 2,
     "condicion": "new"
   },
@@ -5504,6 +5444,30 @@
     "imagen": "https://http2.mlstatic.com/D_639314-MLC99772850550_122025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3384723038-sensor-posicion-eje-de-levas-jmc-vigus-pro-vigus-plus-20-_JM",
     "categoria": "MLC161577",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2936970426",
+    "sku": "XGM90069AA",
+    "titulo": "Sensor Presion Diferencial (bosch) Jac X200 2.0",
+    "precio": 79990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_705651-MLC86347086558_062025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2936970426-sensor-presion-diferencial-bosch-jac-x200-20-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2841570360",
+    "sku": "GM90069AA",
+    "titulo": "Sensor Presión Diferencial Jmc Vigus Work 2.5/vigus Plus 2.4",
+    "precio": 95990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_932679-MLC113587311759_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2841570360-sensor-presion-diferencial-jmc-vigus-work-25vigus-plus-24-_JM",
+    "categoria": "MLC416795",
     "stock": 1,
     "condicion": "new"
   },
