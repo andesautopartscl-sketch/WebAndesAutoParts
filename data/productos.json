@@ -152,7 +152,7 @@
     "imagen": "https://http2.mlstatic.com/D_917115-MLC105257826511_012026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1831417237-axiales-de-direccion-par-koreanos-jac-s3-js3-y-grand-s3-_JM",
     "categoria": "MLC425021",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -518,11 +518,11 @@
   {
     "id": "MLC3180858840",
     "sku": "Kit119AA",
-    "titulo": "Bandejas Delanteras Par (stp) Maxus G10 1.9/2.0",
+    "titulo": "Bandejas Delanteras Par (korea) Maxus G10 1.9/2.0",
     "precio": 185990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_652920-MLC93573355145_092025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3180858840-bandejas-delanteras-par-stp-maxus-g10-1920-_JM",
+    "link": "https://articulo.mercadolibre.cl/MLC-3180858840-bandejas-delanteras-par-korea-maxus-g10-1920-_JM",
     "categoria": "MLC161582",
     "stock": 2,
     "condicion": "new"
@@ -656,7 +656,7 @@
     "imagen": "https://http2.mlstatic.com/D_843491-MLC94902004610_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3230671070-bieletas-de-suspension-par-jetour-x70-15t-_JM",
     "categoria": "MLC179512",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -931,6 +931,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_850789-MLC99451289194_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1770985669-bujias-punta-de-iridium-juego-chery-tiggo-4-pro-max-15l-_JM",
+    "categoria": "MLC441075",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4109146428",
+    "sku": "VX3311AA",
+    "titulo": "Bujías Punta De Iridium Juego (ngk) Exeed Vx 2.0t",
+    "precio": 54990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_942363-MLC112510269276_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4109146428-bujias-punta-de-iridium-juego-ngk-exeed-vx-20t-_JM",
     "categoria": "MLC441075",
     "stock": 1,
     "condicion": "new"
@@ -1560,18 +1572,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1888917325",
-    "sku": "T2PMX97AA",
-    "titulo": "Eje Palier Completo Izquierdo Chery Tiggo 2 Pro 1.5 2021/",
-    "precio": 189990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_757165-MLC108878781255_032026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1888917325-eje-palier-completo-izquierdo-chery-tiggo-2-pro-15-2021-_JM",
-    "categoria": "MLC161598",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1575787671",
     "sku": "TX737AA",
     "titulo": "Eje Palier Completo Izquierdo Chery Tiggo 2 Y 2 Pro 1.5",
@@ -1951,8 +1951,8 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_652340-MLC109858613489_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3819739162-goma-barra-estabilizadora-del-par-dfm-joyear-x3-sx5-sx6-_JM",
-    "categoria": "MLC161580",
-    "stock": 1,
+    "categoria": "MLC416687",
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1975,8 +1975,8 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_758294-MLC84600962337_052025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2890562322-gomas-barra-estabilizadora-delantera-par-maxus-g10-1920-_JM",
-    "categoria": "MLC161579",
-    "stock": 4,
+    "categoria": "MLC416687",
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2018,11 +2018,11 @@
   {
     "id": "MLC2852379598",
     "sku": "WIN7030AA",
-    "titulo": "Jgo De Bujías Iridium Great Wall Wingle 7 2.4 Bencinera",
+    "titulo": "Jgo De Bujías Iridium (ngk) Great Wall Wingle 7 2.4 Bencina",
     "precio": 49990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_787069-MLC92789855928_092025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2852379598-jgo-de-bujias-iridium-great-wall-wingle-7-24-bencinera-_JM",
+    "link": "https://articulo.mercadolibre.cl/MLC-2852379598-jgo-de-bujias-iridium-ngk-great-wall-wingle-7-24-bencina-_JM",
     "categoria": "MLC441075",
     "stock": 4,
     "condicion": "new"
@@ -2167,18 +2167,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_998633-MLC82307872685_022025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1574030525-kit-de-distribucion-9-piezas-original-jac-x200-t6-t8-20-_JM",
-    "categoria": "MLC161650",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4063699444",
-    "sku": "Kit212AA",
-    "titulo": "Kit De Distribución (9 Pzas) Chery Arrizo 5 1.5/arrizo 7 1.6",
-    "precio": 105990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_632240-MLC111877307876_062026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-4063699444-kit-de-distribucion-9-pzas-chery-arrizo-5-15arrizo-7-16-_JM",
     "categoria": "MLC161650",
     "stock": 1,
     "condicion": "new"
@@ -2616,6 +2604,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2016100293",
+    "sku": "Kit219AA",
+    "titulo": "Kit De Filtros (mantencion) Dfsk D1 2.3t",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_841286-MLC113624740023_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2016100293-kit-de-filtros-mantencion-dfsk-d1-23t-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3433064660",
     "sku": "Kit149AA",
     "titulo": "Kit De Filtros (mantención) Dongfeng T5 Evo 1.5t",
@@ -2637,6 +2637,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3180465876-kit-de-filtros-mantencion-exeed-lx-15t-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4109146614",
+    "sku": "Kit220AA",
+    "titulo": "Kit De Filtros (mantención) Exeed Txl 2.0t",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_775221-MLC113680559333_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4109146614-kit-de-filtros-mantencion-exeed-txl-20t-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3212,7 +3224,7 @@
     "imagen": "https://http2.mlstatic.com/D_648784-MLC91255519594_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1587373447-kit-de-filtros-mantencion-chery-tiggo-2-pro-max-15-2024-25-_JM",
     "categoria": "MLC377254",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3341,7 +3353,7 @@
     "titulo": "Kit De Pernos De Culata Jmc Vigus Plus 2.4 Y Vigus 5 2.4",
     "precio": 135990,
     "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_807774-MLC82740682055_022025-O.jpg",
+    "imagen": "https://http2.mlstatic.com/D_637054-MLC113627605183_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2850352608-kit-de-pernos-de-culata-jmc-vigus-plus-24-y-vigus-5-24-_JM",
     "categoria": "MLC373286",
     "stock": 1,
@@ -4428,6 +4440,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2016101467",
+    "sku": "VGP3212AA",
+    "titulo": "Reten De Tapa Válvulas Kit (inyector) Jmc Vigus Plus 2.4 Negro",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_618147-MLC112460621908_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2016101467-reten-de-tapa-valvulas-kit-inyector-jmc-vigus-plus-24-negro-_JM",
+    "categoria": "MLC161619",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1602326571",
     "sku": "JMGRAV12AA",
     "titulo": "Reten Delantero De Cigüeñal Jmc Grand Avenue 2.3t",
@@ -4527,7 +4551,7 @@
     "id": "MLC2859801362",
     "sku": "G10006AA",
     "titulo": "Reten Trasero De Cigüeñal Maxus G10 1.9",
-    "precio": 39690,
+    "precio": 39990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_772269-MLC89525245508_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2859801362-reten-trasero-de-ciguenal-maxus-g10-19-_JM",
@@ -4760,7 +4784,7 @@
     "imagen": "https://http2.mlstatic.com/D_724257-MLC87846558640_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978902324-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
     "categoria": "MLC373438",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5220,6 +5244,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC4101804588",
+    "sku": "TNW90069AA",
+    "titulo": "Sensor De Presión Diferencial (bosch) Maxus T90 New 2.5t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_841252-MLC112454493274_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4101804588-sensor-de-presion-diferencial-bosch-maxus-t90-new-25t-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1867729661",
     "sku": "T690069AA",
     "titulo": "Sensor De Presion Diferencial (bosh) Jac T6 2.0 Diesel",
@@ -5258,11 +5294,11 @@
   {
     "id": "MLC2841550974",
     "sku": "GM900693AA",
-    "titulo": "Sensor De Presión Diferencial Original Maxus T60,g10 Y G90",
+    "titulo": "Sensor De Presión Diferencial Original Maxus T60/g10/g90/v80",
     "precio": 89990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_965416-MLC88805614126_082025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2841550974-sensor-de-presion-diferencial-original-maxus-t60g10-y-g90-_JM",
+    "link": "https://articulo.mercadolibre.cl/MLC-2841550974-sensor-de-presion-diferencial-original-maxus-t60g10g90v80-_JM",
     "categoria": "MLC416795",
     "stock": 1,
     "condicion": "new"
@@ -5312,7 +5348,7 @@
     "imagen": "https://http2.mlstatic.com/D_671817-MLC109639581869_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1903378407-sensor-posicion-de-ciguenal-ckp-jmc-vigus-5-24-plus-24-_JM",
     "categoria": "MLC161575",
-    "stock": 5,
+    "stock": 4,
     "condicion": "new"
   },
   {
