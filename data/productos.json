@@ -1308,6 +1308,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1602354539",
+    "sku": "VGE6401AA",
+    "titulo": "Correa De Accesorios (larga) Jmc Vigus Work 2.5 2019-2024",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_806510-MLC83714175638_042025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1602354539-correa-de-accesorios-larga-jmc-vigus-work-25-2019-2024-_JM",
+    "categoria": "MLC373343",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3376057040",
     "sku": "TN4P053AA",
     "titulo": "Correa De Accesorios (stp) Chery New Tiggo 4 Pro Max 1.5",
@@ -2429,7 +2441,7 @@
     "titulo": "Kit De Filtro (mantencion) Omoda C7 1.6t",
     "precio": 59990,
     "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_754250-MLC103233013042_012026-O.webp",
+    "imagen": "https://http2.mlstatic.com/D_877447-MLC113955336411_062026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3489949864-kit-de-filtro-mantencion-omoda-c7-16t-_JM",
     "categoria": "MLC377254",
     "stock": 2,
@@ -2832,6 +2844,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1593199281",
+    "sku": "kit35AA",
+    "titulo": "Kit De Filtros (mantención) Jmc Grand Avenue 2.3t",
+    "precio": 79990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_780584-MLC83185229010_042025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1593199281-kit-de-filtros-mantencion-jmc-grand-avenue-23t-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2999327478",
     "sku": "Kit107AA",
     "titulo": "Kit De Filtros (mantencion) Kaiyi X3 1.5t Y 1.5l",
@@ -3045,6 +3069,30 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1704692193-kit-de-filtros-aire-y-aceite-exeed-vx-20t-_JM",
     "categoria": "MLC377254",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3843385300",
+    "sku": "Kit192AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 7 Pro 1.5t",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4087914054",
+    "sku": "Kit217AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Kaiyi X3 1,5t / 1.5l",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_723241-MLC113355239279_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4087914054-kit-de-filtros-caja-automatica-cvt-kaiyi-x3-15t-15l-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4644,18 +4692,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978954648",
-    "sku": "X3558AAA",
-    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978876696",
     "sku": "X3558AA",
     "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
@@ -4663,6 +4699,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978954648",
+    "sku": "X3558AAA",
+    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
+    "precio": 65990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
     "categoria": "MLC373438",
     "stock": 3,
     "condicion": "new"
@@ -4776,18 +4824,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978902324",
-    "sku": "X3857AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_724257-MLC87846558640_072025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978902324-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
-    "categoria": "MLC373438",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978967610",
     "sku": "X3857AA",
     "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
@@ -4797,6 +4833,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2978967610-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
     "categoria": "MLC373438",
     "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978902324",
+    "sku": "X3857AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_724257-MLC87846558640_072025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978902324-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
+    "categoria": "MLC373438",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5184,6 +5232,90 @@
     "condicion": "new"
   },
   {
+    "id": "MLC3384736450",
+    "sku": "CH124AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Changan Hunter 1.9",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_986201-MLC100260930857_122025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3384736450-sensor-de-posicion-ciguenal-bosch-changan-hunter-19-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3386943206",
+    "sku": "JC6450AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac Refine 2.8/1.9",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_634643-MLC99857426116_122025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3386943206-sensor-de-posicion-ciguenal-bosch-jac-refine-2819-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3384620550",
+    "sku": "RM265AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac Refine M4 1.9t",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_959725-MLC100262589747_122025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3384620550-sensor-de-posicion-ciguenal-bosch-jac-refine-m4-19t-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3384671950",
+    "sku": "JX265AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Jac X200 2.0t",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_853246-MLC100262031085_122025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3384671950-sensor-de-posicion-ciguenal-bosch-jac-x200-20t-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3384749600",
+    "sku": "JMC721AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Jmc Vigus Work 2.5",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_956618-MLC100261489843_122025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3384749600-sensor-de-posicion-ciguenal-bosch-jmc-vigus-work-25-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3384710916",
+    "sku": "MAXT721AA",
+    "titulo": "Sensor De Posicion Cigueñal (bosch) Maxus T60 2.8/ V80 2.5",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_939602-MLC99776006642_122025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3384710916-sensor-de-posicion-ciguenal-bosch-maxus-t60-28-v80-25-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1587166009",
+    "sku": "TOU086AA",
+    "titulo": "Sensor De Posición Cigüeñal Jmc Touring 2.8 (bosch) Original",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_760201-MLC83111231991_032025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1587166009-sensor-de-posicion-ciguenal-jmc-touring-28-bosch-original-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1915000401",
     "sku": "TAT036AA",
     "titulo": "Sensor De Posicion Cigueñal Tata Xenon 2.2 Turbo 2009-2019",
@@ -5193,6 +5325,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1915000401-sensor-de-posicion-ciguenal-tata-xenon-22-turbo-2009-2019-_JM",
     "categoria": "MLC161575",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3843384312",
+    "sku": "JC6450AA",
+    "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 1.6 Toneladas",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_782667-MLC109241069032_042026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3843384312-sensor-de-posicion-de-ciguenal-jmc-carrying-16-toneladas-_JM",
+    "categoria": "MLC161575",
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -5328,13 +5472,37 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1588710381",
+    "sku": "2206AAA",
+    "titulo": "Sensor De Temperatura Jmc Grand Avenue 2.3 (bosch)",
+    "precio": 39680,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_877337-MLC83182601051_032025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1588710381-sensor-de-temperatura-jmc-grand-avenue-23-bosch-_JM",
+    "categoria": "MLC161668",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2859749806",
+    "sku": "2206AAAA",
+    "titulo": "Sensor De Temperatura Jmc Vigus Pro 2.0t (bosch)",
+    "precio": 39680,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_894988-MLC82893783588_032025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2859749806-sensor-de-temperatura-jmc-vigus-pro-20t-bosch-_JM",
+    "categoria": "MLC161668",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2859775762",
     "sku": "2206AA",
-    "titulo": "Sensor De Temperatura Jmc Vigus Work 2.5 2019-2024",
+    "titulo": "Sensor De Temperatura Original Jmc Vigus Work 2.5 2019-2024",
     "precio": 40990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_944605-MLC82893753596_032025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2859775762-sensor-de-temperatura-jmc-vigus-work-25-2019-2024-_JM",
+    "link": "https://articulo.mercadolibre.cl/MLC-2859775762-sensor-de-temperatura-original-jmc-vigus-work-25-2019-2024-_JM",
     "categoria": "MLC161668",
     "stock": 1,
     "condicion": "new"
@@ -5348,6 +5516,18 @@
     "imagen": "https://http2.mlstatic.com/D_863243-MLC83159533277_032025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1588401943-sensor-map-mahindra-xuv500-22-bencinera-2019-2024-_JM",
     "categoria": "MLC161573",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3583743694",
+    "sku": "CH124DF6AA",
+    "titulo": "Sensor Posición De Cigueñal (bosch) Dongfeng Df612 2.8",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_711196-MLC107341960297_022026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3583743694-sensor-posicion-de-ciguenal-bosch-dongfeng-df612-28-_JM",
+    "categoria": "MLC161575",
     "stock": 2,
     "condicion": "new"
   },
