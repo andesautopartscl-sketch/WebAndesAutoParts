@@ -1292,7 +1292,7 @@
     "imagen": "https://http2.mlstatic.com/D_600243-MLC112648002483_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2878505688-correa-de-accesorios-corta-jmc-vigus-work-25-2019-2024-_JM",
     "categoria": "MLC373343",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1305,18 +1305,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2878493800-correa-de-accesorios-larga-jmc-vigus-plus-24-vigus-5-24-_JM",
     "categoria": "MLC373343",
     "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1602354539",
-    "sku": "VGE6401AA",
-    "titulo": "Correa De Accesorios (larga) Jmc Vigus Work 2.5 2019-2024",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_806510-MLC83714175638_042025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1602354539-correa-de-accesorios-larga-jmc-vigus-work-25-2019-2024-_JM",
-    "categoria": "MLC373343",
-    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1964,7 +1952,7 @@
     "imagen": "https://http2.mlstatic.com/D_652340-MLC109858613489_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3819739162-goma-barra-estabilizadora-del-par-dfm-joyear-x3-sx5-sx6-_JM",
     "categoria": "MLC416687",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2492,7 +2480,7 @@
     "imagen": "https://http2.mlstatic.com/D_723860-MLC87848298106_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978954864-kit-de-filtros-mantencion-completa-omoda-c5-15-turbo-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -2532,18 +2520,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3373240270",
-    "sku": "Kit142AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 55990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1771318471",
     "sku": "Kit143AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2553,6 +2529,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3373240270",
+    "sku": "Kit142AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 55990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -2612,7 +2600,7 @@
     "imagen": "https://http2.mlstatic.com/D_793910-MLC85759153459_062025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2911804024-kit-de-filtros-mantencion-dfsk-580-15-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3272,7 +3260,7 @@
     "imagen": "https://http2.mlstatic.com/D_763979-MLC92789529058_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1582543653-kit-de-filtros-mantencion-great-wall-wingle-7-24-bencinera-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3872,7 +3860,7 @@
     "imagen": "https://http2.mlstatic.com/D_869871-MLC98636921482_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1761970311-neblineros-delanteros-par-jac-t6-20-2015-2025-vidrio-_JM",
     "categoria": "MLC433655",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -5456,7 +5444,7 @@
     "imagen": "https://http2.mlstatic.com/D_871496-MLC82243176096_022025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2846771842-sensor-posicion-eje-de-leva-maxus-c35-20-diesel-original-_JM",
     "categoria": "MLC161577",
-    "stock": 1,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -6164,7 +6152,7 @@
     "imagen": "https://http2.mlstatic.com/D_925310-MLC88169391394_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2986744882-valvula-pcv-changan-cx70-16-2015-2023-_JM",
     "categoria": "MLC178771",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -6188,7 +6176,7 @@
     "imagen": "https://http2.mlstatic.com/D_727150-MLC89923169483_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1641613939-valvula-pcv-o-tapa-pcv-jmc-carrying-28t-isuzu-2011-2023-_JM",
     "categoria": "MLC178771",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
