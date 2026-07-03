@@ -104,22 +104,25 @@
       logEl.classList.remove("hidden");
     }
 
+    function delay(ms) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, ms);
+      });
+    }
+
     async function exchangeCodeViaWorker(code) {
-      const res = await fetch(
-        "https://andes-autoparts-ml-sync.andesautoparts.workers.dev/exchange-code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer AndesSync2024#SecureKey!",
-          },
-          body: JSON.stringify({ code: code, redirect_uri: REDIRECT_URI }),
-        }
-      );
+      const res = await fetch(WORKER_URL + "/exchange-code", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: WORKER_AUTH,
+        },
+        body: JSON.stringify({ code: code, redirect_uri: REDIRECT_URI }),
+      });
       const data = await res.json().catch(function () {
         return {};
       });
-      if (!res.ok || !data.access_token) {
+      if (!res.ok || !data.ok || !data.access_token) {
         throw new Error(data.message || data.error || "Error HTTP " + res.status);
       }
       return data.access_token;
@@ -159,9 +162,10 @@
       const data = await res.json().catch(function () {
         return {};
       });
-      if (!res.ok) {
+      if (!res.ok || !data.ok) {
         throw new Error(data.message || data.error || "update-token HTTP " + res.status);
       }
+      return data;
     }
 
     async function runSync() {
@@ -210,11 +214,14 @@
           }
           if (!secret) throw workerErr;
           accessToken = await exchangeCodeViaMl(code, secret.trim());
-          await pushTokenToWorker(accessToken);
         }
 
-        log("✓ Token renovado", "ok");
-        log("✓ Sincronizando catálogo...", "pending");
+        log("Guardando token en Worker (KV)...", "pending");
+        await pushTokenToWorker(accessToken);
+        log("✓ Token renovado y guardado en KV", "ok");
+
+        await delay(400);
+        log("Sincronizando catálogo...", "pending");
         const products = await runSync();
         log("✓ Listo" + (products ? " — " + products + " productos" : ""), "ok");
         btnAuth.textContent = "Completado";

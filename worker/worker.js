@@ -107,6 +107,12 @@ async function setMlAccessToken(env, token) {
     throw new Error("TOKEN_KV no configurado en el Worker");
   }
   await env.TOKEN_KV.put(KV_TOKEN_KEY, token);
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const stored = await env.TOKEN_KV.get(KV_TOKEN_KEY);
+    if (stored === token) return;
+    await new Promise((r) => setTimeout(r, 80 * (attempt + 1)));
+  }
+  throw new Error("KV no confirmó el token guardado (ML_ACCESS_TOKEN)");
 }
 
 async function kvGetJson(env, key) {
@@ -557,6 +563,8 @@ async function handleExchangeCode(request, env) {
     refresh_token: tokenData.refresh_token || null,
     expires_in: tokenData.expires_in || null,
     redirect_uri: redirectUri,
+    kv_key: KV_TOKEN_KEY,
+    kv_saved: true,
     message: "Token guardado en KV",
   });
 }
