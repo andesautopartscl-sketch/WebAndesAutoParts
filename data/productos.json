@@ -1184,7 +1184,7 @@
     "imagen": "https://http2.mlstatic.com/D_721250-MLC95630028932_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1731173211-cazoleta-delantera-con-rodamiento-par-jac-s2-15js2-15-_JM",
     "categoria": "MLC161578",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2576,7 +2576,7 @@
     "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2592,18 +2592,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3373240270",
-    "sku": "Kit142AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 55990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1771318471",
     "sku": "Kit143AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2613,6 +2601,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3373240270",
+    "sku": "Kit142AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 55990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -2721,18 +2721,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3180465876-kit-de-filtros-mantencion-exeed-lx-15t-_JM",
     "categoria": "MLC377254",
     "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4109146614",
-    "sku": "Kit220AA",
-    "titulo": "Kit De Filtros (mantención) Exeed Txl 2.0t",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_775221-MLC113680559333_062026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-4109146614-kit-de-filtros-mantencion-exeed-txl-20t-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3500,7 +3488,7 @@
     "imagen": "https://http2.mlstatic.com/D_995634-MLC82747338149_022025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1580830769-kit-de-terminales-con-axiales-great-wall-poer-2019-2023-_JM",
     "categoria": "MLC425021",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -5037,18 +5025,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2849067146-rodamiento-de-masa-delantera-jmc-vigus-work-25-4x2-y-4x4-_JM",
     "categoria": "MLC373438",
     "stock": 5,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1575851305",
-    "sku": "VGP3120AA",
-    "titulo": "Rodamiento Guía Liso Alternador Jmc Vigus Plus 2.4 Original",
-    "precio": 59990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_775550-MLC89342584057_082025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1575851305-rodamiento-guia-liso-alternador-jmc-vigus-plus-24-original-_JM",
-    "categoria": "MLC373307",
-    "stock": 1,
     "condicion": "new"
   },
   {
