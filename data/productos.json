@@ -144,6 +144,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1831417237",
+    "sku": "JS1040AA",
+    "titulo": "Axiales De Dirección (par) Koreanos Jac S3 / Js3 Y Grand S3",
+    "precio": 40990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_917115-MLC105257826511_012026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1831417237-axiales-de-direccion-par-koreanos-jac-s3-js3-y-grand-s3-_JM",
+    "categoria": "MLC425021",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3914609050",
     "sku": "2936AA",
     "titulo": "Balancin (juego 16) Great Wall Wingle 5,6,7 2.0 Diesel Turbo",
@@ -824,7 +836,7 @@
     "imagen": "https://http2.mlstatic.com/D_620245-MLC91517700441_092025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3114526538-bomba-de-embrague-coreana-jac-x200-20-2016-2024-_JM",
     "categoria": "MLC161597",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -848,7 +860,7 @@
     "imagen": "https://http2.mlstatic.com/D_853544-MLC81995593710_022025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2841360098-bomba-de-pedal-de-embrague-jmc-convey-_JM",
     "categoria": "MLC412457",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1172,7 +1184,7 @@
     "imagen": "https://http2.mlstatic.com/D_721250-MLC95630028932_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1731173211-cazoleta-delantera-con-rodamiento-par-jac-s2-15js2-15-_JM",
     "categoria": "MLC161578",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1944,18 +1956,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1573165979",
-    "sku": "VG4018AA",
-    "titulo": "Foco Trasero Derecho Jmc Vigus Plus 2021-2024  Vigus Pro 2.0 Derecho/pasajero Rojo",
-    "precio": 85990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
-    "categoria": "MLC161713",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1573101353",
     "sku": "VG4017AA",
     "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
@@ -1976,7 +1976,7 @@
     "imagen": "https://http2.mlstatic.com/D_652340-MLC109858613489_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3819739162-goma-barra-estabilizadora-del-par-dfm-joyear-x3-sx5-sx6-_JM",
     "categoria": "MLC416687",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -2000,7 +2000,7 @@
     "imagen": "https://http2.mlstatic.com/D_758294-MLC84600962337_052025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2890562322-gomas-barra-estabilizadora-delantera-par-maxus-g10-1920-_JM",
     "categoria": "MLC416687",
-    "stock": 3,
+    "stock": 5,
     "condicion": "new"
   },
   {
@@ -2580,18 +2580,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3373240270",
-    "sku": "Kit142AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 55990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1771318471",
     "sku": "Kit143AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2601,6 +2589,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3373240270",
+    "sku": "Kit142AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 55990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -3152,7 +3152,7 @@
     "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3368,7 +3368,7 @@
     "imagen": "https://http2.mlstatic.com/D_898546-MLC111547037621_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573114101-kit-de-filtros-mantencion-great-wall-wingle-7-20-diesel-_JM",
     "categoria": "MLC377254",
-    "stock": 6,
+    "stock": 5,
     "condicion": "new"
   },
   {
@@ -3608,7 +3608,7 @@
     "imagen": "https://http2.mlstatic.com/D_922453-MLC89877010413_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1575813587-masa-de-rueda-delantera-jac-x200-20-diesel-_JM",
     "categoria": "MLC161586",
-    "stock": 3,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3920,7 +3920,7 @@
     "imagen": "https://http2.mlstatic.com/D_998315-MLC107946217129_032026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3670613944-neblinero-trasero-central-haval-h6-3ra-generacion-hibrida-rojo-_JM",
     "categoria": "MLC7246",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3992,7 +3992,7 @@
     "imagen": "https://http2.mlstatic.com/D_825957-MLC98428523476_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1759887761-neblineros-delanteros-par-jmc-vigus-work-25-2021-2023-transparente-_JM",
     "categoria": "MLC433655",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -4748,7 +4748,7 @@
     "imagen": "https://http2.mlstatic.com/D_922191-MLC88807620296_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1579583739-rodamiento-de-masa-delantera-kit-jac-x200-20-diesel-_JM",
     "categoria": "MLC373438",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -5352,18 +5352,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1915000401",
-    "sku": "TAT036AA",
-    "titulo": "Sensor De Posicion Cigueñal Tata Xenon 2.2 Turbo 2009-2019",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_746717-MLC110089410751_042026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1915000401-sensor-de-posicion-ciguenal-tata-xenon-22-turbo-2009-2019-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC3843384312",
     "sku": "JC6450AA",
     "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 1.6 Toneladas",
@@ -5373,18 +5361,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3843384312-sensor-de-posicion-de-ciguenal-jmc-carrying-16-toneladas-_JM",
     "categoria": "MLC161575",
     "stock": 3,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3843322570",
-    "sku": "JAT036AA",
-    "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 3.5 Toneladas",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_896171-MLC109241062970_042026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3843322570-sensor-de-posicion-de-ciguenal-jmc-carrying-35-toneladas-_JM",
-    "categoria": "MLC161575",
-    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5780,6 +5756,42 @@
     "imagen": "https://http2.mlstatic.com/D_932679-MLC113587311759_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2841570360-sensor-presion-diferencial-jmc-vigus-work-25vigus-plus-24-_JM",
     "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4159927060",
+    "sku": "JC810AA",
+    "titulo": "Sensor Presión Riel De Inyeccion (bosch) Jac Refine 1.9 Old",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_786459-MLC113037768354_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4159927060-sensor-presion-riel-de-inyeccion-bosch-jac-refine-19-old-_JM",
+    "categoria": "MLC416795",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2046349837",
+    "sku": "MA264AA",
+    "titulo": "Sensor Presión Riel De Inyeccion (bosch) Jac Sunray 2.8t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_946392-MLC114262783423_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2046349837-sensor-presion-riel-de-inyeccion-bosch-jac-sunray-28t-_JM",
+    "categoria": "MLC456712",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4159955736",
+    "sku": "MA0334AA",
+    "titulo": "Sensor Presión Riel De Inyeccion (bosch) Jac Urban 1068",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_626688-MLC114262771099_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4159955736-sensor-presion-riel-de-inyeccion-bosch-jac-urban-1068-_JM",
+    "categoria": "MLC456712",
     "stock": 1,
     "condicion": "new"
   },
@@ -6444,18 +6456,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1641613939",
-    "sku": "297793CAA",
-    "titulo": "Valvula Pcv O Tapa Pcv Jmc Carrying 2.8t Isuzu 2011-2023",
-    "precio": 35990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_727150-MLC89923169483_082025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1641613939-valvula-pcv-o-tapa-pcv-jmc-carrying-28t-isuzu-2011-2023-_JM",
-    "categoria": "MLC178771",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1731134339",
     "sku": "JM2977TAA",
     "titulo": "Valvula Pcv O Tapa Pcv Jmc Touring 2.8t 2020-2024",
@@ -6465,6 +6465,66 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1731134339-valvula-pcv-o-tapa-pcv-jmc-touring-28t-2020-2024-_JM",
     "categoria": "MLC178771",
     "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4085081826",
+    "sku": "2913AA",
+    "titulo": "Valvula Scv O Imb Presión (original Bosch) Gwm Wingle 2.8t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_923740-MLC113305975227_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4085081826-valvula-scv-o-imb-presion-original-bosch-gwm-wingle-28t-_JM",
+    "categoria": "MLC456949",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4084966764",
+    "sku": "RF1034AA",
+    "titulo": "Valvula Scv O Imb Presión (original Bosch) Jac Refine 1.9t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_936172-MLC113304552355_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4084966764-valvula-scv-o-imb-presion-original-bosch-jac-refine-19t-_JM",
+    "categoria": "MLC456949",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4084966542",
+    "sku": "MX1034AA",
+    "titulo": "Valvula Scv O Imb Presión (original Bosch) Maxus T60 2.8t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_667912-MLC112161099898_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4084966542-valvula-scv-o-imb-presion-original-bosch-maxus-t60-28t-_JM",
+    "categoria": "MLC178769",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2005735869",
+    "sku": "MXV1034AA",
+    "titulo": "Valvula Scv O Imb Presión (original Bosch) Maxus V80 2.5t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_853299-MLC113305555027_062026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2005735869-valvula-scv-o-imb-presion-original-bosch-maxus-v80-25t-_JM",
+    "categoria": "MLC178769",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2044097817",
+    "sku": "JS66928AA",
+    "titulo": "Valvula Vvt / Valvula Control Aceite Jac S2 / S3 / J4",
+    "precio": 49990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_733313-MLC114247753301_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2044097817-valvula-vvt-valvula-control-aceite-jac-s2-s3-j4-_JM",
+    "categoria": "MLC430959",
+    "stock": 1,
     "condicion": "new"
   },
   {
