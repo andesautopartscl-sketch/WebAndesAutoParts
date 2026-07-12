@@ -152,7 +152,7 @@
     "imagen": "https://http2.mlstatic.com/D_917115-MLC105257826511_012026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1831417237-axiales-de-direccion-par-koreanos-jac-s3-js3-y-grand-s3-_JM",
     "categoria": "MLC425021",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -608,7 +608,7 @@
     "imagen": "https://http2.mlstatic.com/D_896831-MLC103884119999_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3496643542-bieletas-de-suspencion-delanteras-par-jac-s3js3grand-s3-_JM",
     "categoria": "MLC179512",
-    "stock": 3,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1316,7 +1316,7 @@
     "imagen": "https://http2.mlstatic.com/D_600243-MLC112648002483_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2878505688-correa-de-accesorios-corta-jmc-vigus-work-25-2019-2024-_JM",
     "categoria": "MLC373343",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1956,13 +1956,13 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1573101353",
-    "sku": "VG4017AA",
-    "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
+    "id": "MLC1573165979",
+    "sku": "VG4018AA",
+    "titulo": "Foco Trasero Derecho Jmc Vigus Plus 2021-2024  Vigus Pro 2.0 Derecho/pasajero Rojo",
     "precio": 85990,
     "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_833206-MLC110595662640_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1573101353-foco-trasero-izquierdo-jmc-vigus-plus-2021-2024-vigus-pro20-izquierdoconductor-rojo-_JM",
+    "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
     "categoria": "MLC161713",
     "stock": 1,
     "condicion": "new"
@@ -2121,6 +2121,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1578233177-juego-de-valvulas-de-admision-y-escape-chery-tiggo-8-15-_JM",
     "categoria": "MLC178771",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2053547787",
+    "sku": "VGPN22AA",
+    "titulo": "Juntas De Tapa Valvulas  Jmc Vigus 5 / Vigus Plus 2.4 Negro",
+    "precio": 29990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_914595-MLC114385366997_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2053547787-juntas-de-tapa-valvulas-jmc-vigus-5-vigus-plus-24-negro-_JM",
+    "categoria": "MLC459337",
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2564,7 +2576,7 @@
     "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3141,30 +3153,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1704692193-kit-de-filtros-aire-y-aceite-exeed-vx-20t-_JM",
     "categoria": "MLC377254",
     "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3843385300",
-    "sku": "Kit192AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 7 Pro 1.5t",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4087914054",
-    "sku": "Kit217AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Kaiyi X3 1,5t / 1.5l",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_723241-MLC113355239279_062026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-4087914054-kit-de-filtros-caja-automatica-cvt-kaiyi-x3-15t-15l-_JM",
-    "categoria": "MLC377254",
-    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4443,7 +4431,7 @@
     "id": "MLC2840255700",
     "sku": "M4145AA",
     "titulo": "Pastillas Delanteras (cerámica)  Mg Zs 1.5 Y Zx 1.5",
-    "precio": 28990,
+    "precio": 32990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_826827-MLC94645625077_102025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2840255700-pastillas-delanteras-ceramica-mg-zs-15-y-zx-15-_JM",
@@ -4628,7 +4616,7 @@
     "imagen": "https://http2.mlstatic.com/D_956862-MLC83714390040_042025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2878518410-reten-trasero-de-ciguenal-jmc-grand-avenue-23t-_JM",
     "categoria": "MLC373308",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4752,18 +4740,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978954648",
-    "sku": "X3558AAA",
-    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978876696",
     "sku": "X3558AA",
     "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
@@ -4771,6 +4747,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978954648",
+    "sku": "X3558AAA",
+    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
+    "precio": 65990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
     "categoria": "MLC373438",
     "stock": 3,
     "condicion": "new"
@@ -4796,19 +4784,7 @@
     "imagen": "https://http2.mlstatic.com/D_617143-MLC100782551166_122025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1785465629-rodamiento-de-masa-delantera-par-changan-alsvin-2019-2025-_JM",
     "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2978915192",
-    "sku": "CX7062AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_779667-MLC88182287851_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978915192-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
-    "categoria": "MLC373438",
-    "stock": 4,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4821,6 +4797,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
     "categoria": "MLC373438",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978915192",
+    "sku": "CX7062AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
+    "precio": 65990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_779667-MLC88182287851_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978915192-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
+    "categoria": "MLC373438",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -5012,7 +5000,7 @@
     "imagen": "https://http2.mlstatic.com/D_922741-MLC89002285448_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2849067146-rodamiento-de-masa-delantera-jmc-vigus-work-25-4x2-y-4x4-_JM",
     "categoria": "MLC373438",
-    "stock": 5,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -6128,7 +6116,7 @@
     "imagen": "https://http2.mlstatic.com/D_813513-MLC85061535514_052025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2904791680-taquies-hidraulicos-juego-16-great-wall-poer-20-alemanes-_JM",
     "categoria": "MLC441062",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
