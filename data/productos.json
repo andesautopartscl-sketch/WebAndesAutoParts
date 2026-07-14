@@ -992,7 +992,7 @@
     "imagen": "https://http2.mlstatic.com/D_619095-MLC106107059919_012026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1843016367-bujias-punta-de-iridium-ngk-juego-changan-cs55-15-15t-_JM",
     "categoria": "MLC441075",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1268,7 +1268,7 @@
     "imagen": "https://http2.mlstatic.com/D_852517-MLC91515558771_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1578323645-cilindro-de-freno-great-wall-wingle-5-4x2-y-4x4-2012-2023-_JM",
     "categoria": "MLC176304",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1620,6 +1620,90 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2059594975",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Exeed Lx 1.5t",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_862160-MLC114500546741_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059594975-eletrovalvula-o-valvula-canister-original-exeed-lx-15t-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059571593",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Exeed Vx 2.0t",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_657993-MLC114499868627_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059571593-eletrovalvula-o-valvula-canister-original-exeed-vx-20t-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059572199",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Jetour X70 / X90",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_994153-MLC113259245680_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059572199-eletrovalvula-o-valvula-canister-original-jetour-x70-x90-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059584355",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Tiggo 2 Pro/ Max",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_957081-MLC114500938851_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059584355-eletrovalvula-o-valvula-canister-original-tiggo-2-pro-max-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059596691",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Tiggo 4 Pro Max",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_690338-MLC114500614707_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059596691-eletrovalvula-o-valvula-canister-original-tiggo-4-pro-max-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059596131",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Tiggo 7 Pro",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_930830-MLC113259656332_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059596131-eletrovalvula-o-valvula-canister-original-tiggo-7-pro-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059571543",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Tiggo 8 Pro",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_681310-MLC114499366413_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059571543-eletrovalvula-o-valvula-canister-original-tiggo-8-pro-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1631773555",
     "sku": "VGP3209AA",
     "titulo": "Empaquetadura De Culata 3 Mca Jmc Vigus Plus 2.4/vigus 5 2.4",
@@ -1773,6 +1857,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-4093519504-filtro-de-deposito-adblue-o-urea-jac-sunray-192827-_JM",
     "categoria": "MLC437960",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4179286738",
+    "sku": "JU165AA",
+    "titulo": "Filtro De Depósito Adblue O Urea Jac Urban 1040",
+    "precio": 40990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_980464-MLC114489869877_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4179286738-filtro-de-deposito-adblue-o-urea-jac-urban-1040-_JM",
+    "categoria": "MLC437960",
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1976,7 +2072,7 @@
     "imagen": "https://http2.mlstatic.com/D_652340-MLC109858613489_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3819739162-goma-barra-estabilizadora-del-par-dfm-joyear-x3-sx5-sx6-_JM",
     "categoria": "MLC416687",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2372,7 +2468,7 @@
     "imagen": "https://http2.mlstatic.com/D_821718-MLC106900821178_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1580378045-kit-de-embrague-karry-q22-13-_JM",
     "categoria": "MLC161594",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2592,18 +2688,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1771318471",
-    "sku": "Kit143AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 149990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_782108-MLC99934894463_112025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
     "id": "MLC3373240270",
     "sku": "Kit142AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2613,6 +2697,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 4,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1771318471",
+    "sku": "Kit143AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 149990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_782108-MLC99934894463_112025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4191,12 +4287,12 @@
     "id": "MLC1853311259",
     "sku": "DT503302AA",
     "titulo": "Pastillas De Freno Delanteras Brilliance T50 1.5 / T52 1.5",
-    "precio": 29990,
+    "precio": 32990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_630551-MLC106807452887_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1853311259-pastillas-de-freno-delanteras-brilliance-t50-15-t52-15-_JM",
     "categoria": "MLC22887",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4740,18 +4836,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978876696",
-    "sku": "X3558AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
-    "categoria": "MLC373438",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978954648",
     "sku": "X3558AAA",
     "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
@@ -4759,6 +4843,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_776757-MLC88183412495_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2978954648-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
+    "categoria": "MLC373438",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978876696",
+    "sku": "X3558AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Baic X35 1.5 Old Y New",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_878997-MLC89841326019_082025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978876696-rodamiento-de-masa-delantera-par-baic-x35-15-old-y-new-_JM",
     "categoria": "MLC373438",
     "stock": 3,
     "condicion": "new"
@@ -4788,18 +4884,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978980404",
-    "sku": "CX7062AAA",
-    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_756518-MLC88182183255_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
-    "categoria": "MLC373438",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978915192",
     "sku": "CX7062AA",
     "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
@@ -4812,6 +4896,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2978980404",
+    "sku": "CX7062AAA",
+    "titulo": "Rodamiento De Masa Delantera (par) Changan Cx70, A500 Y Cs35",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_756518-MLC88182183255_072025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978980404-rodamiento-de-masa-delantera-par-changan-cx70-a500-y-cs35-_JM",
+    "categoria": "MLC373438",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3427305500",
     "sku": "T2PMX194AA",
     "titulo": "Rodamiento De Masa Delantera (par) Chery Tiggo 2 Pro Max 1.5",
@@ -4819,18 +4915,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_745211-MLC101460323117_122025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3427305500-rodamiento-de-masa-delantera-par-chery-tiggo-2-pro-max-15-_JM",
-    "categoria": "MLC373438",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1787767207",
-    "sku": "T3361AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Chery Tiggo 3 New 1.5",
-    "precio": 60990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_908075-MLC100962250694_122025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1787767207-rodamiento-de-masa-delantera-par-chery-tiggo-3-new-15-_JM",
     "categoria": "MLC373438",
     "stock": 1,
     "condicion": "new"
@@ -4964,19 +5048,7 @@
     "imagen": "https://http2.mlstatic.com/D_940702-MLC111883793482_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2978929310-rodamiento-de-masa-delantera-par-jmc-vigus-work-25-4x24-_JM",
     "categoria": "MLC161586",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3427331072",
-    "sku": "NWT576AA",
-    "titulo": "Rodamiento De Masa Delantera (par) New Tiggo 4 Pro Max 1.5",
-    "precio": 65990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_896070-MLC101459311441_122025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3427331072-rodamiento-de-masa-delantera-par-new-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC373438",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -5168,7 +5240,7 @@
     "imagen": "https://http2.mlstatic.com/D_676312-MLC87647259706_072025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2971832094-rotulas-inferiores-par-originales-gmw-wingle-56-y-7-_JM",
     "categoria": "MLC425018",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5556,6 +5628,30 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2059581483",
+    "sku": "TOU011005AA",
+    "titulo": "Sensor Map  Jmc Touring 2.8 Turbo",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_958548-MLC113259648948_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059581483-sensor-map-jmc-touring-28-turbo-_JM",
+    "categoria": "MLC161573",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059594119",
+    "sku": "VGP011005AA",
+    "titulo": "Sensor Map Jmc Vigus Work 2.5 Turbo 2018-2026",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_663698-MLC113258138242_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059594119-sensor-map-jmc-vigus-work-25-turbo-2018-2026-_JM",
+    "categoria": "MLC161573",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1588401943",
     "sku": "XUVB02AA",
     "titulo": "Sensor Map Mahindra Xuv500 2.2 Bencinera 2019-2024",
@@ -5565,6 +5661,54 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1588401943-sensor-map-mahindra-xuv500-22-bencinera-2019-2024-_JM",
     "categoria": "MLC161573",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059578867",
+    "sku": "JGA3134AA",
+    "titulo": "Sensor Map Original Jmc Grand Avenue 2.3t",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_920076-MLC114499856729_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059578867-sensor-map-original-jmc-grand-avenue-23t-_JM",
+    "categoria": "MLC161573",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059567451",
+    "sku": "JNT3134AA",
+    "titulo": "Sensor Map Original Jmc New Touring 2.0t",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874686-MLC113259348056_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059567451-sensor-map-original-jmc-new-touring-20t-_JM",
+    "categoria": "MLC161573",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059580463",
+    "sku": "VGP3134AA",
+    "titulo": "Sensor Map Original Jmc Vigus 5 2.4 / Vigus Plus 2.4",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_981504-MLC113259233284_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059580463-sensor-map-original-jmc-vigus-5-24-vigus-plus-24-_JM",
+    "categoria": "MLC161573",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2059568085",
+    "sku": "VGPN3134AA",
+    "titulo": "Sensor Map Original Jmc Vigus Plus New 2.0/ Vigus Pro 2.0",
+    "precio": 42990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_621641-MLC113259321434_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2059568085-sensor-map-original-jmc-vigus-plus-new-20-vigus-pro-20-_JM",
+    "categoria": "MLC161573",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -6348,6 +6492,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2853021226",
+    "sku": "VGP011093AA",
+    "titulo": "Válvula Control Combustible (scv) Jmc Vigus Work 2.5",
+    "precio": 149990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_819751-MLC104887489576_012026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2853021226-valvula-control-combustible-scv-jmc-vigus-work-25-_JM",
+    "categoria": "MLC161571",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1632459509",
     "sku": "232XAA",
     "titulo": "Valvula Egr Jmc Carrying 2.8 Euro 4 2009-2014",
@@ -6441,6 +6597,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2986706364-valvula-pcv-chery-tiggo-2-15-2015-2024-_JM",
     "categoria": "MLC178771",
     "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC1641613939",
+    "sku": "297793CAA",
+    "titulo": "Valvula Pcv O Tapa Pcv Jmc Carrying 2.8t Isuzu 2011-2023",
+    "precio": 35990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_727150-MLC89923169483_082025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1641613939-valvula-pcv-o-tapa-pcv-jmc-carrying-28t-isuzu-2011-2023-_JM",
+    "categoria": "MLC178771",
+    "stock": 3,
     "condicion": "new"
   },
   {
