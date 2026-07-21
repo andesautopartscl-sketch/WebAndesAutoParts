@@ -84,18 +84,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2852431324",
-    "sku": "VG3002AA",
-    "titulo": "Amortiguadores Traseros (par) Jmc Vigus Work 2.5 2019-2023",
-    "precio": 100990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_817298-MLC88720596392_072025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2852431324-amortiguadores-traseros-par-jmc-vigus-work-25-2019-2023-_JM",
-    "categoria": "MLC22579",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1726951115",
     "sku": "Kit127AA",
     "titulo": "Axial De Dirección (par) Chery Tiggo 8 1.5/ Tiggo 8 Pro/max",
@@ -572,7 +560,7 @@
     "imagen": "https://http2.mlstatic.com/D_782649-MLC103884308585_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1814462045-bieletas-de-suspencion-delanteras-par-jac-j4-15-_JM",
     "categoria": "MLC179512",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -584,7 +572,7 @@
     "imagen": "https://http2.mlstatic.com/D_896831-MLC103884119999_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3496643542-bieletas-de-suspencion-delanteras-par-jac-s3js3grand-s3-_JM",
     "categoria": "MLC179512",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -704,7 +692,7 @@
     "imagen": "https://http2.mlstatic.com/D_817840-MLC107186506459_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2930285394-bieletas-delanteras-par-maxus-v80-25-2013-2023-_JM",
     "categoria": "MLC179512",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1068,6 +1056,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2074070173",
+    "sku": "OC77710AA",
+    "titulo": "Bujías Punta De Iridium Ngk (juego) Omoda C7 1.6t",
+    "precio": 54990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_757465-MLC114863703893_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2074070173-bujias-punta-de-iridium-ngk-juego-omoda-c7-16t-_JM",
+    "categoria": "MLC441075",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2842619922",
     "sku": "T3311AA",
     "titulo": "Bujías Punta De Iridium Ngk Juego Chery Tiggo 3 New 1.5",
@@ -1076,7 +1076,7 @@
     "imagen": "https://http2.mlstatic.com/D_724966-MLC99151682560_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2842619922-bujias-punta-de-iridium-ngk-juego-chery-tiggo-3-new-15-_JM",
     "categoria": "MLC441075",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1443,12 +1443,12 @@
     "id": "MLC1578437515",
     "sku": "TI40025AA",
     "titulo": "Correa De Alternador O Accesorios Chery Tiggo 4 2.0",
-    "precio": 26990,
+    "precio": 28990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_783833-MLC92789326920_092025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1578437515-correa-de-alternador-o-accesorios-chery-tiggo-4-20-_JM",
     "categoria": "MLC373343",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1627,6 +1627,30 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_994153-MLC113259245680_072026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2059572199-eletrovalvula-o-valvula-canister-original-jetour-x70-x90-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2068810357",
+    "sku": "TP7079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Omoda C5 1.5/1.6",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_696233-MLC113455539340_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2068810357-eletrovalvula-o-valvula-canister-original-omoda-c5-1516-_JM",
+    "categoria": "MLC431175",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2074082455",
+    "sku": "OC77079AA",
+    "titulo": "Eletrovalvula O Valvula Canister (original) Omoda C7 1.6t",
+    "precio": 46990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_970526-MLC113588635426_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2074082455-eletrovalvula-o-valvula-canister-original-omoda-c7-16t-_JM",
     "categoria": "MLC431175",
     "stock": 1,
     "condicion": "new"
@@ -2096,7 +2120,7 @@
     "imagen": "https://http2.mlstatic.com/D_658678-MLC106539486794_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2850883984-gomas-de-barra-estabilizadora-par-maxus-v80-25-2012-2023-_JM",
     "categoria": "MLC416687",
-    "stock": 1,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -3012,6 +3036,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1624763849",
+    "sku": "kit60AA",
+    "titulo": "Kit De Filtros (mantencion) Kyc X5 1.5",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_749630-MLC85758519497_062025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1624763849-kit-de-filtros-mantencion-kyc-x5-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 3,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1949403543",
     "sku": "Kit200AA",
     "titulo": "Kit De Filtros (mantencion) Maxus D60 1.5t Bencinera",
@@ -3240,6 +3276,66 @@
     "condicion": "new"
   },
   {
+    "id": "MLC4212553362",
+    "sku": "Kit227AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 2 Pro / Max",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_707979-MLC113583703034_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4212553362-kit-de-filtros-caja-automatica-cvt-chery-tiggo-2-pro-max-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2074074821",
+    "sku": "Kit228AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 3 Pro 1.5",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_758476-MLC113586169734_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2074074821-kit-de-filtros-caja-automatica-cvt-chery-tiggo-3-pro-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3843385300",
+    "sku": "Kit192AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 7 Pro 1.5t",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4087914054",
+    "sku": "Kit217AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Kaiyi X3 1,5t / 1.5l",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_723241-MLC113355239279_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4087914054-kit-de-filtros-caja-automatica-cvt-kaiyi-x3-15t-15l-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4211500082",
+    "sku": "Kit226AA",
+    "titulo": "Kit De Filtros Caja Automatica (cvt) Omoda C5 1.5t",
+    "precio": 69990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_753140-MLC113571786428_072026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-4211500082-kit-de-filtros-caja-automatica-cvt-omoda-c5-15t-_JM",
+    "categoria": "MLC377254",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2966278262",
     "sku": "Kit80AA",
     "titulo": "Kit De Filtros Changan Cx70 1.5 Turbo",
@@ -3440,7 +3536,7 @@
     "imagen": "https://http2.mlstatic.com/D_898546-MLC111547037621_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573114101-kit-de-filtros-mantencion-great-wall-wingle-7-20-diesel-_JM",
     "categoria": "MLC377254",
-    "stock": 5,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -3477,18 +3573,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2911724546-kit-de-mantencion-completo-mg-zs-15-y-zx-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1624763849",
-    "sku": "kit60AA",
-    "titulo": "Kit De Mantencion (filtros) Kyc X5 1.5",
-    "precio": 44990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_749630-MLC85758519497_062025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1624763849-kit-de-mantencion-filtros-kyc-x5-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 3,
     "condicion": "new"
   },
   {
@@ -4944,18 +5028,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2978902324",
-    "sku": "X3857AA",
-    "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
-    "precio": 39990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_724257-MLC87846558640_072025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2978902324-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
-    "categoria": "MLC373438",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2978967610",
     "sku": "X3857AA",
     "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
@@ -4965,6 +5037,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2978967610-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
     "categoria": "MLC373438",
     "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2978902324",
+    "sku": "X3857AA",
+    "titulo": "Rodamiento De Masa Delantera (par) Dfsk 560 1.8",
+    "precio": 39990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_724257-MLC87846558640_072025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2978902324-rodamiento-de-masa-delantera-par-dfsk-560-18-_JM",
+    "categoria": "MLC373438",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5256,18 +5340,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2894881428",
-    "sku": "VGP3092AA",
-    "titulo": "Sensor Abs Delantero Derecho Jmc Vigus Plus/vigus 5 2.4",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_738580-MLC111395924424_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2894881428-sensor-abs-delantero-derecho-jmc-vigus-plusvigus-5-24-_JM",
-    "categoria": "MLC161543",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1578375565",
     "sku": "VGE6242AA",
     "titulo": "Sensor Abs Delantero Derecho Jmc Vigus Work 2.5 2019-2024",
@@ -5275,18 +5347,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_614028-MLC82561465439_022025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1578375565-sensor-abs-delantero-derecho-jmc-vigus-work-25-2019-2024-_JM",
-    "categoria": "MLC161543",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2894842416",
-    "sku": "VGP3093AA",
-    "titulo": "Sensor Abs Delantero Izquierdo Jmc Vigus Plus/vigus 5 2.4",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_615490-MLC111395923974_052026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2894842416-sensor-abs-delantero-izquierdo-jmc-vigus-plusvigus-5-24-_JM",
     "categoria": "MLC161543",
     "stock": 1,
     "condicion": "new"
@@ -5412,6 +5472,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1915000401",
+    "sku": "TAT036AA",
+    "titulo": "Sensor De Posicion Cigueñal Tata Xenon 2.2 Turbo 2009-2019",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_746717-MLC110089410751_042026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1915000401-sensor-de-posicion-ciguenal-tata-xenon-22-turbo-2009-2019-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3843384312",
     "sku": "JC6450AA",
     "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 1.6 Toneladas",
@@ -5421,6 +5493,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-3843384312-sensor-de-posicion-de-ciguenal-jmc-carrying-16-toneladas-_JM",
     "categoria": "MLC161575",
     "stock": 3,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3843322570",
+    "sku": "JAT036AA",
+    "titulo": "Sensor De Posicion De Cigueñal Jmc Carrying 3.5 Toneladas",
+    "precio": 44990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_896171-MLC109241062970_042026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-3843322570-sensor-de-posicion-de-ciguenal-jmc-carrying-35-toneladas-_JM",
+    "categoria": "MLC161575",
+    "stock": 1,
     "condicion": "new"
   },
   {
