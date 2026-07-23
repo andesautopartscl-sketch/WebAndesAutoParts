@@ -1527,12 +1527,12 @@
     "id": "MLC1583726049",
     "sku": "RI0040AA",
     "titulo": "Discos Delanteros (par) Zna Rich 6 O Df6 2.5 2019-2024",
-    "precio": 95990,
+    "precio": 125990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_783625-MLC82626870418_032025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1583726049-discos-delanteros-par-zna-rich-6-o-df6-25-2019-2024-_JM",
     "categoria": "MLC161536",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2047,30 +2047,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_643724-MLC112624934907_062026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-4042627670-foco-trasero-derecho-copiloto-foton-g7-20-derechopasajero-rojo-_JM",
-    "categoria": "MLC161713",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1573165979",
-    "sku": "VG4018AA",
-    "titulo": "Foco Trasero Derecho Jmc Vigus Plus 2021-2024  Vigus Pro 2.0 Derecho/pasajero Rojo",
-    "precio": 85990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_965867-MLC110595665140_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1573165979-foco-trasero-derecho-jmc-vigus-plus-2021-2024-vigus-pro-20-derechopasajero-rojo-_JM",
-    "categoria": "MLC161713",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC1573101353",
-    "sku": "VG4017AA",
-    "titulo": "Foco Trasero Izquierdo Jmc Vigus Plus 2021-2024 Vigus Pro2.0 Izquierdo/conductor Rojo",
-    "precio": 85990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_833206-MLC110595662640_052026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-1573101353-foco-trasero-izquierdo-jmc-vigus-plus-2021-2024-vigus-pro20-izquierdoconductor-rojo-_JM",
     "categoria": "MLC161713",
     "stock": 1,
     "condicion": "new"
@@ -2684,7 +2660,7 @@
     "imagen": "https://http2.mlstatic.com/D_671562-MLC110792349193_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3901833414-kit-de-filtros-mantencion-changan-x7-plus-15t-2023-2026-_JM",
     "categoria": "MLC377254",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2700,18 +2676,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC3373240270",
-    "sku": "Kit142AA",
-    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
-    "precio": 55990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 4,
-    "condicion": "new"
-  },
-  {
     "id": "MLC1771318471",
     "sku": "Kit143AA",
     "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
@@ -2721,6 +2685,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1771318471-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC3373240270",
+    "sku": "Kit142AA",
+    "titulo": "Kit De Filtros (mantencion) Chery Tiggo 4 Pro Max 1.5",
+    "precio": 55990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_874411-MLC99935027109_112025-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-3373240270-kit-de-filtros-mantencion-chery-tiggo-4-pro-max-15-_JM",
+    "categoria": "MLC377254",
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -3024,6 +3000,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2842611342",
+    "sku": "kit9AA",
+    "titulo": "Kit De Filtros (mantención) Jmc Touring 2.8",
+    "precio": 54990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_644206-MLC113681794892_072026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2842611342-kit-de-filtros-mantencion-jmc-touring-28-_JM",
+    "categoria": "MLC377254",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2999327478",
     "sku": "Kit107AA",
     "titulo": "Kit De Filtros (mantencion) Kaiyi X3 1.5t Y 1.5l",
@@ -3032,7 +3020,7 @@
     "imagen": "https://http2.mlstatic.com/D_876005-MLC88629795098_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2999327478-kit-de-filtros-mantencion-kaiyi-x3-15t-y-15l-_JM",
     "categoria": "MLC377254",
-    "stock": 6,
+    "stock": 5,
     "condicion": "new"
   },
   {
@@ -3308,7 +3296,7 @@
     "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4088,7 +4076,7 @@
     "imagen": "https://http2.mlstatic.com/D_961286-MLC95347286039_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3230597226-neblineros-delantero-par-changan-hunter-2020-2024-transparente-_JM",
     "categoria": "MLC433655",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
