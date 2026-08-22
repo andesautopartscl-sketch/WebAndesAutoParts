@@ -23,12 +23,30 @@
         el.textContent = count + "+";
       } else if (el.classList.contains("stat-number")) {
         el.dataset.target = String(count);
-        if (!el.dataset.animated) {
-          el.textContent = String(count);
-        }
+        // Siempre refresca el número visible (aunque la animación ya haya corrido)
+        el.textContent = String(count);
+        el.dataset.animated = "1";
+      } else {
+        el.textContent = count + "+";
       }
     });
   }
+
+  // Contador del hero/stats independiente del catálogo (siempre al día con productos.json)
+  (function initProductCountFromJson() {
+    if (!document.querySelector("[data-dynamic-count='productos']")) return;
+    var url = "data/productos.json?v=" + Date.now();
+    fetch(url, { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("count fetch failed");
+        return res.json();
+      })
+      .then(function (data) {
+        if (!Array.isArray(data) || !data.length) return;
+        updateDynamicProductCounts(data.length);
+      })
+      .catch(function () {});
+  })();
 
   function closeMenu() {
     if (!header || !toggle) return;
@@ -182,6 +200,346 @@
       } catch (err) {}
       banner.setAttribute("hidden", "");
     });
+  })();
+
+  (function initPromoModal() {
+    var modal = document.getElementById("promo-modal");
+    if (!modal) return;
+
+    var STORAGE_KEY = "andes_promo_fiestas_patrias_session";
+    var closing = false;
+    var forcePromo = false;
+    try {
+      forcePromo = new URLSearchParams(window.location.search).get("promo") === "1";
+    } catch (err) {}
+
+    // Limpia claves viejas que dejaban el banner oculto para siempre
+    try {
+      [
+        "andes_promo_fiestas_patrias_2026",
+        "andes_promo_fiestas_patrias_v2",
+        "andes_promo_fiestas_patrias_v3",
+        "andes_promo_fiestas_patrias_v4",
+        "andes_promo_fiestas_patrias_v5",
+      ].forEach(function (k) {
+        localStorage.removeItem(k);
+      });
+    } catch (err) {}
+
+    // ?promo=1 fuerza el banner (start-local). Si no, 1 vez por pestaña/sesión.
+    if (!forcePromo) {
+      try {
+        if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
+      } catch (err) {}
+    }
+
+    function prefersReducedMotion() {
+      try {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function finishClose() {
+      modal.setAttribute("hidden", "");
+      modal.classList.remove("is-closing");
+      document.body.style.overflow = "";
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "1");
+      } catch (err) {}
+      document.removeEventListener("keydown", onKey);
+      var fx = document.getElementById("promo-fireworks");
+      if (fx && fx.parentNode) fx.parentNode.removeChild(fx);
+      closing = false;
+    }
+
+    /** Fuegos artificiales a pantalla completa (rojo / blanco / azul) */
+    function playDelicateFireworks(done) {
+      var canvas = document.createElement("canvas");
+      canvas.id = "promo-fireworks";
+      canvas.className = "promo-fireworks";
+      canvas.setAttribute("aria-hidden", "true");
+      document.body.appendChild(canvas);
+
+      var ctx = canvas.getContext("2d");
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Solo colores de la bandera de Chile
+      var colors = [
+        "#e63030",
+        "#ff4d4d",
+        "#ff7a7a",
+        "#ffffff",
+        "#f0f4ff",
+        "#1e4fa3",
+        "#3d6ec8",
+        "#7eb6ff",
+      ];
+      var particles = [];
+      var scheduled = [];
+      var start = performance.now();
+      var activeUntil = 2300;
+      var fadeMs = 550;
+      var fadeStart = null;
+      var finished = false;
+
+      function pickColor() {
+        return colors[(Math.random() * colors.length) | 0];
+      }
+
+      function spawnBurst(ox, oy, count, power, canBranch) {
+        var baseColor = pickColor();
+        for (var i = 0; i < count; i++) {
+          var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
+          var speed = power * (0.55 + Math.random() * 0.95);
+          var isSpark = Math.random() > 0.72;
+          particles.push({
+            x: ox,
+            y: oy,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 0.55,
+            life: 1,
+            decay: 0.0065 + Math.random() * 0.008,
+            size: isSpark ? 2.2 + Math.random() * 2.8 : 3.2 + Math.random() * 4.5,
+            color: Math.random() > 0.35 ? baseColor : pickColor(),
+            gravity: 0.022 + Math.random() * 0.016,
+            trail: [],
+            spark: isSpark,
+            branch: canBranch && Math.random() > 0.82,
+            branched: false,
+          });
+        }
+        particles.push({
+          x: ox,
+          y: oy,
+          vx: 0,
+          vy: 0,
+          life: 1,
+          decay: 0.04,
+          size: 14 + power * 1.2,
+          color: "#ffffff",
+          gravity: 0,
+          trail: [],
+          spark: false,
+          branch: false,
+          branched: true,
+          flash: true,
+        });
+      }
+
+      function scheduleBurst(delay, ox, oy, count, power, canBranch) {
+        scheduled.push({
+          at: start + delay,
+          ox: ox,
+          oy: oy,
+          count: count,
+          power: power,
+          canBranch: canBranch,
+        });
+      }
+
+      // Estallidos repartidos por TODA la pantalla (duración un poco más corta)
+      spawnBurst(w * 0.5, h * 0.42, 72, 5.2, true);
+      scheduleBurst(180, w * 0.12, h * 0.22, 52, 4.3, true);
+      scheduleBurst(280, w * 0.88, h * 0.2, 52, 4.3, true);
+      scheduleBurst(400, w * 0.22, h * 0.55, 46, 3.9, true);
+      scheduleBurst(500, w * 0.78, h * 0.52, 46, 3.9, true);
+      scheduleBurst(620, w * 0.5, h * 0.18, 58, 4.8, true);
+      scheduleBurst(760, w * 0.08, h * 0.7, 40, 3.6, true);
+      scheduleBurst(860, w * 0.92, h * 0.68, 40, 3.6, true);
+      scheduleBurst(980, w * 0.35, h * 0.35, 44, 4.0, true);
+      scheduleBurst(1080, w * 0.65, h * 0.32, 44, 4.0, true);
+      scheduleBurst(1220, w * 0.5, h * 0.62, 50, 4.4, true);
+      scheduleBurst(1400, w * 0.18, h * 0.4, 38, 3.4, false);
+      scheduleBurst(1500, w * 0.82, h * 0.38, 38, 3.4, false);
+      scheduleBurst(1650, w * 0.5, h * 0.28, 60, 5.2, true);
+
+      function drawSpark(x, y, size, color, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = Math.max(1, size * 0.35);
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(x - size, y);
+        ctx.lineTo(x + size, y);
+        ctx.moveTo(x, y - size);
+        ctx.lineTo(x, y + size);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function beginFade(now) {
+        if (fadeStart != null) return;
+        fadeStart = now;
+        scheduled.length = 0;
+        // Acelera el apagado para que no se sienta “pegado”
+        for (var fi = 0; fi < particles.length; fi++) {
+          particles[fi].decay *= 2.8;
+          particles[fi].branch = false;
+          particles[fi].trail = [];
+        }
+        canvas.classList.add("is-fading");
+      }
+
+      function frame(now) {
+        if (finished) return;
+        var elapsed = now - start;
+        var fading = fadeStart != null;
+
+        ctx.clearRect(0, 0, w, h);
+        if (!fading) {
+          ctx.fillStyle = "rgba(6, 14, 32, 0.12)";
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        if (!fading) {
+          for (var s = scheduled.length - 1; s >= 0; s--) {
+            if (now >= scheduled[s].at) {
+              var b = scheduled[s];
+              spawnBurst(b.ox, b.oy, b.count, b.power, b.canBranch);
+              scheduled.splice(s, 1);
+            }
+          }
+        }
+
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          if (!fading) {
+            p.trail.push({ x: p.x, y: p.y });
+            if (p.trail.length > 6) p.trail.shift();
+          }
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.vx *= 0.992;
+          p.life -= p.decay * (fading ? 1.6 : 1);
+
+          if (!fading && p.branch && !p.branched && p.life < 0.55 && p.life > 0.35) {
+            p.branched = true;
+            spawnBurst(p.x, p.y, 14 + ((Math.random() * 10) | 0), 2.2 + Math.random() * 1.2, false);
+          }
+
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          var alpha = Math.max(0, p.life * p.life);
+
+          if (!fading && p.trail.length > 1 && !p.flash) {
+            ctx.beginPath();
+            ctx.strokeStyle = p.color;
+            ctx.globalAlpha = alpha * 0.35;
+            ctx.lineWidth = Math.max(1, p.size * 0.35);
+            ctx.lineCap = "round";
+            ctx.moveTo(p.trail[0].x, p.trail[0].y);
+            for (var t = 1; t < p.trail.length; t++) {
+              ctx.lineTo(p.trail[t].x, p.trail[t].y);
+            }
+            ctx.stroke();
+          }
+
+          if (p.flash) {
+            ctx.globalAlpha = alpha * 0.85;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * Math.sqrt(p.life), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = alpha * 0.25;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * 2.2 * Math.sqrt(p.life), 0, Math.PI * 2);
+            ctx.fill();
+          } else if (p.spark) {
+            drawSpark(p.x, p.y, p.size * 1.6 * Math.sqrt(p.life), p.color, alpha);
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, Math.max(1, p.size * 0.35), 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.globalAlpha = alpha * 0.95;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * (0.45 + 0.55 * p.life), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = alpha * 0.35;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.globalAlpha = 1;
+
+        // Fundido fijo: no espera a que “mueran” todas las partículas (evita lag)
+        if (fadeStart == null && elapsed >= activeUntil) {
+          beginFade(now);
+        }
+
+        if (fadeStart != null) {
+          var ft = Math.min(1, (now - fadeStart) / fadeMs);
+          var ease = 1 - Math.pow(1 - ft, 2);
+          canvas.style.opacity = String(Math.max(0, 1 - ease));
+          if (ft >= 1) {
+            finished = true;
+            particles.length = 0;
+            if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+            done();
+            return;
+          }
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    function closePromo() {
+      if (closing) return;
+      closing = true;
+      document.removeEventListener("keydown", onKey);
+
+      if (prefersReducedMotion()) {
+        finishClose();
+        return;
+      }
+
+      modal.classList.add("is-closing");
+      playDelicateFireworks(finishClose);
+    }
+
+    function onKey(e) {
+      if (e.key === "Escape") closePromo();
+    }
+
+    function openPromo() {
+      modal.removeAttribute("hidden");
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKey);
+      var closeBtn = modal.querySelector(".promo-modal__close");
+      if (closeBtn) {
+        try {
+          closeBtn.focus();
+        } catch (err) {}
+      }
+    }
+
+    modal.querySelectorAll("[data-promo-close]").forEach(function (el) {
+      el.addEventListener("click", closePromo);
+    });
+
+    setTimeout(openPromo, 300);
   })();
 
   (function initHeroCarousel() {
