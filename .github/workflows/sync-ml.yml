@@ -26,8 +26,8 @@ jobs:
           fi
 
           BASE="${WORKER_URL%/}"
-          AUTH_URL_DEFAULT="https://auth.mercadolibre.cl/authorization?response_type=code&client_id=2004412570250603&redirect_uri=https%3A%2F%2Fandesautopartscl-sketch.github.io%2FWebAndesAutoParts%2F&scope=offline_access+read+write"
-          ADMIN_RENEW_URL="https://andesautopartscl-sketch.github.io/WebAndesAutoParts/admin/renovar-token.html"
+          AUTH_URL_DEFAULT="https://auth.mercadolibre.cl/authorization?response_type=code&client_id=2004412570250603&redirect_uri=https%3A%2F%2Fandesautoparts.cl%2F&scope=offline_access+read+write"
+          ADMIN_RENEW_URL="https://andesautoparts.cl/admin/renovar-token.html"
 
           AUTH_URL="$AUTH_URL_DEFAULT"
           if AUTH_JSON=$(curl -sS "${BASE}/auth-url" 2>/dev/null); then

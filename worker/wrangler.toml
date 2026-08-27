@@ -5,7 +5,7 @@ compatibility_date = "2024-11-01"
 # Variables públicas (no sensibles)
 [vars]
 ML_CLIENT_ID = "2004412570250603"
-ML_REDIRECT_URI = "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/"
+ML_REDIRECT_URI = "https://andesautoparts.cl/"
 GITHUB_OWNER = "andesautopartscl-sketch"
 GITHUB_REPO = "WebAndesAutoParts"
 GITHUB_BRANCH = "main"

@@ -20,7 +20,7 @@ const ML_ITEM_ATTRS =
   "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
 const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "https://andesautopartscl-sketch.github.io",
+  "Access-Control-Allow-Origin": "https://andesautoparts.cl",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
@@ -64,7 +64,7 @@ function buildMlAuthUrl(env) {
   const clientId = env.ML_CLIENT_ID || "2004412570250603";
   const redirectUri =
     env.ML_REDIRECT_URI ||
-    "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/";
+    "https://andesautoparts.cl/";
   const params = new URLSearchParams({
     response_type: "code",
     client_id: clientId,
@@ -82,7 +82,7 @@ function handleAuthUrl(env) {
     client_id: env.ML_CLIENT_ID || "2004412570250603",
     redirect_uri:
       env.ML_REDIRECT_URI ||
-      "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/",
+      "https://andesautoparts.cl/",
     scope: "offline_access read write",
     renew_script: "./renew-token-quick.sh",
     instructions: [
@@ -496,7 +496,7 @@ async function handleExchangeCode(request, env) {
   const redirectUri =
     (body.redirect_uri || "").trim() ||
     env.ML_REDIRECT_URI ||
-    "https://andesautopartscl-sketch.github.io/WebAndesAutoParts/admin/renovar-token.html";
+    "https://andesautoparts.cl/admin/renovar-token.html";
 
   if (!code) {
     return json({ ok: false, error: "MISSING_CODE", message: "Falta code de autorización ML" }, 400);

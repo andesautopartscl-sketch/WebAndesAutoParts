@@ -55,7 +55,7 @@ Ya configurados en el proyecto:
 
 - `ML_CLIENT_ID=2004412570250603`
 - `ML_CLIENT_SECRET` (panel [developers.mercadolibre.com](https://developers.mercadolibre.com/))
-- `ML_REDIRECT_URI=https://andesautopartscl-sketch.github.io/WebAndesAutoParts/`
+- `ML_REDIRECT_URI=https://andesautoparts.cl/`
 
 ---
 
