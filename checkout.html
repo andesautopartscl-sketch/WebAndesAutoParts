@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Finalizar compra | Andes Auto Parts</title>
+  <meta name="description" content="Completa tu pedido de repuestos en Andes Auto Parts." />
+  <link rel="icon" href="logo_andes.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260909i" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Andes Auto Parts — Inicio">
+        <span class="logo-surface">
+          <img src="logo_andes.png" alt="Andes Auto Parts" class="logo-img" width="200" height="48" />
+        </span>
+      </a>
+
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav">
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html#productos">Catálogo</a></li>
+          <li><a href="index.html#vehiculos-chinos">Marcas</a></li>
+          <li><a href="index.html#nosotros">Nosotros</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="header-actions">
+          <a href="tel:+56926152826" class="header-phone">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +56 9 2615 2826
+          </a>
+          <a href="index.html#contacto" class="btn btn-primary btn-sm">Cotizar</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="checkout">
+    <div class="container">
+      <nav class="checkout-crumbs" aria-label="Ruta de navegación">
+        <a href="index.html#productos">Catálogo</a>
+        <span aria-hidden="true">›</span>
+        <span>Finalizar compra</span>
+      </nav>
+
+      <!-- Carrito vacío -->
+      <section class="checkout-blank" id="checkout-blank" hidden aria-labelledby="checkout-blank-title">
+        <h1 class="checkout-blank__title" id="checkout-blank-title">Tu carrito está vacío</h1>
+        <p class="checkout-blank__text">
+          Agrega los repuestos que necesitas desde el catálogo y vuelve para completar el pedido.
+        </p>
+        <a class="btn btn-primary btn-lg" href="index.html#productos">Ir al catálogo</a>
+      </section>
+
+      <!-- Checkout -->
+      <div class="checkout-grid" id="checkout-grid" hidden>
+        <div class="checkout-main">
+          <h1 class="checkout-title">Finalizar compra</h1>
+          <p class="checkout-lead">
+            Estás comprando directo a Andes Auto Parts. Completa tus datos y elige
+            cómo prefieres pagar.
+          </p>
+
+          <form id="checkout-form" novalidate>
+            <!-- Paso 1 -->
+            <section class="checkout-step" aria-labelledby="paso-datos">
+              <h2 class="checkout-step__title" id="paso-datos">
+                <span class="checkout-step__num" aria-hidden="true">1</span>
+                Tus datos
+              </h2>
+              <div class="checkout-fields">
+                <div class="field">
+                  <label for="co-nombre">Nombre y apellido <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-nombre" name="nombre" autocomplete="name" required />
+                  <p class="field-error" data-error-for="nombre" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="co-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="co-email" name="email" autocomplete="email" required />
+                  <p class="field-error" data-error-for="email" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="co-telefono">Teléfono <span class="req" aria-hidden="true">*</span></label>
+                  <input type="tel" id="co-telefono" name="telefono" placeholder="+56 9 1234 5678" autocomplete="tel" required />
+                  <p class="field-error" data-error-for="telefono" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="co-rut">RUT <span class="field-opt" data-opt-rut>(opcional)</span></label>
+                  <input type="text" id="co-rut" name="rut" placeholder="12345678-5" autocomplete="off" />
+                  <p class="field-error" data-error-for="rut" hidden></p>
+                </div>
+
+                <div class="field field--wide">
+                  <span class="field-label">¿Necesitas boleta o factura?</span>
+                  <div class="doc-options" id="doc-options" role="radiogroup" aria-label="Documento tributario">
+                    <label class="doc-option">
+                      <input type="radio" name="documento" value="boleta" checked />
+                      <span class="doc-option__label">Boleta</span>
+                    </label>
+                    <label class="doc-option">
+                      <input type="radio" name="documento" value="factura" />
+                      <span class="doc-option__label">Factura</span>
+                    </label>
+                  </div>
+                  <p class="field-hint" id="doc-hint" aria-live="polite"></p>
+                </div>
+
+                <div class="field" data-factura hidden>
+                  <label for="co-razon">Razón social <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-razon" name="razon_social" autocomplete="organization" />
+                  <p class="field-error" data-error-for="razon_social" hidden></p>
+                </div>
+                <div class="field" data-factura hidden>
+                  <label for="co-giro">Giro <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-giro" name="giro" placeholder="Ej.: Transporte de carga" autocomplete="off" />
+                  <p class="field-error" data-error-for="giro" hidden></p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Paso 2 -->
+            <section class="checkout-step" aria-labelledby="paso-entrega">
+              <h2 class="checkout-step__title" id="paso-entrega">
+                <span class="checkout-step__num" aria-hidden="true">2</span>
+                Cómo recibes tu pedido
+              </h2>
+
+              <!-- Esta elección va primero porque decide si siquiera hace
+                   falta pedir la dirección. -->
+              <div
+                class="entrega-options"
+                id="entrega-options"
+                role="radiogroup"
+                aria-label="Forma de entrega"
+              >
+                <label class="entrega-option">
+                  <input type="radio" name="entrega" value="retiro" />
+                  <span class="entrega-option__body">
+                    <span class="entrega-option__title">Retiro en nuestra dirección</span>
+                    <span class="entrega-option__desc" id="entrega-retiro-desc"></span>
+                  </span>
+                </label>
+                <label class="entrega-option">
+                  <input type="radio" name="entrega" value="envio" checked />
+                  <span class="entrega-option__body">
+                    <span class="entrega-option__title" id="entrega-envio-title">Envío a domicilio</span>
+                    <span class="entrega-option__desc" id="entrega-envio-desc"></span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="pickup-card" id="pickup-card" hidden>
+                <p class="pickup-card__addr" id="pickup-addr"></p>
+                <p class="pickup-card__hours" id="pickup-hours"></p>
+                <a
+                  class="pickup-card__map"
+                  id="pickup-map"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Ver en Google Maps</a>
+                <p class="pickup-card__note" id="pickup-note"></p>
+              </div>
+
+              <div id="envio-block">
+              <div class="checkout-fields">
+                <div class="field field--wide">
+                  <label for="co-direccion">Calle y número <span class="req" data-req-envio aria-hidden="true">*</span></label>
+                  <input type="text" id="co-direccion" name="direccion" placeholder="Av. Ejemplo 1234, depto. 5B" autocomplete="street-address" />
+                  <p class="field-error" data-error-for="direccion" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="co-region">Región <span class="req" data-req-envio aria-hidden="true">*</span></label>
+                  <select id="co-region" name="region">
+                    <option value="">Selecciona tu región</option>
+                    <option>Arica y Parinacota</option>
+                    <option>Tarapacá</option>
+                    <option>Antofagasta</option>
+                    <option>Atacama</option>
+                    <option>Coquimbo</option>
+                    <option>Valparaíso</option>
+                    <option>Metropolitana de Santiago</option>
+                    <option>O'Higgins</option>
+                    <option>Maule</option>
+                    <option>Ñuble</option>
+                    <option>Biobío</option>
+                    <option>La Araucanía</option>
+                    <option>Los Ríos</option>
+                    <option>Los Lagos</option>
+                    <option>Aysén</option>
+                    <option>Magallanes</option>
+                  </select>
+                  <p class="field-error" data-error-for="region" hidden></p>
+                </div>
+                <!-- En la Región Metropolitana la comuna se elige de una lista
+                     para poder confirmar el despacho gratis sin depender de
+                     cómo la escriba el cliente. En el resto del país va libre. -->
+                <div class="field" data-comuna="rm" hidden>
+                  <label for="co-comuna-rm">Comuna <span class="req" data-req-envio aria-hidden="true">*</span></label>
+                  <select id="co-comuna-rm" name="comuna_rm">
+                    <option value="">Selecciona tu comuna</option>
+                  </select>
+                  <p class="field-error" data-error-for="comuna" hidden></p>
+                </div>
+                <div class="field" data-comuna="libre">
+                  <label for="co-comuna">Comuna <span class="req" data-req-envio aria-hidden="true">*</span></label>
+                  <input type="text" id="co-comuna" name="comuna" autocomplete="address-level3" />
+                  <p class="field-error" data-error-for="comuna" hidden></p>
+                </div>
+              </div>
+
+              <p class="ship-note" id="ship-note" aria-live="polite"></p>
+
+              <!-- Solo aparece cuando el pedido sale por pagar: en el Gran
+                   Santiago el reparto lo hacemos nosotros. -->
+              <div class="ship-courier" id="ship-courier" hidden>
+                <span class="field-label" id="courier-label">
+                  ¿Por qué empresa despachamos? <span class="req" aria-hidden="true">*</span>
+                </span>
+                <div
+                  class="doc-options"
+                  id="courier-options"
+                  role="radiogroup"
+                  aria-labelledby="courier-label"
+                ></div>
+                <p class="field-error" data-error-for="transporte" hidden></p>
+
+                <div class="field field--wide" id="courier-otra" hidden>
+                  <label for="co-transporte-otra">
+                    ¿Qué empresa? <span class="req" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="co-transporte-otra"
+                    name="transporte_otra"
+                    placeholder="Ej.: Pullman Cargo"
+                    autocomplete="off"
+                  />
+                  <p class="field-error" data-error-for="transporte_otra" hidden></p>
+                </div>
+
+                <p class="ship-note ship-note--atencion" id="courier-aviso" hidden></p>
+              </div>
+              </div><!-- /envio-block -->
+
+              <!-- Los datos del vehículo sirven igual si retira o si le
+                   despachamos: nos dejan confirmar la compatibilidad. -->
+              <div class="checkout-fields">
+                <div class="field field--wide">
+                  <label for="co-notas">Datos del vehículo o comentarios <span class="field-opt">(opcional)</span></label>
+                  <textarea id="co-notas" name="notas" rows="3" placeholder="Marca, modelo y año, patente o VIN. Nos ayuda a confirmar la compatibilidad antes de entregar."></textarea>
+                </div>
+              </div>
+            </section>
+
+            <!-- Paso 3 -->
+            <section class="checkout-step" aria-labelledby="paso-pago">
+              <h2 class="checkout-step__title" id="paso-pago">
+                <span class="checkout-step__num" aria-hidden="true">3</span>
+                Forma de pago
+              </h2>
+
+              <div class="pay-options" id="pay-options" role="radiogroup" aria-label="Forma de pago">
+                <label class="pay-option">
+                  <input type="radio" name="pago" value="transferencia" checked />
+                  <span class="pay-option__body">
+                    <span class="pay-option__title">Transferencia bancaria</span>
+                    <span class="pay-option__desc">
+                      Transfieres ahora con los datos que aparecen abajo y nos confirmas el pedido ya pagado.
+                    </span>
+                  </span>
+                </label>
+
+                <label class="pay-option">
+                  <input type="radio" name="pago" value="whatsapp" />
+                  <span class="pay-option__body">
+                    <span class="pay-option__title">Coordinar por WhatsApp</span>
+                    <span class="pay-option__desc">
+                      Te abrimos el chat con tu pedido ya escrito. Resolvemos dudas de compatibilidad y acordamos el pago y el despacho.
+                    </span>
+                  </span>
+                </label>
+
+                <label class="pay-option pay-option--soon" data-soon="Mercado Pago">
+                  <input type="radio" name="pago" value="mercadopago" disabled />
+                  <span class="pay-option__body">
+                    <span class="pay-option__title">
+                      Mercado Pago
+                      <span class="pay-badge">Próximamente</span>
+                    </span>
+                    <span class="pay-option__desc">
+                      Tarjetas de crédito, débito y saldo de Mercado Pago, con confirmación inmediata.
+                    </span>
+                  </span>
+                </label>
+
+                <label class="pay-option pay-option--soon" data-soon="Webpay Plus">
+                  <input type="radio" name="pago" value="webpay" disabled />
+                  <span class="pay-option__body">
+                    <span class="pay-option__title">
+                      Webpay Plus
+                      <span class="pay-badge">Próximamente</span>
+                    </span>
+                    <span class="pay-option__desc">
+                      Pago con tarjetas a través de Transbank, en cuotas si tu banco lo permite.
+                    </span>
+                  </span>
+                </label>
+              </div>
+
+              <p class="pay-soon-note" id="pay-soon-note" hidden aria-live="polite"></p>
+
+              <!-- El cliente transfiere acá, antes de confirmar. Por eso el
+                   número de pedido se genera al entrar y no al enviar: lo
+                   necesita como referencia de la transferencia. -->
+              <div class="pay-transfer" id="pay-transfer" hidden>
+                <div class="bank-card">
+                  <h3 class="bank-card__title">Transfiere a esta cuenta</h3>
+                  <dl class="bank-card__list" id="bank-list-form"></dl>
+                  <p class="bank-card__note" id="pay-before-note"></p>
+                </div>
+
+                <label class="pay-check" for="co-pagado">
+                  <input type="checkbox" id="co-pagado" name="pagado" />
+                  <span class="pay-check__text">
+                    Ya hice la transferencia por
+                    <strong id="pay-check-monto">$0</strong>
+                  </span>
+                </label>
+                <p class="field-error" data-error-for="pagado" hidden></p>
+
+                <!-- Aparece recién al marcar la casilla: pedir el comprobante
+                     antes de que diga que pagó no tiene sentido. -->
+                <div class="pay-file" id="pay-file" hidden>
+                  <label class="pay-file__label" for="co-comprobante">
+                    Adjunta el comprobante <span class="field-opt">(opcional)</span>
+                  </label>
+                  <input type="file" id="co-comprobante" name="comprobante" />
+                  <p class="pay-file__hint" id="pay-file-hint"></p>
+                  <p class="field-error" data-error-for="comprobante" hidden></p>
+                </div>
+
+                <p class="pay-refund" id="pay-refund"></p>
+              </div>
+            </section>
+
+            <p class="checkout-error" id="checkout-error" hidden role="alert"></p>
+
+            <button type="submit" class="btn btn-primary btn-lg checkout-submit" id="checkout-submit">
+              Confirmar el pedido
+            </button>
+
+            <p class="checkout-legal">
+              Al confirmar aceptas nuestros
+              <a href="terminos-uso.html">términos de uso</a> y la
+              <a href="politica-privacidad.html">política de privacidad</a>.
+              Tienes 10 días corridos para desistir de la compra según la Ley 19.496.
+            </p>
+          </form>
+        </div>
+
+        <!-- Resumen -->
+        <aside class="checkout-summary" aria-labelledby="resumen-title">
+          <h2 class="checkout-summary__title" id="resumen-title">Tu pedido</h2>
+          <div class="checkout-summary__items" id="summary-items"></div>
+          <div class="checkout-summary__totals">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="summary-subtotal">$0</strong>
+            </div>
+            <div class="summary-row summary-row--muted">
+              <span>Despacho</span>
+              <span id="summary-envio">Por confirmar</span>
+            </div>
+            <div class="summary-row summary-row--total">
+              <span>Total</span>
+              <strong id="summary-total">$0</strong>
+            </div>
+          </div>
+          <p class="checkout-summary__note">
+            Despacho gratis en el Gran Santiago en compras sobre
+            <span id="envio-minimo">$49.990</span>. Si no alcanzas, el envío a
+            domicilio cuesta $5.990 (IVA incluido). Pedidos confirmados antes de
+            las 10:00 se despachan el mismo día entre 14:00 y 22:00; después de
+            esa hora, al día siguiente. Fuera de esa zona el envío va por pagar
+            por
+            <span id="envio-couriers">Starken o Chilexpress</span>: el flete lo
+            pagas tú directamente a la empresa cuando retiras.
+          </p>
+          <a class="checkout-summary__back" href="index.html#productos">← Seguir comprando</a>
+        </aside>
+      </div>
+
+      <!-- Confirmación -->
+      <section class="checkout-done" id="checkout-done" hidden aria-labelledby="done-title">
+        <div class="checkout-done__mark" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h1 class="checkout-done__title" id="done-title">Recibimos tu pedido</h1>
+        <p class="checkout-done__order">
+          Número de pedido: <strong id="done-order">—</strong>
+        </p>
+        <p class="checkout-done__text" id="done-text"></p>
+
+        <div class="bank-card" id="bank-card" hidden>
+          <h2 class="bank-card__title">Datos de la transferencia</h2>
+          <dl class="bank-card__list" id="bank-list"></dl>
+          <p class="bank-card__note">
+            Si todavía no transfieres, usa estos datos y tu número de pedido como
+            referencia. Envíanos el comprobante por WhatsApp y lo preparamos de inmediato.
+          </p>
+        </div>
+
+        <p class="checkout-done__refund" id="done-refund" hidden></p>
+
+        <div class="checkout-done__actions">
+          <a class="btn btn-wa btn-lg" id="done-wa" href="#" target="_blank" rel="noopener noreferrer">
+            Enviar el comprobante por WhatsApp
+          </a>
+          <a class="btn btn-outline btn-lg" href="index.html#productos">Seguir comprando</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-row">
+        <div class="footer-brand">
+          <span class="logo-surface logo-surface--footer">
+            <img src="logo_andes.png" alt="" class="footer-logo" width="40" height="40" />
+          </span>
+          <div class="footer-brand-text">
+            <span>Andes Auto Parts</span>
+            <span class="footer-tagline">Repuestos para vehículos chinos e indios · Chile</span>
+          </div>
+        </div>
+        <div class="footer-links-group">
+          <nav class="footer-nav" aria-label="Pie de página">
+            <a href="index.html#productos">Catálogo</a>
+            <a href="index.html#faq">FAQ</a>
+            <a href="index.html#nosotros">Nosotros</a>
+            <a href="index.html#contacto">Contacto</a>
+          </nav>
+        </div>
+      </div>
+      <p class="footer-copy">© <span id="year"></span> Andes Auto Parts. Todos los derechos reservados.</p>
+      <nav class="footer-legal" aria-label="Información legal">
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <span class="footer-legal-sep" aria-hidden="true"> · </span>
+        <a href="aviso-legal.html">Aviso legal</a>
+        <span class="footer-legal-sep" aria-hidden="true"> · </span>
+        <a href="terminos-uso.html">Términos de uso</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="contact-config.js?v=20260909i"></script>
+  <script src="cart.js?v=20260909i"></script>
+  <script src="checkout.js?v=20260909i"></script>
+</body>
+</html>

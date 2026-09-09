@@ -1414,6 +1414,42 @@
       return blob.indexOf(nq) !== -1;
     }
 
+    /**
+     * Botón de compra directa. Convive con el de Mercado Libre: el cliente
+     * elige si nos compra a nosotros o sigue en ML. Ver cart.js.
+     */
+    function buildCartButton(p, titulo, stock) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-cart btn-sm card-cart-btn";
+
+      var sinStock = stock != null && !isNaN(stock) && stock <= 0;
+      if (sinStock) {
+        btn.disabled = true;
+        btn.textContent = "Sin stock";
+        return btn;
+      }
+
+      btn.textContent = "Agregar al carrito";
+      btn.setAttribute("aria-label", "Agregar al carrito: " + titulo);
+      btn.addEventListener("click", function () {
+        if (!window.AndesCart) return;
+        window.AndesCart.agregar(
+          {
+            id: productMlId(p) || productSku(p),
+            sku: productSku(p),
+            titulo: titulo,
+            precio: p.precio,
+            imagen: primeraImagen(p),
+            link: productLink(p),
+            stock: stock,
+          },
+          1
+        );
+      });
+      return btn;
+    }
+
     function renderProductCard(p, idx) {
         var titulo = (p.titulo || "Sin título").trim();
         var desc = (p.descripcion || "").trim();
@@ -1582,6 +1618,10 @@
         article.appendChild(wrap);
         article.appendChild(body);
 
+        var actions = document.createElement("div");
+        actions.className = "card-actions";
+        actions.appendChild(buildCartButton(p, titulo, stock));
+
         if (url && esMl) {
           var mlBtn = document.createElement("a");
           mlBtn.className = "btn btn-ml btn-sm card-ml-btn";
@@ -1590,8 +1630,10 @@
           mlBtn.rel = "noopener noreferrer";
           mlBtn.setAttribute("aria-label", "Ver en Mercado Libre: " + titulo);
           mlBtn.textContent = "Ver en Mercado Libre";
-          article.appendChild(mlBtn);
+          actions.appendChild(mlBtn);
         }
+
+        article.appendChild(actions);
 
         return article;
     }

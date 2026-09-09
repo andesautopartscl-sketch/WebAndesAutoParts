@@ -185,6 +185,69 @@ Endpoints (requieren `Authorization: Bearer WORKER_SYNC_SECRET` salvo `/health`)
 
 ---
 
+## Correos de pedidos (Worker + Resend)
+
+Los pedidos de la tienda directa **no** pasan por Web3Forms: ese servicio solo
+sabe escribirle al buzón dueño de la access key, así que el cliente nunca
+recibía copia y el correo de "compra confirmada" era imposible. Todo eso vive
+en `worker/pedidos.js`.
+
+| Ruta | Para qué |
+|------|----------|
+| `POST /orders` | El checkout crea el pedido. Guarda en KV, nos avisa con el comprobante adjunto y le manda la copia al cliente. Es pública porque la llama el navegador. |
+| `GET /orders/accion` | Abre una página con un botón para confirmar o rechazar. **No** envía nada al abrirse. |
+| `POST /orders/accion` | Envía el correo al cliente y marca el pedido. |
+| `GET /orders/lista` | Últimos pedidos guardados. Requiere `WORKER_SYNC_SECRET`. |
+
+### Cómo se confirma un pedido
+
+El correo interno de cada pedido trae dos botones: **"Tenemos el repuesto:
+confirmar"** y **"Sin stock: reembolsar"**. Abren una página que resume el
+pedido y pide una confirmación más; recién ahí sale el correo al cliente. Ese
+paso extra existe porque los antivirus de correo abren los enlaces solos y
+dispararían la confirmación sin que nadie la apretara.
+
+Los enlaces van firmados con un token propio de cada pedido, no con
+`WORKER_SYNC_SECRET`: si uno se filtra, solo compromete ese pedido.
+
+### Configuración (una sola vez)
+
+```bash
+# 1. Crea una cuenta en https://resend.com (gratis: 3.000 correos/mes)
+
+# 2. Domains → Add Domain → andesautoparts.cl
+#    Copia los registros DKIM y SPF que te muestra y agrégalos en el DNS
+#    del dominio. Espera a que Resend lo marque como "Verified".
+#    Sin esto los correos llegan a spam o son rechazados.
+
+# 3. API Keys → Create API Key (permiso "Sending access")
+
+# 4. Guarda la clave como secret del Worker
+cd worker
+npx wrangler secret put RESEND_API_KEY
+
+# 5. Despliega
+npx wrangler deploy
+
+# 6. Comprueba que quedó configurado
+curl -sS "https://andes-autoparts-ml-sync.<subdominio>.workers.dev/health"
+#    debe responder "pedidos_configurados": true
+```
+
+Las direcciones se cambian en `worker/wrangler.toml`: `PEDIDOS_FROM` (remitente,
+debe usar el dominio verificado) y `PEDIDOS_AVISO` (dónde nos llegan los
+pedidos). La URL del Worker que usa el checkout está en `contact-config.js`,
+en `window.ANDES_PEDIDOS.workerUrl`; si la dejas vacía, el checkout vuelve a
+avisar por Web3Forms, con la limitación de siempre.
+
+### Límites
+
+El endpoint público acepta hasta 60 pedidos por día para que nadie agote la
+cuota de Resend, y el comprobante adjunto no puede pasar de 5 MB. Ambos topes
+están en las constantes del inicio de `worker/pedidos.js`.
+
+---
+
 ## Formulario de contacto (EmailJS)
 
 El formulario de la sección **Contacto** envía correos a `andesautopartscl@gmail.com` vía [EmailJS](https://www.emailjs.com/). En el código quedan placeholders hasta que los configures:

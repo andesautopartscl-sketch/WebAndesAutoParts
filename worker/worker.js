@@ -1,11 +1,17 @@
 /**
  * Cloudflare Worker — sincroniza catálogo ML → GitHub (data/productos.json)
- * GET  /sync         — sincroniza y commitea vía GitHub API
+ * y recibe los pedidos de la tienda directa.
+ *
+ * GET  /sync           — sincroniza y commitea vía GitHub API
  * POST /update-token   — guarda ML_ACCESS_TOKEN en KV (renovación)
  * POST /exchange-code  — intercambia code OAuth por access_token (admin)
- * GET  /auth-url     — URL de autorización ML para renovar token
- * GET  /health       — estado del servicio
+ * GET  /auth-url       — URL de autorización ML para renovar token
+ * GET  /health         — estado del servicio
+ *
+ * Las rutas /orders* viven en pedidos.js.
  */
+
+import { rutearPedidos } from "./pedidos.js";
 
 const API = "https://api.mercadolibre.com";
 const KV_TOKEN_KEY = "ML_ACCESS_TOKEN";
@@ -19,30 +25,54 @@ const SEARCH_PAGE_SIZE = 100;
 const ML_ITEM_ATTRS =
   "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "https://andesautoparts.cl",
+const CORS_HEADERS_BASE = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-function jsonResponse(data, status = 200) {
+/** Orígenes desde los que el checkout puede llamar al Worker. */
+function origenPermitido(request) {
+  const origin = request.headers.get("Origin") || "";
+  const ok =
+    origin === "https://andesautoparts.cl" ||
+    origin === "https://www.andesautoparts.cl" ||
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  return ok ? origin : "https://andesautoparts.cl";
+}
+
+function corsHeaders(request) {
+  return {
+    ...CORS_HEADERS_BASE,
+    "Access-Control-Allow-Origin": origenPermitido(request),
+    Vary: "Origin",
+  };
+}
+
+function jsonResponse(data, status = 200, request = null) {
   return new Response(JSON.stringify(data, null, 2), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
-      ...CORS_HEADERS,
+      ...(request ? corsHeaders(request) : {
+        ...CORS_HEADERS_BASE,
+        "Access-Control-Allow-Origin": "https://andesautoparts.cl",
+      }),
     },
   });
 }
 
 /** @deprecated alias — todas las respuestas JSON incluyen CORS */
-function json(data, status = 200) {
-  return jsonResponse(data, status);
+function json(data, status = 200, request = null) {
+  return jsonResponse(data, status, request);
 }
 
-function unauthorized() {
-  return json({ ok: false, error: "UNAUTHORIZED", message: "Token de Worker inválido" }, 401);
+function unauthorized(request = null) {
+  return json(
+    { ok: false, error: "UNAUTHORIZED", message: "Token de Worker inválido" },
+    401,
+    request
+  );
 }
 
 function checkAuth(request, env) {
@@ -625,8 +655,11 @@ async function handleUpdateToken(request, env) {
 
 export default {
   async fetch(request, env) {
+    const jsonReq = (data, status = 200) => jsonResponse(data, status, request);
+    const unauthorizedReq = () => unauthorized(request);
+
     if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: CORS_HEADERS });
+      return new Response(null, { status: 204, headers: corsHeaders(request) });
     }
 
     const url = new URL(request.url);
@@ -634,16 +667,20 @@ export default {
 
     if (path === "/health" || (path === "/" && request.method === "GET")) {
       const hasToken = Boolean(await getMlAccessToken(env));
-      return json({
+      return jsonReq({
         ok: true,
         service: "andes-autoparts-ml-sync",
         token_configured: hasToken,
+        pedidos_configurados: Boolean((env.RESEND_API_KEY || "").trim()),
         endpoints: [
           "GET /sync?offset=0 (paginado, máx 200 ítems por llamada)",
           "POST /update-token",
           "POST /exchange-code",
           "GET /auth-url",
           "GET /health",
+          "POST /orders (público, desde el checkout)",
+          "GET|POST /orders/accion (confirmar o rechazar un pedido)",
+          "GET /orders/lista (requiere WORKER_SYNC_SECRET)",
         ],
       });
     }
@@ -652,8 +689,18 @@ export default {
       return handleAuthUrl(env);
     }
 
+    // Los pedidos se atienden antes del checkAuth general: POST /orders lo
+    // llama el navegador del cliente, que no puede llevar el secreto. Cada
+    // ruta de pedidos decide por su cuenta qué proteger.
+    const respuestaPedidos = await rutearPedidos(path, request, env, {
+      json: jsonReq,
+      checkAuth,
+      unauthorized: unauthorizedReq,
+    });
+    if (respuestaPedidos) return respuestaPedidos;
+
     if (!checkAuth(request, env)) {
-      return unauthorized();
+      return unauthorizedReq();
     }
 
     if (path === "/sync" && request.method === "GET") {
@@ -668,6 +715,6 @@ export default {
       return handleUpdateToken(request, env);
     }
 
-    return json({ ok: false, error: "NOT_FOUND" }, 404);
+    return jsonReq({ ok: false, error: "NOT_FOUND" }, 404);
   },
 };
