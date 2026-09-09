@@ -290,6 +290,7 @@ ${tablaItems(pedido)}
 <p style="margin:22px 0 10px;font-size:14px;color:#6b7280">Cuando revises el abono y el stock:</p>
 <table role="presentation" cellpadding="0" cellspacing="0"><tr>
 <td style="padding-right:10px"><a href="${enlace("confirmar")}" style="display:inline-block;padding:11px 18px;background:#15803d;color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Tenemos el repuesto: confirmar</a></td>
+<td style="padding-right:10px"><a href="${enlace("despachado")}" style="display:inline-block;padding:11px 18px;background:#1d4ed8;color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Pedido despachado</a></td>
 <td><a href="${enlace("rechazar")}" style="display:inline-block;padding:11px 18px;background:#fff;color:#b91c1c;border:1px solid #b91c1c;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Sin stock: reembolsar</a></td>
 </tr></table>
 <p style="margin:14px 0 0;font-size:12px;color:#9ca3af">Los botones abren una página con la confirmación; nada se envía solo.</p>`
@@ -355,7 +356,7 @@ function correoClienteRechazado(pedido) {
     )}</strong> y lamentablemente no tenemos disponible el repuesto.</p>
 <p style="margin:0 0 18px;padding:14px;background:#fffbeb;border-left:3px solid #b45309;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6">Te devolvemos ${clp(
       totalPedido(pedido)
-    )} dentro de los próximos días hábiles.</p>
+    )} entre 30 minutos y 1 hora después de que nos respondas este correo con tus datos de devolución.</p>
 <p style="margin:0 0 18px;font-size:14px;line-height:1.6">Para hacerte la devolución necesitamos tus datos bancarios. <strong>Responde este correo</strong> con:</p>
 <ul style="margin:0 0 18px;padding-left:20px;font-size:14px;line-height:1.8;color:#1f2937">
 <li>Nombre del titular de la cuenta</li>
@@ -365,6 +366,27 @@ function correoClienteRechazado(pedido) {
 <li>Número de cuenta</li>
 </ul>
 <p style="margin:0;font-size:14px;line-height:1.6">Si quieres, también podemos buscar una alternativa compatible con tu vehículo. Escríbenos al +56 9 2615 2826.</p>`
+  );
+}
+
+function correoClienteDespachado(pedido) {
+  const cierre =
+    pedido.entrega.modo === "retiro"
+      ? "Tu pedido ya está listo para retiro en Salas 8973, La Cisterna. Te esperamos con tu número de pedido y tu cédula."
+      : pedido.entrega.costo > 0 || pedido.entrega.despacho === "Gratis"
+      ? "Tu pedido ya va en camino hacia la dirección registrada. Si necesitamos una referencia adicional para completar la entrega, te contactaremos a la brevedad."
+      : `Tu pedido ya fue entregado a ${esc(
+          pedido.entrega.transporte || "la empresa de transporte"
+        )}. Te compartiremos el seguimiento apenas quede disponible.`;
+
+  return envoltura(
+    "Tu pedido va en camino",
+    `<p style="margin:0 0 16px;font-size:15px;line-height:1.6">Hola ${esc(
+      pedido.cliente.nombre.split(" ")[0]
+    )}, tu pedido <strong>${esc(pedido.numero)}</strong> ya fue despachado.</p>
+<p style="margin:0 0 18px;padding:14px;background:#eff6ff;border-left:3px solid #1d4ed8;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6"><strong>Tu compra ya va en camino.</strong> ${cierre}</p>
+${tablaItems(pedido)}
+<p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Gracias por comprar en Andes Auto Parts. Si necesitas ayuda con la recepción de tu pedido, responde este correo o escríbenos al +56 9 2615 2826.</p>`
   );
 }
 
@@ -456,9 +478,16 @@ async function crearPedido(request, env, json) {
 
 function paginaAccion(pedido, accion, urlBase, token) {
   const confirmar = accion === "confirmar";
-  const titulo = confirmar ? "Confirmar la compra" : "Avisar que no hay stock";
+  const despachado = accion === "despachado";
+  const titulo = confirmar
+    ? "Confirmar la compra"
+    : despachado
+    ? "Avisar pedido despachado"
+    : "Avisar que no hay stock";
   const detalle = confirmar
-    ? `Le vamos a escribir a ${esc(pedido.cliente.email)} diciendo que su compra está confirmada.`
+    ? `Le vamos a escribir a ${esc(pedido.cliente.email)} diciendo que su compra est? confirmada.`
+    : despachado
+    ? `Le vamos a escribir a ${esc(pedido.cliente.email)} diciendo que su pedido ya va en camino.`
     : `Le vamos a escribir a ${esc(
         pedido.cliente.email
       )} diciendo que no tenemos la pieza y que le devolvemos ${clp(totalPedido(pedido))}.`;
@@ -466,19 +495,19 @@ function paginaAccion(pedido, accion, urlBase, token) {
   return `<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>${esc(titulo)} · ${esc(pedido.numero)}</title></head>
+<title>${esc(titulo)} ? ${esc(pedido.numero)}</title></head>
 <body style="margin:0;padding:24px;background:#f4f6f9;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1f2937">
 <div style="max-width:460px;margin:0 auto;background:#fff;border:1px solid #e5e9f0;border-radius:12px;padding:24px">
 <h1 style="margin:0 0 8px;font-size:19px;color:${MARCA}">${esc(titulo)}</h1>
-<p style="margin:0 0 6px;font-size:14px;color:#6b7280">Pedido ${esc(pedido.numero)} · ${esc(
+<p style="margin:0 0 6px;font-size:14px;color:#6b7280">Pedido ${esc(pedido.numero)} ? ${esc(
     pedido.cliente.nombre
-  )} · ${clp(totalPedido(pedido))}</p>
+  )} ? ${clp(totalPedido(pedido))}</p>
 <p style="margin:0 0 20px;font-size:14px;line-height:1.6">${detalle}</p>
 ${
   pedido.estado !== "pendiente"
-    ? `<p style="margin:0;padding:12px;background:#fffbeb;border-radius:8px;font-size:14px">Este pedido ya está marcado como <strong>${esc(
+    ? `<p style="margin:0;padding:12px;background:#fffbeb;border-radius:8px;font-size:14px">Este pedido ya est? marcado como <strong>${esc(
         pedido.estado
-      )}</strong>. Si envías de nuevo, el cliente recibirá otro correo.</p><div style="height:14px"></div>`
+      )}</strong>. Si env?as de nuevo, el cliente recibir? otro correo.</p><div style="height:14px"></div>`
     : ""
 }
 <form method="POST" action="${urlBase}/orders/accion">
@@ -486,9 +515,9 @@ ${
 <input type="hidden" name="token" value="${esc(token)}">
 <input type="hidden" name="accion" value="${esc(accion)}">
 <button type="submit" style="width:100%;padding:14px;border:0;border-radius:10px;background:${
-    confirmar ? "#15803d" : "#b91c1c"
+    confirmar ? "#15803d" : despachado ? "#1d4ed8" : "#b91c1c"
   };color:#fff;font-size:15px;font-weight:700;cursor:pointer">
-${confirmar ? "Sí, confirmar y avisarle" : "Sí, avisarle del reembolso"}
+${confirmar ? "Sí, confirmar y avisarle" : despachado ? "Sí, avisarle que va en camino" : "Sí, avisarle del reembolso"}
 </button>
 </form>
 </div></body></html>`;
@@ -517,7 +546,7 @@ async function mostrarAccion(url, env) {
   const token = url.searchParams.get("token") || "";
   const accion = url.searchParams.get("accion") || "";
 
-  if (accion !== "confirmar" && accion !== "rechazar") {
+  if (accion !== "confirmar" && accion !== "despachado" && accion !== "rechazar") {
     return html(paginaResultado("Acción desconocida", "El enlace no es válido."), 400);
   }
 
@@ -537,17 +566,24 @@ async function ejecutarAccion(request, env) {
 
   const pedido = await leerPedido(env, numero);
   if (!pedido || pedido.token !== token) {
-    return html(paginaResultado("Enlace inválido", "No encontramos ese pedido."), 404);
+    return html(paginaResultado("Enlace inv?lido", "No encontramos ese pedido."), 404);
   }
 
   const confirmar = accion === "confirmar";
+  const despachado = accion === "despachado";
   try {
     await enviarCorreo(env, {
       para: pedido.cliente.email,
       asunto: confirmar
-        ? `Tu compra ${pedido.numero} está confirmada`
+        ? `Tu compra ${pedido.numero} est? confirmada`
+        : despachado
+        ? `Tu pedido ${pedido.numero} va en camino`
         : `Sobre tu pedido ${pedido.numero}`,
-      html: confirmar ? correoClienteConfirmado(pedido) : correoClienteRechazado(pedido),
+      html: confirmar
+        ? correoClienteConfirmado(pedido)
+        : despachado
+        ? correoClienteDespachado(pedido)
+        : correoClienteRechazado(pedido),
       responderA: env.PEDIDOS_AVISO || "andesautopartscl@gmail.com",
     });
   } catch (err) {
@@ -557,15 +593,17 @@ async function ejecutarAccion(request, env) {
     );
   }
 
-  pedido.estado = confirmar ? "confirmado" : "rechazado";
+  pedido.estado = confirmar ? "confirmado" : despachado ? "despachado" : "rechazado";
   pedido.resueltoEn = new Date().toISOString();
   await guardarPedido(env, pedido);
 
   return html(
     paginaResultado(
-      confirmar ? "Compra confirmada" : "Aviso enviado",
+      confirmar ? "Compra confirmada" : despachado ? "Pedido despachado" : "Aviso enviado",
       confirmar
-        ? `Le avisamos a ${pedido.cliente.email} que su compra está confirmada.`
+        ? `Le avisamos a ${pedido.cliente.email} que su compra est? confirmada.`
+        : despachado
+        ? `Le avisamos a ${pedido.cliente.email} que su pedido ya va en camino.`
         : `Le avisamos a ${pedido.cliente.email} que no hay stock y que le devuelves ${clp(
             totalPedido(pedido)
           )}.`
