@@ -114,6 +114,25 @@
       // durante la sesión, que es mejor que perderlo en silencio.
     }
     avisar(items);
+    // Si hay sesión, reflejamos el carrito en el perfil (sin bloquear la UI).
+    if (window.AndesAuth && window.AndesAuth.haySesion()) {
+      window.AndesAuth.sincronizarCarrito().catch(function () {});
+    }
+  }
+
+  /** Reemplaza el carrito local (p. ej. tras merge con el perfil). */
+  function reemplazar(lista) {
+    var items = Array.isArray(lista)
+      ? lista.filter(esValido).map(normalizar)
+      : [];
+    // Evita un PUT circular al servidor justo después del merge.
+    memoria = items;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch (err) {
+      /* noop */
+    }
+    avisar(items);
   }
 
   function avisar(items) {
@@ -489,6 +508,7 @@
     quitar: quitar,
     definirCantidad: definirCantidad,
     vaciar: vaciar,
+    reemplazar: reemplazar,
     items: function () {
       return leer().slice();
     },

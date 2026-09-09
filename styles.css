@@ -4798,3 +4798,195 @@ body.cart-open {
   line-height: 1.55;
   color: var(--text-muted);
 }
+
+/* —— Cuenta / auth / admin clientes —— */
+.header-account {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header-account:hover {
+  color: var(--accent, #c45c26);
+  text-decoration: underline;
+}
+
+.header-account--admin {
+  margin-left: 0.55rem;
+  opacity: 0.85;
+}
+
+.account {
+  padding: 2.5rem 0 4rem;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(15, 45, 80, 0.06), transparent 55%),
+    linear-gradient(180deg, #f7f9fb 0%, #eef2f6 100%);
+  min-height: 70vh;
+}
+
+.account__wrap {
+  max-width: 32rem;
+}
+
+.account__wrap--wide {
+  max-width: 56rem;
+}
+
+.account-panel {
+  background: var(--white, #fff);
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.75rem 1.5rem 2rem;
+  box-shadow: 0 12px 40px rgba(15, 35, 60, 0.06);
+}
+
+.account-panel__title {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+
+.account-panel__lead {
+  margin: 0 0 1.4rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.account-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.account-tab {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #dde3ea;
+  border-radius: 0.55rem;
+  background: #f4f7fa;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.account-tab.is-active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.account-form .field {
+  margin-bottom: 0.9rem;
+}
+
+.account-form .field label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.account-form .field input,
+.account-form .field select,
+.account-toolbar input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #dde3ea;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.account-subtitle {
+  margin: 0 0 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.account-error {
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.45rem;
+  background: #fdecea;
+  color: #9b1c1c;
+  font-size: 0.85rem;
+}
+
+.account-ok {
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.45rem;
+  background: #e8f6ee;
+  color: #146c43;
+  font-size: 0.85rem;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.account-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.65rem 0.55rem;
+  border-bottom: 1px solid #e8edf2;
+}
+
+.admin-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.admin-precios {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  font-size: 0.88rem;
+}
+
+.admin-precios li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.admin-precios code {
+  font-size: 0.82rem;
+  background: #f0f4f8;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.3rem;
+}

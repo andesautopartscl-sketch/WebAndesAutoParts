@@ -423,7 +423,7 @@ async function guardarPedido(env, pedido) {
 
 /* =============================== Handlers =============================== */
 
-async function crearPedido(request, env, json) {
+async function crearPedido(request, env, json, extras = {}) {
   let body;
   try {
     body = await request.json();
@@ -433,6 +433,29 @@ async function crearPedido(request, env, json) {
 
   const { error, pedido, comprobante } = validarPedido(body);
   if (error) return json({ ok: false, error: "PEDIDO_INVALIDO", message: error }, 400);
+
+  // Si hay sesión, recalculamos precios con descuento / precio especial.
+  if (typeof extras.usuarioDesdeRequest === "function" && typeof extras.resolverPreciosUsuario === "function") {
+    try {
+      const usuario = await extras.usuarioDesdeRequest(env, request);
+      if (usuario) {
+        const items = await extras.resolverPreciosUsuario(env, usuario, pedido.items);
+        pedido.items = items.map((it) => ({
+          id: it.id,
+          titulo: it.titulo,
+          sku: it.sku,
+          qty: it.qty,
+          precio: it.precio,
+        }));
+        pedido.subtotal = pedido.items.reduce((acc, it) => acc + it.precio * it.qty, 0);
+        pedido.total = pedido.subtotal + (pedido.entrega.costo || 0);
+        pedido.usuario_id = usuario.id;
+        pedido.descuento_pct = Number(usuario.descuento_pct) || 0;
+      }
+    } catch (err) {
+      /* si falla el lookup seguimos con los precios del body (invitado) */
+    }
+  }
 
   if (!(await dentroDeCuota(env))) {
     return json({ ok: false, error: "CUOTA_DIARIA" }, 429);
@@ -642,9 +665,14 @@ async function listarPedidos(env, json) {
  * siga con las suyas. `json` y `checkAuth` llegan desde worker.js para no
  * duplicar los encabezados CORS ni el manejo del secreto.
  */
-export async function rutearPedidos(path, request, env, { json, checkAuth, unauthorized }) {
+export async function rutearPedidos(
+  path,
+  request,
+  env,
+  { json, checkAuth, unauthorized, usuarioDesdeRequest, resolverPreciosUsuario }
+) {
   if (path === "/orders" && request.method === "POST") {
-    return crearPedido(request, env, json);
+    return crearPedido(request, env, json, { usuarioDesdeRequest, resolverPreciosUsuario });
   }
 
   if (path === "/orders/accion" && request.method === "GET") {

@@ -9,9 +9,11 @@
  * GET  /health         — estado del servicio
  *
  * Las rutas /orders* viven en pedidos.js.
+ * Las rutas /auth/* (cuenta), /cart, /pricing y /admin viven en clientes.js.
  */
 
 import { rutearPedidos } from "./pedidos.js";
+import { rutearClientes, usuarioDesdeRequest, resolverPreciosUsuario } from "./clientes.js";
 
 const API = "https://api.mercadolibre.com";
 const KV_TOKEN_KEY = "ML_ACCESS_TOKEN";
@@ -672,6 +674,7 @@ export default {
         service: "andes-autoparts-ml-sync",
         token_configured: hasToken,
         pedidos_configurados: Boolean((env.RESEND_API_KEY || "").trim()),
+        clientes_db: Boolean(env.CLIENTES_DB),
         endpoints: [
           "GET /sync?offset=0 (paginado, máx 200 ítems por llamada)",
           "POST /update-token",
@@ -681,6 +684,11 @@ export default {
           "POST /orders (público, desde el checkout)",
           "GET|POST /orders/accion (confirmar o rechazar un pedido)",
           "GET /orders/lista (requiere WORKER_SYNC_SECRET)",
+          "POST /auth/registro | /auth/login | /auth/logout | /auth/bootstrap",
+          "GET|PATCH /auth/yo",
+          "GET|PUT /cart | POST /cart/merge",
+          "POST /pricing/resolver",
+          "GET|POST|PATCH /admin/usuarios (+ precios especiales)",
         ],
       });
     }
@@ -689,6 +697,11 @@ export default {
       return handleAuthUrl(env);
     }
 
+    const respuestaClientes = await rutearClientes(path, request, env, {
+      json: jsonReq,
+    });
+    if (respuestaClientes) return respuestaClientes;
+
     // Los pedidos se atienden antes del checkAuth general: POST /orders lo
     // llama el navegador del cliente, que no puede llevar el secreto. Cada
     // ruta de pedidos decide por su cuenta qué proteger.
@@ -696,6 +709,8 @@ export default {
       json: jsonReq,
       checkAuth,
       unauthorized: unauthorizedReq,
+      usuarioDesdeRequest,
+      resolverPreciosUsuario,
     });
     if (respuestaPedidos) return respuestaPedidos;
 

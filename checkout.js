@@ -68,8 +68,17 @@
   var fileWrap = document.getElementById("pay-file");
   var fileInput = document.getElementById("co-comprobante");
   var fileHint = document.getElementById("pay-file-hint");
+  var descuentoRow = document.getElementById("summary-descuento-row");
+  var descuentoEl = document.getElementById("summary-descuento");
+  var descuentoLabel = document.getElementById("summary-descuento-label");
 
   var finalizado = false;
+  /** Subtotal con precios de cuenta (descuento / especial); 0 = usar carrito. */
+  var subtotalCuenta = 0;
+  /** id → precio efectivo resuelto por el Worker. */
+  var preciosCuenta = {};
+  var preciosFirma = "";
+  var preciosCargando = false;
 
   /* ============================= Utilidades ============================= */
 
@@ -187,8 +196,8 @@
 
   /**
    * La boleta electrónica al consumidor final no exige el RUT del comprador;
-   * la factura sí, junto con razón social y giro. Por eso los campos extra
-   * solo aparecen cuando el cliente pide factura.
+   * la factura sí, junto con razón social y giro. Por eso el RUT de empresa
+   * y los campos extra solo aparecen cuando el cliente pide factura.
    */
   function actualizarDocumentoUi() {
     var factura = documentoSeleccionado() === "factura";
@@ -197,16 +206,16 @@
       el.hidden = !factura;
     });
 
-    ["razon_social", "giro"].forEach(function (name) {
+    var rutPersona = document.querySelector("[data-rut-persona]");
+    if (rutPersona) rutPersona.hidden = factura;
+
+    ["razon_social", "giro", "rut_factura"].forEach(function (name) {
       var campo = form.elements[name];
       if (campo) campo.required = factura;
     });
 
     var campoRut = form.elements.rut;
-    if (campoRut) campoRut.required = factura;
-
-    var optRut = document.querySelector("[data-opt-rut]");
-    if (optRut) optRut.textContent = factura ? "(obligatorio)" : "(opcional)";
+    if (campoRut) campoRut.required = false;
 
     if (docHint) {
       docHint.textContent = factura
@@ -271,7 +280,7 @@
 
     var minimo = Number(envio.montoMinimoGratis) || 0;
     var costoBajo = Number(envio.costoDespachoBajoMinimo) || 0;
-    var sub = window.AndesCart ? window.AndesCart.subtotal() : 0;
+    var sub = subtotalPedido();
 
     titulo.textContent =
       minimo > 0 && sub < minimo && costoBajo > 0
@@ -335,12 +344,67 @@
    * con un flete fijo si todavía falta. Fuera de esa zona no cotizamos: el
    * envío va por pagar y el cliente le paga a Starken o Chilexpress.
    */
+  function precioLinea(it) {
+    if (preciosCuenta[it.id] != null) return Number(preciosCuenta[it.id]) || 0;
+    return Number(it.precio) || 0;
+  }
+
+  function subtotalPedido(items) {
+    if (subtotalCuenta > 0) return subtotalCuenta;
+    if (!items) {
+      return window.AndesCart ? window.AndesCart.subtotal() : 0;
+    }
+    return items.reduce(function (acc, it) {
+      return acc + precioLinea(it) * it.qty;
+    }, 0);
+  }
+
+  function refrescarPreciosCuenta(items) {
+    if (!window.AndesAuth || !window.AndesAuth.haySesion() || !items.length) {
+      preciosCuenta = {};
+      preciosFirma = "";
+      subtotalCuenta = 0;
+      return Promise.resolve();
+    }
+    var firma = items
+      .map(function (it) {
+        return it.id + ":" + it.qty + ":" + it.precio;
+      })
+      .join("|");
+    if (firma === preciosFirma || preciosCargando) return Promise.resolve();
+    preciosCargando = true;
+    return window.AndesAuth.resolverPrecios(items)
+      .then(function (data) {
+        preciosCargando = false;
+        if (!data || !data.ok) return;
+        preciosFirma = firma;
+        preciosCuenta = {};
+        var efe = 0;
+        var lista = 0;
+        (data.items || []).forEach(function (row) {
+          var p = Math.round(Number(row.precio) || 0);
+          preciosCuenta[row.id] = p;
+        });
+        items.forEach(function (it) {
+          lista += (Number(it.precio) || 0) * it.qty;
+          efe += precioLinea(it) * it.qty;
+        });
+        subtotalCuenta = efe;
+        if (lista !== efe || Number(data.descuento_pct) > 0) {
+          pintarResumen();
+        }
+      })
+      .catch(function () {
+        preciosCargando = false;
+      });
+  }
+
   function evaluarDespacho() {
     var region = (form.elements.region.value || "").trim();
     var comuna = comunaValor();
     var minimo = Number(envio.montoMinimoGratis) || 0;
     var costoBajo = Number(envio.costoDespachoBajoMinimo) || 0;
-    var sub = window.AndesCart ? window.AndesCart.subtotal() : 0;
+    var sub = subtotalPedido();
     var valores = {
       couriers: couriersTexto(),
       minimo: fmt(minimo),
@@ -397,13 +461,13 @@
 
   /** Productos + el flete propio cuando aplica. */
   function totalAPagar() {
-    var sub = window.AndesCart ? window.AndesCart.subtotal() : 0;
+    var sub = subtotalPedido();
     return sub + (evaluarDespacho().costo || 0);
   }
 
   function pintarDespacho() {
     var r = evaluarDespacho();
-    var sub = window.AndesCart ? window.AndesCart.subtotal() : 0;
+    var sub = subtotalPedido();
 
     if (shipNote) {
       var texto = r.texto || "";
@@ -497,10 +561,14 @@
     var items = window.AndesCart.items();
 
     if (!items.length) {
+      preciosCuenta = {};
+      preciosFirma = "";
+      subtotalCuenta = 0;
       if (itemsEl) itemsEl.innerHTML = "";
       if (subtotalEl) subtotalEl.textContent = fmt(0);
       if (totalEl) totalEl.textContent = fmt(0);
       if (envioEl) envioEl.textContent = "—";
+      if (descuentoRow) descuentoRow.hidden = true;
       actualizarTituloEnvio();
       grid.hidden = true;
       blank.hidden = false;
@@ -510,9 +578,21 @@
     blank.hidden = true;
     grid.hidden = false;
 
+    refrescarPreciosCuenta(items);
+
+    var listaSub = window.AndesCart.subtotal();
+    var sub = subtotalPedido(items);
+    if (!subtotalCuenta && Object.keys(preciosCuenta).length) {
+      sub = items.reduce(function (acc, it) {
+        return acc + precioLinea(it) * it.qty;
+      }, 0);
+      subtotalCuenta = sub;
+    }
+
     itemsEl.innerHTML = items
       .map(function (it) {
         var tope = it.stock != null && it.stock > 0 ? it.stock : 99;
+        var unit = precioLinea(it);
         return (
           '<article class="summary-item">' +
           (it.imagen
@@ -546,17 +626,29 @@
           '">Quitar</button>' +
           "</div>" +
           "</div>" +
-          '<p class="summary-item__total">' + fmt(it.precio * it.qty) + "</p>" +
+          '<p class="summary-item__total">' + fmt(unit * it.qty) + "</p>" +
           "</article>"
         );
       })
       .join("");
 
-    var sub = window.AndesCart.subtotal();
     var despacho = evaluarDespacho();
     subtotalEl.textContent = fmt(sub);
     if (envioEl) envioEl.textContent = despacho.resumen;
     totalEl.textContent = fmt(sub + (despacho.costo || 0));
+
+    if (descuentoRow && descuentoEl) {
+      var ahorro = Math.max(0, listaSub - sub);
+      if (ahorro > 0) {
+        descuentoRow.hidden = false;
+        var u = window.AndesAuth && window.AndesAuth.usuario();
+        var pct = u && Number(u.descuento_pct) > 0 ? u.descuento_pct + "% · " : "";
+        if (descuentoLabel) descuentoLabel.textContent = "Descuento cuenta";
+        descuentoEl.textContent = "−" + fmt(ahorro) + (pct ? " (" + pct.trim() + ")" : "");
+      } else {
+        descuentoRow.hidden = true;
+      }
+    }
 
     // Cambiar cantidades mueve el subtotal, y el subtotal decide tanto si se
     // cumple el mínimo para el despacho gratis como cuánto tiene que
@@ -806,7 +898,10 @@
       nombre: (form.elements.nombre.value || "").trim(),
       email: (form.elements.email.value || "").trim(),
       telefono: (form.elements.telefono.value || "").trim(),
-      rut: (form.elements.rut.value || "").trim(),
+      rut:
+        documentoSeleccionado() === "factura"
+          ? (form.elements.rut_factura.value || "").trim()
+          : (form.elements.rut.value || "").trim(),
       documento: documentoSeleccionado(),
       razonSocial: (form.elements.razon_social.value || "").trim(),
       giro: (form.elements.giro.value || "").trim(),
@@ -846,10 +941,11 @@
     if (datos.rut || esFactura) {
       if (!rutValido(datos.rut)) {
         marcar(
-          "rut",
+          esFactura ? "rut_factura" : "rut",
           esFactura
-            ? "Para la factura necesitamos el RUT de la empresa. Escríbelo como 12345678-5."
-            : "El RUT no es válido. Escríbelo como 12345678-5."
+            ? "Para la factura necesitamos el RUT de la empresa. Escríbelo como 76.123.456-7."
+            : "El RUT no es válido. Escríbelo como 12345678-5.",
+          esFactura ? form.elements.rut_factura : form.elements.rut
         );
       }
     }
@@ -1037,9 +1133,14 @@
     var base = String(cfgPedidos.workerUrl || "").replace(/\/+$/, "");
     if (!base) return Promise.resolve(false);
 
+    var headers = { "Content-Type": "application/json" };
+    if (window.AndesAuth && window.AndesAuth.token()) {
+      headers.Authorization = "Bearer " + window.AndesAuth.token();
+    }
+
     var envioRed = fetch(base + "/orders", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify(cuerpoPedido(numero, datos, items, comprobante)),
     })
       .then(function (res) {
@@ -1161,8 +1262,6 @@
         "usa el botón de abajo: el mensaje ya viene escrito." +
         entrega;
     } else if (datos.pagado) {
-      // Ojo: hoy el correo del pedido llega solo a Andes Auto Parts, no al
-      // cliente, así que acá no podemos prometerle una copia automática.
       texto.textContent =
         "Guarda tu número de pedido. Ahora verificamos la transferencia y el " +
         "stock, y te confirmamos a " +
@@ -1176,11 +1275,20 @@
         entrega;
     }
 
-    if (datos.metodo === "transferencia") {
-      var lista = document.getElementById("bank-list");
-      if (lista) lista.innerHTML = datosBancariosHtml(false);
-      document.getElementById("bank-card").hidden = false;
+    // Los datos bancarios ya se mostraron en el paso 3, antes de confirmar.
+    // Si el cliente ya declaró el pago, repetirlos acá solo ensucia la pantalla.
+    var bankCard = document.getElementById("bank-card");
+    if (bankCard) {
+      var mostrarBanco =
+        datos.metodo === "transferencia" && !datos.pagado;
+      if (mostrarBanco) {
+        var lista = document.getElementById("bank-list");
+        if (lista) lista.innerHTML = datosBancariosHtml(false);
+      }
+      bankCard.hidden = !mostrarBanco;
+    }
 
+    if (datos.metodo === "transferencia") {
       var reembolso = document.getElementById("done-refund");
       if (reembolso) {
         reembolso.textContent = textosPago.reembolso || "";
@@ -1218,7 +1326,7 @@
         return;
       }
 
-      var sub = window.AndesCart.subtotal();
+      var sub = subtotalPedido(items);
       // El mismo número que ya vio como referencia de la transferencia.
       var numero = numeroPedido();
       var resumen = textoPedido(numero, datos, items, sub);
@@ -1296,6 +1404,61 @@
   /* ============================= Arranque ============================= */
 
   var year = document.getElementById("year");
+  function precargarPerfil(u) {
+    if (!form || !u) return;
+
+    function setSiVacio(id, valor) {
+      var el = document.getElementById(id);
+      if (!el || valor == null || valor === "") return;
+      if (String(el.value || "").trim()) return;
+      el.value = valor;
+    }
+
+    setSiVacio("co-nombre", u.nombre);
+    setSiVacio("co-email", u.email);
+    setSiVacio("co-telefono", u.telefono);
+    setSiVacio("co-rut", u.rut);
+    setSiVacio("co-rut-factura", u.rut);
+    setSiVacio("co-razon", u.razon_social);
+    setSiVacio("co-giro", u.giro);
+    setSiVacio("co-direccion", u.direccion);
+
+    var regionEl = document.getElementById("co-region");
+    if (regionEl && u.region && !String(regionEl.value || "").trim()) {
+      var match = Array.prototype.find.call(regionEl.options, function (opt) {
+        return norm(opt.value) === norm(u.region) || norm(opt.text) === norm(u.region);
+      });
+      if (match) regionEl.value = match.value;
+      else regionEl.value = u.region;
+      actualizarComunaUi();
+    }
+
+    if (u.comuna) {
+      var rm = document.getElementById("co-comuna-rm");
+      var libre = document.getElementById("co-comuna");
+      if (rm && !rm.value) {
+        var opt = Array.prototype.find.call(rm.options, function (o) {
+          return norm(o.value) === norm(u.comuna);
+        });
+        if (opt) rm.value = opt.value;
+        else if (libre && !libre.value) libre.value = u.comuna;
+      } else if (libre && !libre.value) {
+        libre.value = u.comuna;
+      }
+    }
+
+    if (u.documento === "factura" || u.documento === "boleta") {
+      var radio = form.querySelector('input[name="documento"][value="' + u.documento + '"]');
+      if (radio && !form.querySelector('input[name="documento"]:checked')) {
+        radio.checked = true;
+        actualizarDocumentoUi();
+      }
+    }
+
+    actualizarRequisitos();
+    pintarDespacho();
+  }
+
   if (year) year.textContent = new Date().getFullYear();
 
   var toggle = document.querySelector(".nav-toggle");
@@ -1329,7 +1492,29 @@
   }
 
   if (window.AndesCart) {
-    window.AndesCart.onChange(pintarResumen);
+    window.AndesCart.onChange(function () {
+      preciosFirma = "";
+      preciosCargando = false;
+      subtotalCuenta = 0;
+      pintarResumen();
+    });
     pintarResumen();
+  }
+
+  if (window.AndesAuth) {
+    var uLocal = window.AndesAuth.usuario();
+    if (uLocal) precargarPerfil(uLocal);
+    window.AndesAuth.onChange(function (u) {
+      preciosFirma = "";
+      if (u) precargarPerfil(u);
+      pintarResumen();
+    });
+    if (window.AndesAuth.haySesion()) {
+      window.AndesAuth.refrescarYo().then(function (u) {
+        if (u) precargarPerfil(u);
+        preciosFirma = "";
+        pintarResumen();
+      });
+    }
   }
 })();

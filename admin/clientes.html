@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Clientes | Andes Auto Parts</title>
+  <link rel="icon" href="../logo_andes.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css?v=20260909n" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-surface">
+          <img src="../logo_andes.png" alt="Andes Auto Parts" class="logo-img" width="200" height="48" />
+        </span>
+      </a>
+      <div class="header-actions">
+        <span data-auth-slot></span>
+        <a class="btn btn-outline btn-sm" href="../cuenta.html">Mi cuenta</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="account">
+    <div class="container account__wrap account__wrap--wide">
+      <section class="account-panel" id="gate" hidden>
+        <h1 class="account-panel__title">Acceso vendedor</h1>
+        <p class="account-panel__lead">Inicia sesión con una cuenta de vendedor o administrador.</p>
+        <p><a class="btn btn-primary" href="../cuenta.html">Ir a mi cuenta</a></p>
+      </section>
+
+      <section class="account-panel" id="panel" hidden>
+        <h1 class="account-panel__title">Clientes</h1>
+        <p class="account-panel__lead">Crea perfiles, asigna descuento % y precios especiales por producto.</p>
+
+        <form class="account-form" id="form-nuevo">
+          <h2 class="account-subtitle">Nuevo cliente</h2>
+          <div class="checkout-fields">
+            <div class="field">
+              <label for="n-nombre">Nombre</label>
+              <input id="n-nombre" name="nombre" required />
+            </div>
+            <div class="field">
+              <label for="n-email">Correo</label>
+              <input id="n-email" name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="n-telefono">Teléfono</label>
+              <input id="n-telefono" name="telefono" />
+            </div>
+            <div class="field">
+              <label for="n-clave">Clave temporal</label>
+              <input id="n-clave" name="clave" type="password" minlength="8" required />
+            </div>
+            <div class="field">
+              <label for="n-desc">Descuento %</label>
+              <input id="n-desc" name="descuento_pct" type="number" min="0" max="100" step="0.5" value="0" />
+            </div>
+          </div>
+          <p class="account-error" id="nuevo-error" hidden></p>
+          <button type="submit" class="btn btn-primary">Crear cliente</button>
+        </form>
+
+        <div class="account-toolbar">
+          <input type="search" id="buscar" placeholder="Buscar por nombre, correo, RUT…" />
+          <button type="button" class="btn btn-outline" id="btn-buscar">Buscar</button>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="tabla">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Correo</th>
+                <th>Descuento</th>
+                <th>Rol</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <form class="account-form" id="form-editar" hidden>
+          <h2 class="account-subtitle">Editar cliente</h2>
+          <input type="hidden" id="e-id" />
+          <div class="checkout-fields">
+            <div class="field">
+              <label for="e-nombre">Nombre</label>
+              <input id="e-nombre" required />
+            </div>
+            <div class="field">
+              <label for="e-telefono">Teléfono</label>
+              <input id="e-telefono" />
+            </div>
+            <div class="field">
+              <label for="e-desc">Descuento %</label>
+              <input id="e-desc" type="number" min="0" max="100" step="0.5" />
+            </div>
+            <div class="field">
+              <label for="e-activo">Activo</label>
+              <select id="e-activo">
+                <option value="1">Sí</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="e-producto">ID producto (ML)</label>
+              <input id="e-producto" placeholder="MLC…" />
+            </div>
+            <div class="field">
+              <label for="e-precio">Precio especial</label>
+              <input id="e-precio" type="number" min="0" step="10" />
+            </div>
+          </div>
+          <p class="account-error" id="edit-error" hidden></p>
+          <p class="account-ok" id="edit-ok" hidden></p>
+          <div class="account-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-outline" id="btn-precio">Guardar precio especial</button>
+            <button type="button" class="btn btn-outline" id="btn-cancelar">Cerrar</button>
+          </div>
+          <ul class="admin-precios" id="lista-precios"></ul>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="../contact-config.js?v=20260909m"></script>
+  <script src="../auth.js?v=20260909n"></script>
+  <script>
+    (function () {
+      var gate = document.getElementById("gate");
+      var panel = document.getElementById("panel");
+      var tbody = document.querySelector("#tabla tbody");
+      var editando = null;
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function esStaff(u) {
+        return u && (u.rol === "vendedor" || u.rol === "admin");
+      }
+
+      function abrir() {
+        var u = window.AndesAuth.usuario();
+        if (!esStaff(u)) {
+          gate.hidden = false;
+          panel.hidden = true;
+          return;
+        }
+        gate.hidden = true;
+        panel.hidden = false;
+        cargar();
+      }
+
+      function cargar(q) {
+        var path = "/admin/usuarios" + (q ? "?q=" + encodeURIComponent(q) : "");
+        return window.AndesAuth.api(path).then(function (data) {
+          if (!data.ok) {
+            if (data._status === 401 || data._status === 403) {
+              gate.hidden = false;
+              panel.hidden = true;
+            }
+            return;
+          }
+          tbody.innerHTML = (data.usuarios || [])
+            .map(function (u) {
+              return (
+                "<tr>" +
+                "<td>" + esc(u.nombre) + "</td>" +
+                "<td>" + esc(u.email) + "</td>" +
+                "<td>" + esc(u.descuento_pct) + "%</td>" +
+                "<td>" + esc(u.rol) + "</td>" +
+                '<td><button type="button" class="btn btn-outline btn-sm" data-edit="' +
+                esc(u.id) +
+                '">Editar</button></td>' +
+                "</tr>"
+              );
+            })
+            .join("");
+        });
+      }
+
+      document.getElementById("btn-buscar").addEventListener("click", function () {
+        cargar(document.getElementById("buscar").value.trim());
+      });
+
+      document.getElementById("form-nuevo").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var f = e.target;
+        var err = document.getElementById("nuevo-error");
+        err.hidden = true;
+        window.AndesAuth.api("/admin/usuarios", {
+          method: "POST",
+          body: {
+            nombre: f.nombre.value,
+            email: f.email.value,
+            telefono: f.telefono.value,
+            clave: f.clave.value,
+            descuento_pct: Number(f.descuento_pct.value) || 0,
+          },
+        }).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || data.error || "No se pudo crear";
+            return;
+          }
+          f.reset();
+          cargar();
+        });
+      });
+
+      tbody.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-edit]");
+        if (!btn) return;
+        var id = btn.getAttribute("data-edit");
+        window.AndesAuth.api("/admin/usuarios").then(function (data) {
+          var u = (data.usuarios || []).find(function (x) {
+            return x.id === id;
+          });
+          if (!u) return;
+          editando = u;
+          document.getElementById("form-editar").hidden = false;
+          document.getElementById("e-id").value = u.id;
+          document.getElementById("e-nombre").value = u.nombre || "";
+          document.getElementById("e-telefono").value = u.telefono || "";
+          document.getElementById("e-desc").value = u.descuento_pct || 0;
+          document.getElementById("e-activo").value = u.activo ? "1" : "0";
+          cargarPrecios(u.id);
+        });
+      });
+
+      function cargarPrecios(id) {
+        window.AndesAuth.api("/admin/usuarios/" + id + "/precios").then(function (data) {
+          var ul = document.getElementById("lista-precios");
+          ul.innerHTML = (data.precios || [])
+            .map(function (p) {
+              return (
+                "<li><code>" +
+                esc(p.producto_id) +
+                "</code> → $" +
+                Number(p.precio).toLocaleString("es-CL") +
+                ' <button type="button" data-del-precio="' +
+                esc(p.producto_id) +
+                '">Quitar</button></li>'
+              );
+            })
+            .join("") || "<li>Sin precios especiales</li>";
+        });
+      }
+
+      document.getElementById("lista-precios").addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-del-precio]");
+        if (!btn || !editando) return;
+        var pid = btn.getAttribute("data-del-precio");
+        window.AndesAuth.api(
+          "/admin/usuarios/" + editando.id + "/precios/" + encodeURIComponent(pid),
+          { method: "DELETE" }
+        ).then(function () {
+          cargarPrecios(editando.id);
+        });
+      });
+
+      document.getElementById("form-editar").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var id = document.getElementById("e-id").value;
+        var err = document.getElementById("edit-error");
+        var ok = document.getElementById("edit-ok");
+        err.hidden = true;
+        ok.hidden = true;
+        window.AndesAuth.api("/admin/usuarios/" + id, {
+          method: "PATCH",
+          body: {
+            nombre: document.getElementById("e-nombre").value,
+            telefono: document.getElementById("e-telefono").value,
+            descuento_pct: Number(document.getElementById("e-desc").value) || 0,
+            activo: document.getElementById("e-activo").value === "1",
+          },
+        }).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || "Error al guardar";
+            return;
+          }
+          ok.hidden = false;
+          ok.textContent = "Cliente actualizado";
+          cargar();
+        });
+      });
+
+      document.getElementById("btn-precio").addEventListener("click", function () {
+        if (!editando) return;
+        var pid = document.getElementById("e-producto").value.trim();
+        var precio = Number(document.getElementById("e-precio").value) || 0;
+        var err = document.getElementById("edit-error");
+        var ok = document.getElementById("edit-ok");
+        err.hidden = true;
+        ok.hidden = true;
+        if (!pid) {
+          err.hidden = false;
+          err.textContent = "Indica el ID del producto (ej. MLC…)";
+          return;
+        }
+        window.AndesAuth.api(
+          "/admin/usuarios/" + editando.id + "/precios/" + encodeURIComponent(pid),
+          { method: "PUT", body: { precio: precio } }
+        ).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || "No se pudo guardar el precio";
+            return;
+          }
+          ok.hidden = false;
+          ok.textContent = "Precio especial guardado";
+          document.getElementById("e-producto").value = "";
+          document.getElementById("e-precio").value = "";
+          cargarPrecios(editando.id);
+        });
+      });
+
+      document.getElementById("btn-cancelar").addEventListener("click", function () {
+        document.getElementById("form-editar").hidden = true;
+        editando = null;
+      });
+
+      window.AndesAuth.onChange(abrir);
+      if (window.AndesAuth.haySesion()) {
+        window.AndesAuth.refrescarYo().then(abrir);
+      } else {
+        abrir();
+      }
+    })();
+  </script>
+</body>
+</html>

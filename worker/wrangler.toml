@@ -23,9 +23,17 @@ binding = "TOKEN_KV"
 id = "36d3f5ea6b074512a4906890f596b3ac"
 preview_id = "0c60c3b6712f4df6b699e3f15fd2bcdf"
 
+# Base aislada de clientes, carritos y descuentos (worker/schema-clientes.sql)
+[[d1_databases]]
+binding = "CLIENTES_DB"
+database_name = "andes-clientes"
+database_id = "b8e48160-8257-474b-aabf-b335b32e3915"
+
 # Secrets (configurar con wrangler secret put o renew-token.sh):
 #   ML_ACCESS_TOKEN      — token OAuth de Mercado Libre
 #   ML_CLIENT_SECRET     — secreto de la app ML
 #   GITHUB_TOKEN         — Personal Access Token (repo contents: write)
 #   WORKER_SYNC_SECRET   — clave para proteger /sync, /update-token y /orders/lista
 #   RESEND_API_KEY       — clave de Resend para enviar los correos de pedidos
+#   ADMIN_BOOTSTRAP_EMAIL — correo del primer admin (alta única vía /auth/bootstrap)
+#   ADMIN_BOOTSTRAP_PASSWORD — clave del primer admin
