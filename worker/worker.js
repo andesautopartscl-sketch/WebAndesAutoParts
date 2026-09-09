@@ -13,7 +13,7 @@
  */
 
 import { rutearPedidos } from "./pedidos.js";
-import { rutearClientes, usuarioDesdeRequest, resolverPreciosUsuario } from "./clientes.js";
+import { rutearClientes, usuarioDesdeRequest, resolverPreciosUsuario, registrarUltimaCompra } from "./clientes.js";
 
 const API = "https://api.mercadolibre.com";
 const KV_TOKEN_KEY = "ML_ACCESS_TOKEN";
@@ -28,7 +28,7 @@ const ML_ITEM_ATTRS =
   "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
 const CORS_HEADERS_BASE = {
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -79,10 +79,11 @@ function unauthorized(request = null) {
 
 function checkAuth(request, env) {
   const secret = (env.WORKER_SYNC_SECRET || "").trim();
-  if (!secret) return true;
+  // Sin secreto configurado: denegar (nunca dejar rutas admin/sync abiertas).
+  if (!secret) return false;
   const auth = request.headers.get("Authorization") || "";
   const token = (auth.startsWith("Bearer ") ? auth.slice(7) : auth).trim();
-  return token === secret;
+  return token.length > 0 && token === secret;
 }
 
 function toBase64Utf8(str) {
@@ -591,13 +592,10 @@ async function handleExchangeCode(request, env) {
 
   return json({
     ok: true,
-    access_token: tokenData.access_token,
-    refresh_token: tokenData.refresh_token || null,
     expires_in: tokenData.expires_in || null,
-    redirect_uri: redirectUri,
     kv_key: KV_TOKEN_KEY,
     kv_saved: true,
-    message: "Token guardado en KV",
+    message: "Token guardado en KV (no se devuelve el access_token por seguridad)",
   });
 }
 
@@ -711,6 +709,7 @@ export default {
       unauthorized: unauthorizedReq,
       usuarioDesdeRequest,
       resolverPreciosUsuario,
+      registrarUltimaCompra,
     });
     if (respuestaPedidos) return respuestaPedidos;
 

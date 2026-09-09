@@ -35,5 +35,6 @@ database_id = "b8e48160-8257-474b-aabf-b335b32e3915"
 #   GITHUB_TOKEN         — Personal Access Token (repo contents: write)
 #   WORKER_SYNC_SECRET   — clave para proteger /sync, /update-token y /orders/lista
 #   RESEND_API_KEY       — clave de Resend para enviar los correos de pedidos
+#   TURNSTILE_SECRET_KEY  — secreto de Cloudflare Turnstile (login / registro)
 #   ADMIN_BOOTSTRAP_EMAIL — correo del primer admin (alta única vía /auth/bootstrap)
 #   ADMIN_BOOTSTRAP_PASSWORD — clave del primer admin

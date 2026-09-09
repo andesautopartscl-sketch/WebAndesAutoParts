@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
   descuento_pct REAL NOT NULL DEFAULT 0 CHECK (descuento_pct >= 0 AND descuento_pct <= 100),
   activo INTEGER NOT NULL DEFAULT 1,
   creado_por TEXT,
-  creado_en TEXT NOT NULL
+  creado_en TEXT NOT NULL,
+  ultima_compra_en TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_usuarios_email ON usuarios(email);

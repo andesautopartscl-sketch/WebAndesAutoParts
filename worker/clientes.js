@@ -14,7 +14,8 @@
  */
 
 const SESION_DIAS = 30;
-const MAX_AUTH_INTENTOS = 40;
+const DIAS_SIN_COMPRA = 30;
+const MAX_AUTH_INTENTOS = 12;
 const PBKDF2_ITER = 100000;
 
 /* ============================== Utilidades ============================== */
@@ -173,6 +174,35 @@ async function crearSesion(env, usuarioId) {
   return token;
 }
 
+/**
+ * Clientes dados de alta por vendedor/admin: si pasan DIAS_SIN_COMPRA sin
+ * comprar (o desde el alta si nunca compraron), se desactivan.
+ */
+async function aplicarBloqueoSinCompra(env, u) {
+  if (!env.CLIENTES_DB || !u) return null;
+  if (u.rol !== "cliente" || !u.creado_por) return null;
+
+  const ref = u.ultima_compra_en || u.creado_en;
+  const ms = Date.parse(ref);
+  if (!ms || Number.isNaN(ms)) return null;
+
+  const dias = (Date.now() - ms) / 86400000;
+  if (dias <= DIAS_SIN_COMPRA) return null;
+
+  await env.CLIENTES_DB.prepare("UPDATE usuarios SET activo = 0 WHERE id = ?")
+    .bind(u.id)
+    .run();
+  await env.CLIENTES_DB.prepare("DELETE FROM sesiones WHERE usuario_id = ?")
+    .bind(u.id)
+    .run();
+
+  return {
+    error: "CUENTA_BLOQUEADA",
+    message:
+      "Tu cuenta fue bloqueada por seguridad: más de un mes sin compras. Contacta a tu vendedor Andes Auto Parts.",
+  };
+}
+
 async function usuarioPorSesion(env, request) {
   const token = bearer(request);
   if (!token || !env.CLIENTES_DB) return null;
@@ -184,7 +214,11 @@ async function usuarioPorSesion(env, request) {
   )
     .bind(tokenHash, ahoraIso())
     .first();
-  return row || null;
+  if (!row) return null;
+
+  const bloq = await aplicarBloqueoSinCompra(env, row);
+  if (bloq) return null;
+  return row;
 }
 
 async function exigirSesion(env, request, json) {
@@ -208,6 +242,40 @@ async function exigirStaff(env, request, json) {
   return r;
 }
 
+async function verificarTurnstile(env, token, ip) {
+  const secret = (env.TURNSTILE_SECRET_KEY || "").trim();
+  // Sin secreto: no bloqueamos (permite desplegar antes de crear el widget).
+  if (!secret) return { ok: true, skipped: true };
+  if (!token) {
+    return {
+      ok: false,
+      message: "Confirma que no eres un robot antes de continuar.",
+    };
+  }
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret,
+        response: String(token),
+        remoteip: ip || "",
+      }),
+    });
+    const data = await res.json();
+    if (data && data.success) return { ok: true };
+    return {
+      ok: false,
+      message: "No pudimos verificar que no eres un robot. Intenta de nuevo.",
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      message: "Error al verificar el captcha. Intenta de nuevo.",
+    };
+  }
+}
+
 async function registrar(request, env, json, { rol = "cliente", creadoPor = null } = {}) {
   if (!env.CLIENTES_DB) {
     return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
@@ -223,6 +291,18 @@ async function registrar(request, env, json, { rol = "cliente", creadoPor = null
     body = await request.json();
   } catch (err) {
     return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+
+  // Alta pública: exige Turnstile. Alta por vendedor (creadoPor) lo omite.
+  if (!creadoPor) {
+    const cap = await verificarTurnstile(
+      env,
+      body.turnstileToken || body["cf-turnstile-response"],
+      ip
+    );
+    if (!cap.ok) {
+      return json({ ok: false, error: "CAPTCHA", message: cap.message }, 400);
+    }
   }
 
   const email = texto(body.email, 160).toLowerCase();
@@ -252,7 +332,10 @@ async function registrar(request, env, json, { rol = "cliente", creadoPor = null
   const id = nuevoId();
   const salt = nuevoSalt();
   const passwordHash = await hashClave(clave, salt);
-  const descuento = Math.max(0, Math.min(100, Number(body.descuento_pct) || 0));
+  const descuento =
+    creadoPor != null
+      ? Math.max(0, Math.min(100, Number(body.descuento_pct) || 0))
+      : 0;
 
   await env.CLIENTES_DB.prepare(
     `INSERT INTO usuarios (
@@ -304,10 +387,22 @@ async function login(request, env, json) {
     return json({ ok: false, error: "JSON_INVALIDO" }, 400);
   }
 
+  const cap = await verificarTurnstile(
+    env,
+    body.turnstileToken || body["cf-turnstile-response"],
+    ip
+  );
+  if (!cap.ok) {
+    return json({ ok: false, error: "CAPTCHA", message: cap.message }, 400);
+  }
+
   const email = texto(body.email, 160).toLowerCase();
   const clave = String(body.clave || body.password || "");
+  if (!(await rateLimit(env, "login-mail:" + email))) {
+    return json({ ok: false, error: "RATE_LIMIT", message: "Demasiados intentos. Espera una hora." }, 429);
+  }
   const u = await env.CLIENTES_DB.prepare(
-    "SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE AND activo = 1"
+    "SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE"
   )
     .bind(email)
     .first();
@@ -319,6 +414,23 @@ async function login(request, env, json) {
   const hash = await hashClave(clave, u.password_salt);
   if (hash !== u.password_hash) {
     return json({ ok: false, error: "CREDENCIALES", message: "Correo o clave incorrectos" }, 401);
+  }
+
+  if (!u.activo) {
+    return json(
+      {
+        ok: false,
+        error: "CUENTA_BLOQUEADA",
+        message:
+          "Tu cuenta está desactivada. Contacta a tu vendedor Andes Auto Parts para reactivarla.",
+      },
+      403
+    );
+  }
+
+  const bloq = await aplicarBloqueoSinCompra(env, u);
+  if (bloq) {
+    return json({ ok: false, error: bloq.error, message: bloq.message }, 403);
   }
 
   const token = await crearSesion(env, u.id);
@@ -622,6 +734,20 @@ export async function usuarioDesdeRequest(env, request) {
   return usuarioPorSesion(env, request);
 }
 
+/** Marca la última compra del cliente (reactiva el plazo de 1 mes). */
+export async function registrarUltimaCompra(env, usuarioId) {
+  if (!env.CLIENTES_DB || !usuarioId) return;
+  try {
+    await env.CLIENTES_DB.prepare(
+      "UPDATE usuarios SET ultima_compra_en = ?, activo = 1 WHERE id = ?"
+    )
+      .bind(ahoraIso(), usuarioId)
+      .run();
+  } catch (err) {
+    /* columna puede faltar en migraciones viejas: no tumbar el pedido */
+  }
+}
+
 /* =============================== Admin =============================== */
 
 async function listarUsuarios(request, env, json) {
@@ -714,6 +840,14 @@ async function patchUsuario(request, env, json, id) {
     .first();
   if (!u) return json({ ok: false, error: "NO_ENCONTRADO" }, 404);
 
+  // Vendedor solo puede gestionar clientes (no otros vendedores/admins).
+  if (r.usuario.rol === "vendedor" && u.rol !== "cliente") {
+    return json(
+      { ok: false, error: "PROHIBIDO", message: "Solo puedes editar cuentas de cliente" },
+      403
+    );
+  }
+
   const descuento =
     body.descuento_pct != null
       ? Math.max(0, Math.min(100, Number(body.descuento_pct) || 0))
@@ -748,13 +882,29 @@ async function patchUsuario(request, env, json, id) {
     )
     .run();
 
-  if (body.clave && String(body.clave).length >= 8) {
+  // Al reactivar, reinicia el plazo de 1 mes sin compras.
+  if (activo === 1 && !u.activo) {
+    await env.CLIENTES_DB.prepare(
+      "UPDATE usuarios SET ultima_compra_en = ? WHERE id = ?"
+    )
+      .bind(ahoraIso(), id)
+      .run();
+  }
+
+  const puedeCambiarClave =
+    body.clave &&
+    String(body.clave).length >= 8 &&
+    (r.usuario.rol === "admin" || u.rol === "cliente");
+  if (puedeCambiarClave) {
     const salt = nuevoSalt();
     const hash = await hashClave(String(body.clave), salt);
     await env.CLIENTES_DB.prepare(
       "UPDATE usuarios SET password_hash = ?, password_salt = ? WHERE id = ?"
     )
       .bind(hash, salt, id)
+      .run();
+    await env.CLIENTES_DB.prepare("DELETE FROM sesiones WHERE usuario_id = ?")
+      .bind(id)
       .run();
   }
 

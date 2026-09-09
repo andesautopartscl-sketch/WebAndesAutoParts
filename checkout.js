@@ -1131,7 +1131,7 @@
    */
   function enviarAlWorker(numero, datos, items, comprobante) {
     var base = String(cfgPedidos.workerUrl || "").replace(/\/+$/, "");
-    if (!base) return Promise.resolve(false);
+    if (!base) return Promise.resolve({ ok: false });
 
     var headers = { "Content-Type": "application/json" };
     if (window.AndesAuth && window.AndesAuth.token()) {
@@ -1144,13 +1144,23 @@
       body: JSON.stringify(cuerpoPedido(numero, datos, items, comprobante)),
     })
       .then(function (res) {
-        return res.ok;
+        return res.json().then(function (data) {
+          return {
+            ok: res.ok && data && data.ok,
+            numero: data && data.numero ? data.numero : numero,
+            data: data,
+          };
+        }).catch(function () {
+          return { ok: res.ok, numero: numero };
+        });
       })
       .catch(function () {
-        return false;
+        return { ok: false, numero: numero };
       });
 
-    return conLimite(envioRed, comprobante ? 30000 : 12000);
+    return conLimite(envioRed, comprobante ? 30000 : 12000).then(function (r) {
+      return r && typeof r === "object" ? r : { ok: false, numero: numero };
+    });
   }
 
   /**
@@ -1203,8 +1213,16 @@
   }
 
   function enviarPedido(numero, datos, items, resumen, comprobante) {
-    return enviarAlWorker(numero, datos, items, comprobante).then(function (ok) {
-      return ok ? true : enviarPorWeb3Forms(numero, datos, resumen);
+    return enviarAlWorker(numero, datos, items, comprobante).then(function (res) {
+      if (res && res.ok) return res;
+      // Si el Worker rechazó el pedido (precios, cuota, etc.) no mandamos
+      // el mismo payload a Web3Forms: sería un canal sin validación.
+      if (res && res.data && (res.data.error || res.data.ok === false)) {
+        return res;
+      }
+      return enviarPorWeb3Forms(numero, datos, resumen).then(function (ok) {
+        return { ok: !!ok, numero: numero, via: "web3forms" };
+      });
     });
   }
 
@@ -1348,8 +1366,19 @@
         .then(function (comprobante) {
           return enviarPedido(numero, datos, items, resumen, comprobante);
         })
-        .then(function () {
-          mostrarConfirmacion(numero, datos, resumen);
+        .then(function (resultado) {
+          if (!resultado || !resultado.ok) {
+            errorEl.hidden = false;
+            errorEl.textContent =
+              (resultado && resultado.data && resultado.data.message) ||
+              "No pudimos registrar el pedido. Revisa tu conexión e intenta de nuevo.";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Confirmar pedido";
+            return;
+          }
+          var numFinal = resultado.numero || numero;
+          var resumenFinal = textoPedido(numFinal, datos, items, sub);
+          mostrarConfirmacion(numFinal, datos, resumenFinal);
           window.AndesCart.vaciar();
           submitBtn.disabled = false;
           actualizarRequisitos();

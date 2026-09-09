@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260909n" />
+  <link rel="stylesheet" href="styles.css?v=20260909x" />
 </head>
 <body>
   <header class="site-header">
@@ -33,126 +33,555 @@
   </header>
 
   <main class="account">
-    <div class="container account__wrap">
+    <div class="container account__wrap account__wrap--auth" id="wrap-auth">
       <section class="account-panel" id="panel-auth">
         <h1 class="account-panel__title">Mi cuenta</h1>
         <p class="account-panel__lead">
           Guarda tus datos para el próximo pedido. Si agregaste productos sin sesión,
           se suman a tu carrito al entrar.
         </p>
-
-        <div class="account-tabs" role="tablist">
-          <button type="button" class="account-tab is-active" data-tab="login">Entrar</button>
-          <button type="button" class="account-tab" data-tab="registro">Crear cuenta</button>
-        </div>
-
-        <form class="account-form" id="form-login" autocomplete="on">
-          <div class="field">
-            <label for="login-email">Correo</label>
-            <input type="email" id="login-email" name="email" required autocomplete="email" />
-          </div>
-          <div class="field">
-            <label for="login-clave">Clave</label>
-            <input type="password" id="login-clave" name="clave" required minlength="8" autocomplete="current-password" />
-          </div>
-          <p class="account-error" id="login-error" hidden></p>
-          <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
-        </form>
-
-        <form class="account-form" id="form-registro" hidden autocomplete="on">
-          <div class="field">
-            <label for="reg-nombre">Nombre y apellido</label>
-            <input type="text" id="reg-nombre" name="nombre" required minlength="2" autocomplete="name" />
-          </div>
-          <div class="field">
-            <label for="reg-email">Correo</label>
-            <input type="email" id="reg-email" name="email" required autocomplete="email" />
-          </div>
-          <div class="field">
-            <label for="reg-telefono">Teléfono</label>
-            <input type="tel" id="reg-telefono" name="telefono" autocomplete="tel" placeholder="+56 9 …" />
-          </div>
-          <div class="field">
-            <label for="reg-clave">Clave (mín. 8 caracteres)</label>
-            <input type="password" id="reg-clave" name="clave" required minlength="8" autocomplete="new-password" />
-          </div>
-          <p class="account-error" id="reg-error" hidden></p>
-          <button type="submit" class="btn btn-primary btn-lg">Crear cuenta</button>
-        </form>
+        <p class="account-panel__lead">
+          También puedes iniciar sesión desde el icono de usuario en el menú superior.
+        </p>
+        <button type="button" class="btn btn-primary btn-lg" id="btn-abrir-modal">Iniciar sesión / Crear cuenta</button>
       </section>
+    </div>
 
-      <section class="account-panel" id="panel-perfil" hidden>
-        <h1 class="account-panel__title">Hola, <span id="perfil-saludo">—</span></h1>
-        <p class="account-panel__lead" id="perfil-descuento"></p>
+    <div class="container account__wrap account__wrap--dash" id="wrap-dash" hidden>
+      <aside class="account-side">
+        <div class="account-side__head">Mi Perfil</div>
+        <nav class="account-side__nav" aria-label="Secciones de mi cuenta">
+          <button type="button" class="account-side__link is-active" data-section="datos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Mis datos
+          </button>
+          <button type="button" class="account-side__link" data-section="compras">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Mis compras
+          </button>
+          <button type="button" class="account-side__link" data-section="favoritos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            Productos favoritos
+          </button>
+          <button type="button" class="account-side__link" data-section="clientes" id="link-admin" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Central de clientes
+          </button>
+          <div class="account-side__sep"></div>
+          <button type="button" class="account-side__link account-side__link--out" id="btn-logout">
+            Cerrar sesión
+          </button>
+        </nav>
+      </aside>
 
-        <form class="account-form" id="form-perfil">
-          <div class="checkout-fields">
-            <div class="field">
-              <label for="perfil-nombre">Nombre</label>
-              <input type="text" id="perfil-nombre" name="nombre" required />
-            </div>
-            <div class="field">
-              <label for="perfil-email">Correo</label>
-              <input type="email" id="perfil-email" disabled />
-            </div>
-            <div class="field">
-              <label for="perfil-telefono">Teléfono</label>
-              <input type="tel" id="perfil-telefono" name="telefono" />
-            </div>
-            <div class="field">
-              <label for="perfil-rut">RUT</label>
-              <input type="text" id="perfil-rut" name="rut" placeholder="12345678-5" />
-            </div>
-            <div class="field field--wide">
-              <label for="perfil-direccion">Dirección</label>
-              <input type="text" id="perfil-direccion" name="direccion" />
-            </div>
-            <div class="field">
-              <label for="perfil-comuna">Comuna</label>
-              <input type="text" id="perfil-comuna" name="comuna" />
-            </div>
-            <div class="field">
-              <label for="perfil-region">Región</label>
-              <input type="text" id="perfil-region" name="region" />
+      <div class="account-main">
+        <section class="account-view" id="view-datos" data-view="datos">
+          <div class="account-view__head">
+            <div>
+              <h1 class="account-view__title">Hola, <span id="perfil-saludo">—</span></h1>
+              <p class="account-view__lead" id="perfil-descuento"></p>
             </div>
           </div>
-          <p class="account-error" id="perfil-error" hidden></p>
-          <p class="account-ok" id="perfil-ok" hidden>Datos guardados.</p>
-          <div class="account-actions">
-            <button type="submit" class="btn btn-primary">Guardar datos</button>
-            <a class="btn btn-outline" href="checkout.html">Ir al checkout</a>
-            <button type="button" class="btn btn-outline" id="btn-logout">Cerrar sesión</button>
+
+          <form class="account-form" id="form-perfil">
+            <div class="checkout-fields">
+              <div class="field">
+                <label for="perfil-nombre">Nombre</label>
+                <input type="text" id="perfil-nombre" name="nombre" required />
+              </div>
+              <div class="field">
+                <label for="perfil-email">Correo</label>
+                <input type="email" id="perfil-email" disabled />
+              </div>
+              <div class="field">
+                <label for="perfil-telefono">Teléfono</label>
+                <input type="tel" id="perfil-telefono" name="telefono" />
+              </div>
+              <div class="field">
+                <label for="perfil-rut">RUT</label>
+                <input type="text" id="perfil-rut" name="rut" placeholder="12.345.678-5" />
+              </div>
+              <div class="field field--wide">
+                <label for="perfil-direccion">Dirección</label>
+                <input type="text" id="perfil-direccion" name="direccion" />
+              </div>
+              <div class="field">
+                <label for="perfil-region">Región</label>
+                <select id="perfil-region" name="region">
+                  <option value="">Selecciona tu región</option>
+                  <option>Arica y Parinacota</option>
+                  <option>Tarapacá</option>
+                  <option>Antofagasta</option>
+                  <option>Atacama</option>
+                  <option>Coquimbo</option>
+                  <option>Valparaíso</option>
+                  <option>Metropolitana de Santiago</option>
+                  <option>O'Higgins</option>
+                  <option>Maule</option>
+                  <option>Ñuble</option>
+                  <option>Biobío</option>
+                  <option>La Araucanía</option>
+                  <option>Los Ríos</option>
+                  <option>Los Lagos</option>
+                  <option>Aysén</option>
+                  <option>Magallanes</option>
+                </select>
+              </div>
+              <div class="field" id="wrap-comuna-rm" hidden>
+                <label for="perfil-comuna-rm">Comuna</label>
+                <select id="perfil-comuna-rm" name="comuna_rm">
+                  <option value="">Selecciona tu comuna</option>
+                </select>
+              </div>
+              <div class="field" id="wrap-comuna-libre">
+                <label for="perfil-comuna">Comuna</label>
+                <input type="text" id="perfil-comuna" name="comuna" autocomplete="address-level3" />
+              </div>
+            </div>
+            <p class="account-error" id="perfil-error" hidden></p>
+            <p class="account-ok" id="perfil-ok" hidden>Datos guardados.</p>
+            <div class="account-actions">
+              <button type="submit" class="btn btn-primary">Guardar datos</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="account-view" id="view-compras" data-view="compras" hidden>
+          <div class="account-view__head">
+            <h1 class="account-view__title">Tus últimas compras</h1>
+            <p class="account-view__help">
+              Si tienes dudas acerca de tus pedidos, contáctanos al
+              <a href="tel:+56926152826">+56 9 2615 2826</a>
+            </p>
           </div>
-        </form>
-      </section>
+          <div class="account-empty" id="compras-empty">
+            <p>Aún no mostramos el historial aquí.</p>
+            <p class="account-view__lead">Cada pedido te llega por correo con el número de referencia. Pronto verás el listado en esta sección.</p>
+            <a class="btn btn-outline" href="index.html#productos">Seguir comprando</a>
+          </div>
+        </section>
+
+        <section class="account-view" id="view-favoritos" data-view="favoritos" hidden>
+          <div class="account-view__head">
+            <h1 class="account-view__title">Mis productos favoritos</h1>
+          </div>
+          <div class="account-empty">
+            <p>Aún no tienes productos favoritos agregados</p>
+            <p class="account-view__lead">Cuando marquemos favoritos en el catálogo, aparecerán acá.</p>
+            <a class="btn btn-outline" href="index.html#productos">Ver catálogo</a>
+          </div>
+        </section>
+
+        <section class="account-view" id="view-clientes" data-view="clientes" hidden>
+          <div class="account-view__head">
+            <div>
+              <h1 class="account-view__title">Central de clientes</h1>
+              <p class="account-view__lead">Crea perfiles, asigna descuento % y precios especiales por producto.</p>
+            </div>
+          </div>
+
+          <form class="account-form" id="form-nuevo">
+            <h2 class="account-subtitle">Nuevo cliente</h2>
+            <div class="checkout-fields">
+              <div class="field">
+                <label for="n-nombre">Nombre</label>
+                <input id="n-nombre" name="nombre" required />
+              </div>
+              <div class="field">
+                <label for="n-email">Correo</label>
+                <input id="n-email" name="email" type="email" required />
+              </div>
+              <div class="field">
+                <label for="n-telefono">Teléfono</label>
+                <input id="n-telefono" name="telefono" />
+              </div>
+              <div class="field">
+                <label for="n-clave">Clave temporal</label>
+                <input id="n-clave" name="clave" type="password" minlength="8" required />
+              </div>
+              <div class="field">
+                <label for="n-desc">Descuento %</label>
+                <input id="n-desc" name="descuento_pct" type="number" min="0" max="100" step="0.5" value="0" />
+              </div>
+            </div>
+            <p class="account-error" id="nuevo-error" hidden></p>
+            <button type="submit" class="btn btn-primary">Crear cliente</button>
+          </form>
+
+          <div class="account-toolbar">
+            <input type="search" id="buscar" placeholder="Buscar por nombre, correo, RUT…" />
+            <button type="button" class="btn btn-outline" id="btn-buscar">Buscar</button>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="tabla">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Correo</th>
+                  <th>Descuento</th>
+                  <th>Rol</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <form class="account-form" id="form-editar" hidden>
+            <h2 class="account-subtitle">Editar cliente</h2>
+            <input type="hidden" id="e-id" />
+            <div class="checkout-fields">
+              <div class="field">
+                <label for="e-nombre">Nombre</label>
+                <input id="e-nombre" required />
+              </div>
+              <div class="field">
+                <label for="e-telefono">Teléfono</label>
+                <input id="e-telefono" />
+              </div>
+              <div class="field">
+                <label for="e-desc">Descuento %</label>
+                <input id="e-desc" type="number" min="0" max="100" step="0.5" />
+              </div>
+              <div class="field">
+                <label for="e-activo">Activo</label>
+                <select id="e-activo">
+                  <option value="1">Sí</option>
+                  <option value="0">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="e-producto">ID producto (ML)</label>
+                <input id="e-producto" placeholder="MLC…" />
+              </div>
+              <div class="field">
+                <label for="e-precio">Precio especial</label>
+                <input id="e-precio" type="number" min="0" step="10" />
+              </div>
+            </div>
+            <p class="account-error" id="edit-error" hidden></p>
+            <p class="account-ok" id="edit-ok" hidden></p>
+            <div class="account-actions">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-outline" id="btn-precio">Guardar precio especial</button>
+              <button type="button" class="btn btn-outline" id="btn-cancelar">Cerrar</button>
+            </div>
+            <ul class="admin-precios" id="lista-precios"></ul>
+          </form>
+        </section>
+      </div>
     </div>
   </main>
 
-  <script src="contact-config.js?v=20260909m"></script>
-  <script src="cart.js?v=20260909n"></script>
-  <script src="auth.js?v=20260909n"></script>
+  <script src="contact-config.js?v=20260909x"></script>
+  <script src="cart.js?v=20260909t"></script>
+  <script src="auth.js?v=20260909w"></script>
   <script>
     (function () {
-      var formLogin = document.getElementById("form-login");
-      var formReg = document.getElementById("form-registro");
+      var COMUNAS_RM = [
+        "Alhué", "Buin", "Calera de Tango", "Cerrillos", "Cerro Navia", "Colina",
+        "Conchalí", "Curacaví", "El Bosque", "El Monte", "Estación Central",
+        "Huechuraba", "Independencia", "Isla de Maipo", "La Cisterna", "La Florida",
+        "La Granja", "La Pintana", "La Reina", "Lampa", "Las Condes",
+        "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "María Pinto",
+        "Melipilla", "Ñuñoa", "Padre Hurtado", "Paine", "Pedro Aguirre Cerda",
+        "Peñaflor", "Peñalolén", "Pirque", "Providencia", "Pudahuel",
+        "Puente Alto", "Quilicura", "Quinta Normal", "Recoleta", "Renca",
+        "San Bernardo", "San Joaquín", "San José de Maipo", "San Miguel",
+        "San Pedro", "San Ramón", "Santiago", "Talagante", "Tiltil", "Vitacura",
+      ];
+
+      var wrapAuth = document.getElementById("wrap-auth");
+      var wrapDash = document.getElementById("wrap-dash");
       var formPerfil = document.getElementById("form-perfil");
-      var panelAuth = document.getElementById("panel-auth");
-      var panelPerfil = document.getElementById("panel-perfil");
+      var regionEl = document.getElementById("perfil-region");
+      var comunaRm = document.getElementById("perfil-comuna-rm");
+      var comunaLibre = document.getElementById("perfil-comuna");
+      var wrapRm = document.getElementById("wrap-comuna-rm");
+      var wrapLibre = document.getElementById("wrap-comuna-libre");
+
+      function norm(s) {
+        return String(s || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      }
+
+      function esRM(region) {
+        return norm(region).indexOf("metropolitana") >= 0;
+      }
+
+      function poblarComunas() {
+        COMUNAS_RM.forEach(function (nombre) {
+          var opt = document.createElement("option");
+          opt.value = nombre;
+          opt.textContent = nombre;
+          comunaRm.appendChild(opt);
+        });
+      }
+
+      function actualizarComunaUi() {
+        var rm = esRM(regionEl.value);
+        wrapRm.hidden = !rm;
+        wrapLibre.hidden = rm;
+      }
+
+      function comunaValor() {
+        return esRM(regionEl.value) ? (comunaRm.value || "").trim() : (comunaLibre.value || "").trim();
+      }
+
+      function setRegion(valor) {
+        if (!valor) {
+          regionEl.value = "";
+          actualizarComunaUi();
+          return;
+        }
+        var match = Array.prototype.find.call(regionEl.options, function (opt) {
+          return norm(opt.value) === norm(valor) || norm(opt.text) === norm(valor);
+        });
+        regionEl.value = match ? match.value : "";
+        if (!match && valor) {
+          var extra = document.createElement("option");
+          extra.value = valor;
+          extra.textContent = valor;
+          regionEl.appendChild(extra);
+          regionEl.value = valor;
+        }
+        actualizarComunaUi();
+      }
+
+      function setComuna(valor) {
+        if (esRM(regionEl.value)) {
+          var match = Array.prototype.find.call(comunaRm.options, function (opt) {
+            return norm(opt.value) === norm(valor);
+          });
+          comunaRm.value = match ? match.value : "";
+          comunaLibre.value = "";
+        } else {
+          comunaLibre.value = valor || "";
+        }
+      }
 
       function mostrarError(el, msg) {
         el.hidden = !msg;
         el.textContent = msg || "";
       }
 
-      function pintarPerfil(u) {
-        if (!u) {
-          panelAuth.hidden = false;
-          panelPerfil.hidden = true;
+      function mostrarSeccion(id) {
+        var u = window.AndesAuth.usuario();
+        if (id === "clientes" && !(u && (u.rol === "vendedor" || u.rol === "admin"))) {
+          id = "datos";
+        }
+        document.querySelectorAll(".account-side__link[data-section]").forEach(function (btn) {
+          btn.classList.toggle("is-active", btn.getAttribute("data-section") === id);
+        });
+        document.querySelectorAll(".account-view").forEach(function (view) {
+          view.hidden = view.getAttribute("data-view") !== id;
+        });
+        try {
+          history.replaceState(null, "", "#" + id);
+        } catch (err) {
+          /* noop */
+        }
+        if (id === "clientes") cargarClientes();
+      }
+
+      function seccionDesdeHash() {
+        var h = (location.hash || "#datos").replace(/^#/, "");
+        if (h === "pedidos") h = "compras";
+        if (h === "perfil") h = "datos";
+        if (["datos", "compras", "favoritos", "clientes"].indexOf(h) < 0) h = "datos";
+        return h;
+      }
+
+      /* —— Central de clientes (misma página) —— */
+      var tbody = document.querySelector("#tabla tbody");
+      var editando = null;
+
+      function escHtml(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function cargarClientes(q) {
+        if (!tbody || !window.AndesAuth.haySesion()) return;
+        var path = "/admin/usuarios" + (q ? "?q=" + encodeURIComponent(q) : "");
+        return window.AndesAuth.api(path).then(function (data) {
+          if (!data.ok) return;
+          tbody.innerHTML = (data.usuarios || [])
+            .map(function (u) {
+              return (
+                "<tr>" +
+                "<td>" + escHtml(u.nombre) + "</td>" +
+                "<td>" + escHtml(u.email) + "</td>" +
+                "<td>" + escHtml(u.descuento_pct) + "%</td>" +
+                "<td>" + escHtml(u.rol) + "</td>" +
+                '<td><button type="button" class="btn btn-outline btn-sm" data-edit="' +
+                escHtml(u.id) +
+                '">Editar</button></td>' +
+                "</tr>"
+              );
+            })
+            .join("");
+        });
+      }
+
+      function cargarPrecios(id) {
+        window.AndesAuth.api("/admin/usuarios/" + id + "/precios").then(function (data) {
+          var ul = document.getElementById("lista-precios");
+          ul.innerHTML = (data.precios || [])
+            .map(function (p) {
+              return (
+                "<li><code>" +
+                escHtml(p.producto_id) +
+                "</code> → $" +
+                Number(p.precio).toLocaleString("es-CL") +
+                ' <button type="button" data-del-precio="' +
+                escHtml(p.producto_id) +
+                '">Quitar</button></li>'
+              );
+            })
+            .join("") || "<li>Sin precios especiales</li>";
+        });
+      }
+
+      document.getElementById("btn-buscar").addEventListener("click", function () {
+        cargarClientes(document.getElementById("buscar").value.trim());
+      });
+
+      document.getElementById("form-nuevo").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var f = e.target;
+        var err = document.getElementById("nuevo-error");
+        err.hidden = true;
+        window.AndesAuth.api("/admin/usuarios", {
+          method: "POST",
+          body: {
+            nombre: f.nombre.value,
+            email: f.email.value,
+            telefono: f.telefono.value,
+            clave: f.clave.value,
+            descuento_pct: Number(f.descuento_pct.value) || 0,
+          },
+        }).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || data.error || "No se pudo crear";
+            return;
+          }
+          f.reset();
+          cargarClientes();
+        });
+      });
+
+      tbody.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-edit]");
+        if (!btn) return;
+        var id = btn.getAttribute("data-edit");
+        window.AndesAuth.api("/admin/usuarios").then(function (data) {
+          var u = (data.usuarios || []).find(function (x) {
+            return x.id === id;
+          });
+          if (!u) return;
+          editando = u;
+          document.getElementById("form-editar").hidden = false;
+          document.getElementById("e-id").value = u.id;
+          document.getElementById("e-nombre").value = u.nombre || "";
+          document.getElementById("e-telefono").value = u.telefono || "";
+          document.getElementById("e-desc").value = u.descuento_pct || 0;
+          document.getElementById("e-activo").value = u.activo ? "1" : "0";
+          cargarPrecios(u.id);
+        });
+      });
+
+      document.getElementById("lista-precios").addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-del-precio]");
+        if (!btn || !editando) return;
+        var pid = btn.getAttribute("data-del-precio");
+        window.AndesAuth.api(
+          "/admin/usuarios/" + editando.id + "/precios/" + encodeURIComponent(pid),
+          { method: "DELETE" }
+        ).then(function () {
+          cargarPrecios(editando.id);
+        });
+      });
+
+      document.getElementById("form-editar").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var id = document.getElementById("e-id").value;
+        var err = document.getElementById("edit-error");
+        var ok = document.getElementById("edit-ok");
+        err.hidden = true;
+        ok.hidden = true;
+        window.AndesAuth.api("/admin/usuarios/" + id, {
+          method: "PATCH",
+          body: {
+            nombre: document.getElementById("e-nombre").value,
+            telefono: document.getElementById("e-telefono").value,
+            descuento_pct: Number(document.getElementById("e-desc").value) || 0,
+            activo: document.getElementById("e-activo").value === "1",
+          },
+        }).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || "Error al guardar";
+            return;
+          }
+          ok.hidden = false;
+          ok.textContent = "Cliente actualizado";
+          cargarClientes();
+        });
+      });
+
+      document.getElementById("btn-precio").addEventListener("click", function () {
+        if (!editando) return;
+        var pid = document.getElementById("e-producto").value.trim();
+        var precio = Number(document.getElementById("e-precio").value) || 0;
+        var err = document.getElementById("edit-error");
+        var ok = document.getElementById("edit-ok");
+        err.hidden = true;
+        ok.hidden = true;
+        if (!pid) {
+          err.hidden = false;
+          err.textContent = "Indica el ID del producto (ej. MLC…)";
           return;
         }
-        panelAuth.hidden = true;
-        panelPerfil.hidden = false;
-        document.getElementById("perfil-saludo").textContent = (u.nombre || "").split(" ")[0] || "cliente";
+        window.AndesAuth.api(
+          "/admin/usuarios/" + editando.id + "/precios/" + encodeURIComponent(pid),
+          { method: "PUT", body: { precio: precio } }
+        ).then(function (data) {
+          if (!data.ok) {
+            err.hidden = false;
+            err.textContent = data.message || "No se pudo guardar el precio";
+            return;
+          }
+          ok.hidden = false;
+          ok.textContent = "Precio especial guardado";
+          document.getElementById("e-producto").value = "";
+          document.getElementById("e-precio").value = "";
+          cargarPrecios(editando.id);
+        });
+      });
+
+      document.getElementById("btn-cancelar").addEventListener("click", function () {
+        document.getElementById("form-editar").hidden = true;
+        editando = null;
+      });
+
+      function pintarPerfil(u) {
+        if (!u) {
+          wrapAuth.hidden = false;
+          wrapDash.hidden = true;
+          return;
+        }
+        wrapAuth.hidden = true;
+        wrapDash.hidden = false;
+        document.getElementById("perfil-saludo").textContent =
+          (u.nombre || "").split(" ")[0] || "cliente";
         var desc = document.getElementById("perfil-descuento");
         desc.textContent =
           Number(u.descuento_pct) > 0
@@ -163,80 +592,67 @@
         formPerfil.telefono.value = u.telefono || "";
         formPerfil.rut.value = u.rut || "";
         formPerfil.direccion.value = u.direccion || "";
-        formPerfil.comuna.value = u.comuna || "";
-        formPerfil.region.value = u.region || "";
+        setRegion(u.region || "");
+        setComuna(u.comuna || "");
+        var admin = document.getElementById("link-admin");
+        if (admin) admin.hidden = !(u.rol === "vendedor" || u.rol === "admin");
+        mostrarSeccion(seccionDesdeHash());
       }
 
-      document.querySelectorAll("[data-tab]").forEach(function (btn) {
+      poblarComunas();
+      regionEl.addEventListener("change", actualizarComunaUi);
+      actualizarComunaUi();
+
+      document.querySelectorAll("[data-section]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document.querySelectorAll("[data-tab]").forEach(function (b) {
-            b.classList.toggle("is-active", b === btn);
-          });
-          var tab = btn.getAttribute("data-tab");
-          formLogin.hidden = tab !== "login";
-          formReg.hidden = tab !== "registro";
+          mostrarSeccion(btn.getAttribute("data-section"));
         });
       });
 
-      formLogin.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var err = document.getElementById("login-error");
-        mostrarError(err, "");
-        window.AndesAuth.login({
-          email: formLogin.email.value,
-          clave: formLogin.clave.value,
-        }).then(function (data) {
-          if (!data.ok) {
-            mostrarError(err, data.message || "No pudimos iniciar sesión.");
-            return;
-          }
-          pintarPerfil(data.usuario);
-        }).catch(function () {
-          mostrarError(err, "Error de red. Intenta de nuevo.");
-        });
+      window.addEventListener("hashchange", function () {
+        if (window.AndesAuth.usuario()) mostrarSeccion(seccionDesdeHash());
       });
 
-      formReg.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var err = document.getElementById("reg-error");
-        mostrarError(err, "");
-        window.AndesAuth.registrar({
-          nombre: formReg.nombre.value,
-          email: formReg.email.value,
-          telefono: formReg.telefono.value,
-          clave: formReg.clave.value,
-        }).then(function (data) {
-          if (!data.ok) {
-            mostrarError(err, data.message || "No pudimos crear la cuenta.");
-            return;
-          }
-          pintarPerfil(data.usuario);
-        }).catch(function () {
-          mostrarError(err, "Error de red. Intenta de nuevo.");
-        });
+      document.getElementById("btn-abrir-modal").addEventListener("click", function () {
+        if (window.AndesAuth && window.AndesAuth.abrirModal) window.AndesAuth.abrirModal("login");
       });
 
       formPerfil.addEventListener("submit", function (e) {
         e.preventDefault();
         var err = document.getElementById("perfil-error");
         var ok = document.getElementById("perfil-ok");
+        var btn = formPerfil.querySelector('[type="submit"]');
         mostrarError(err, "");
         ok.hidden = true;
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Guardando…";
+        }
         window.AndesAuth.actualizarYo({
           nombre: formPerfil.nombre.value,
           telefono: formPerfil.telefono.value,
           rut: formPerfil.rut.value,
           direccion: formPerfil.direccion.value,
-          comuna: formPerfil.comuna.value,
-          region: formPerfil.region.value,
-        }).then(function (data) {
-          if (!data.ok) {
-            mostrarError(err, data.message || "No se pudo guardar.");
-            return;
-          }
-          ok.hidden = false;
-          pintarPerfil(data.usuario);
-        });
+          comuna: comunaValor(),
+          region: regionEl.value,
+        })
+          .then(function (data) {
+            if (!data.ok) {
+              mostrarError(err, data.message || data.error || "No se pudo guardar.");
+              return;
+            }
+            ok.hidden = false;
+            pintarPerfil(data.usuario);
+          })
+          .catch(function () {
+            mostrarError(err, "Error de red. Intenta de nuevo.");
+          })
+          .then(function () {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = "Guardar datos";
+            }
+          });
       });
 
       document.getElementById("btn-logout").addEventListener("click", function () {
@@ -245,7 +661,18 @@
         });
       });
 
+      window.AndesAuth.onChange(function (u) {
+        pintarPerfil(u);
+      });
+
+      // Pintar al toque con la sesión local para no mostrar el login encima
+      // del dashboard mientras llega /auth/yo.
       pintarPerfil(window.AndesAuth.usuario());
+      if (window.AndesAuth.haySesion()) {
+        window.AndesAuth.refrescarYo().then(function (u) {
+          if (u) pintarPerfil(u);
+        });
+      }
     })();
   </script>
 </body>

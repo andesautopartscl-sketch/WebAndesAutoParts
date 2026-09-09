@@ -69,8 +69,9 @@ function hoy() {
 function validarPedido(body) {
   if (!body || typeof body !== "object") return { error: "Cuerpo inválido" };
 
-  const numero = texto(body.numero, 32);
-  if (!/^AAP-\d{6}-\d{4}$/.test(numero)) return { error: "Número de pedido inválido" };
+  // El número lo asigna el servidor; si viene del cliente solo se valida formato
+  // y luego se reemplaza (evita sobrescribir pedidos ajenos).
+  const numeroCliente = texto(body.numero, 32);
 
   const cliente = body.cliente || {};
   const nombre = texto(cliente.nombre, 120);
@@ -85,14 +86,16 @@ function validarPedido(body) {
     id: texto(it.id, 40),
     titulo: texto(it.titulo, 200),
     sku: texto(it.sku, 60),
-    qty: Math.max(1, Math.min(999, Number(it.qty) || 1)),
-    precio: Math.max(0, Number(it.precio) || 0),
+    qty: Math.max(1, Math.min(99, Number(it.qty) || 1)),
+    // Precio del navegador se ignora después: se reemplaza con catálogo.
+    precio: 0,
   }));
+
+  if (limpios.some((it) => !it.id)) return { error: "Hay productos sin ID" };
 
   const comprobante = body.comprobante || null;
   if (comprobante) {
     const datos = String(comprobante.datos || "");
-    // base64 crece un tercio sobre el tamaño real del archivo.
     if (datos.length * 0.75 > MAX_ADJUNTO_BYTES) {
       return { error: "El comprobante supera los 5 MB" };
     }
@@ -100,15 +103,12 @@ function validarPedido(body) {
   }
 
   const entrega = body.entrega || {};
-  // El flete propio solo aplica en Gran Santiago bajo el mínimo. Lo acotamos
-  // para que un cliente no pueda inventarse un cobro absurdo desde el navegador.
   const costoDespacho = Math.max(0, Math.min(20000, Math.round(Number(entrega.costo) || 0)));
-  const subtotal = limpios.reduce((acc, it) => acc + it.precio * it.qty, 0);
   const pago = body.pago || {};
 
   return {
     pedido: {
-      numero,
+      numero: numeroCliente,
       creado: new Date().toISOString(),
       estado: "pendiente",
       cliente: {
@@ -134,13 +134,119 @@ function validarPedido(body) {
         declarado: pago.declarado === true,
       },
       items: limpios,
-      subtotal,
-      total: subtotal + costoDespacho,
+      subtotal: 0,
+      total: 0,
       notas: texto(body.notas, 1000),
       comprobanteNombre: comprobante ? texto(comprobante.nombre, 120) : "",
     },
     comprobante,
   };
+}
+
+/** Catálogo público en GitHub → mapa id → precio lista (cache KV 1 h). */
+async function mapaPreciosCatalogo(env) {
+  if (!env.TOKEN_KV) return null;
+  const cacheKey = "CATALOGO_PRECIOS_V1";
+  try {
+    const cached = await env.TOKEN_KV.get(cacheKey, "json");
+    if (cached && cached.map && cached.ts && Date.now() - cached.ts < 3600000) {
+      return cached.map;
+    }
+  } catch (err) {
+    /* seguir a fetch */
+  }
+
+  const owner = env.GITHUB_OWNER || "andesautopartscl-sketch";
+  const repo = env.GITHUB_REPO || "WebAndesAutoParts";
+  const branch = env.GITHUB_BRANCH || "main";
+  const filePath = env.GITHUB_FILE_PATH || "data/productos.json";
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+
+  let productos;
+  try {
+    const res = await fetch(url, { cf: { cacheTtl: 600, cacheEverything: true } });
+    if (!res.ok) return null;
+    productos = await res.json();
+  } catch (err) {
+    return null;
+  }
+  if (!Array.isArray(productos)) return null;
+
+  const map = {};
+  productos.forEach((p) => {
+    if (!p || !p.id) return;
+    map[String(p.id)] = {
+      precio: Math.max(0, Math.round(Number(p.precio) || 0)),
+      titulo: String(p.titulo || "").slice(0, 200),
+      sku: String(p.sku || "").slice(0, 60),
+      stock: p.stock != null ? Number(p.stock) : null,
+    };
+  });
+
+  try {
+    await env.TOKEN_KV.put(
+      cacheKey,
+      JSON.stringify({ ts: Date.now(), map }),
+      { expirationTtl: 7200 }
+    );
+  } catch (err) {
+    /* noop */
+  }
+  return map;
+}
+
+async function aplicarPreciosCatalogo(env, items) {
+  const map = await mapaPreciosCatalogo(env);
+  if (!map) {
+    return { error: "No pudimos validar precios del catálogo. Intenta en unos minutos." };
+  }
+  const out = [];
+  for (const it of items) {
+    const cat = map[it.id];
+    if (!cat || !(cat.precio > 0)) {
+      return { error: "Producto no válido o sin precio: " + it.id };
+    }
+    if (cat.stock != null && cat.stock >= 0 && it.qty > cat.stock) {
+      return { error: "Stock insuficiente para " + (cat.titulo || it.id) };
+    }
+    out.push({
+      id: it.id,
+      titulo: cat.titulo || it.titulo,
+      sku: cat.sku || it.sku,
+      qty: it.qty,
+      precio: cat.precio,
+    });
+  }
+  return { items: out };
+}
+
+async function asignarNumeroPedido(env) {
+  const ahora = new Date();
+  const yymmdd =
+    String(ahora.getFullYear()).slice(2) +
+    String(ahora.getMonth() + 1).padStart(2, "0") +
+    String(ahora.getDate()).padStart(2, "0");
+  const seqKey = "PEDIDO_SEQ:" + yymmdd;
+  let n = 1;
+  if (env.TOKEN_KV) {
+    const prev = Number((await env.TOKEN_KV.get(seqKey)) || 0);
+    n = prev + 1;
+    await env.TOKEN_KV.put(seqKey, String(n), { expirationTtl: 172800 });
+  } else {
+    n = Math.floor(Math.random() * 9000) + 1000;
+  }
+  let numero = "AAP-" + yymmdd + "-" + String(n).padStart(4, "0");
+  // Si por carrera ya existe, busca el siguiente libre.
+  for (let i = 0; i < 20; i++) {
+    const existe = await leerPedido(env, numero);
+    if (!existe) return numero;
+    n += 1;
+    if (env.TOKEN_KV) {
+      await env.TOKEN_KV.put(seqKey, String(n), { expirationTtl: 172800 });
+    }
+    numero = "AAP-" + yymmdd + "-" + String(n).padStart(4, "0");
+  }
+  return "AAP-" + yymmdd + "-" + String(Date.now()).slice(-4);
 }
 
 /* ================================ Correo ================================ */
@@ -434,7 +540,16 @@ async function crearPedido(request, env, json, extras = {}) {
   const { error, pedido, comprobante } = validarPedido(body);
   if (error) return json({ ok: false, error: "PEDIDO_INVALIDO", message: error }, 400);
 
-  // Si hay sesión, recalculamos precios con descuento / precio especial.
+  // Precios solo desde el catálogo (nunca confiar en el navegador).
+  const precios = await aplicarPreciosCatalogo(env, pedido.items);
+  if (precios.error) {
+    return json({ ok: false, error: "PRECIO_INVALIDO", message: precios.error }, 400);
+  }
+  pedido.items = precios.items;
+  pedido.subtotal = pedido.items.reduce((acc, it) => acc + it.precio * it.qty, 0);
+  pedido.total = pedido.subtotal + (pedido.entrega.costo || 0);
+
+  // Si hay sesión, aplicar descuento % / precio especial sobre la lista del catálogo.
   if (typeof extras.usuarioDesdeRequest === "function" && typeof extras.resolverPreciosUsuario === "function") {
     try {
       const usuario = await extras.usuarioDesdeRequest(env, request);
@@ -451,9 +566,12 @@ async function crearPedido(request, env, json, extras = {}) {
         pedido.total = pedido.subtotal + (pedido.entrega.costo || 0);
         pedido.usuario_id = usuario.id;
         pedido.descuento_pct = Number(usuario.descuento_pct) || 0;
+        if (typeof extras.registrarUltimaCompra === "function") {
+          await extras.registrarUltimaCompra(env, usuario.id);
+        }
       }
     } catch (err) {
-      /* si falla el lookup seguimos con los precios del body (invitado) */
+      /* invitado: ya tenemos precios de catálogo */
     }
   }
 
@@ -461,6 +579,7 @@ async function crearPedido(request, env, json, extras = {}) {
     return json({ ok: false, error: "CUOTA_DIARIA" }, 429);
   }
 
+  pedido.numero = await asignarNumeroPedido(env);
   pedido.token = crypto.randomUUID().replace(/-/g, "");
   await guardarPedido(env, pedido);
 
@@ -669,10 +788,14 @@ export async function rutearPedidos(
   path,
   request,
   env,
-  { json, checkAuth, unauthorized, usuarioDesdeRequest, resolverPreciosUsuario }
+  { json, checkAuth, unauthorized, usuarioDesdeRequest, resolverPreciosUsuario, registrarUltimaCompra }
 ) {
   if (path === "/orders" && request.method === "POST") {
-    return crearPedido(request, env, json, { usuarioDesdeRequest, resolverPreciosUsuario });
+    return crearPedido(request, env, json, {
+      usuarioDesdeRequest,
+      resolverPreciosUsuario,
+      registrarUltimaCompra,
+    });
   }
 
   if (path === "/orders/accion" && request.method === "GET") {

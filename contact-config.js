@@ -36,6 +36,18 @@ window.ANDES_PEDIDOS = {
 };
 
 /**
+ * Cloudflare Turnstile (“No soy un robot”).
+ * 1) https://dash.cloudflare.com → Turnstile → Add site (andesautoparts.cl)
+ * 2) Pega el Site Key aquí
+ * 3) Guarda el Secret Key en el Worker:
+ *      cd worker && npx wrangler secret put TURNSTILE_SECRET_KEY
+ * Hasta que configures ambos, el login funciona sin el widget (solo rate-limit).
+ */
+window.ANDES_TURNSTILE = {
+  siteKey: "0x4AAAAAAEuORxljI0ZODWBS",
+};
+
+/**
  * Datos de pago que usa checkout.html.
  *
  * Los campos de `transferencia` se muestran tal cual al cliente cuando elige
