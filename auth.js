@@ -290,6 +290,19 @@
     } catch (err) {
       /* noop */
     }
+    var btn = document.querySelector('[data-auth-human="' + cual + '"]');
+    if (btn) {
+      btn.classList.remove("is-verified", "is-loading");
+      btn.setAttribute("aria-pressed", "false");
+      btn.disabled = false;
+    }
+  }
+
+  function setHumanLoading(cual, loading) {
+    var btn = document.querySelector('[data-auth-human="' + cual + '"]');
+    if (!btn) return;
+    btn.classList.toggle("is-loading", !!loading);
+    btn.disabled = !!loading;
   }
 
   function montarTurnstile(cual) {
@@ -312,10 +325,62 @@
           sitekey: key,
           theme: "light",
           language: "es",
+          size: "compact",
+          appearance: "always",
+          // Solo corre cuando el cliente pulsa “No soy un robot”.
+          execution: "execute",
+          callback: function () {
+            var btn = document.querySelector('[data-auth-human="' + cual + '"]');
+            if (btn) {
+              btn.classList.remove("is-loading");
+              btn.classList.add("is-verified");
+              btn.setAttribute("aria-pressed", "true");
+              btn.disabled = false;
+            }
+          },
+          "error-callback": function () {
+            setHumanLoading(cual, false);
+            resetTurnstile(cual);
+          },
+          "expired-callback": function () {
+            setHumanLoading(cual, false);
+            resetTurnstile(cual);
+          },
         });
       })
       .catch(function () {
-        /* si falla el script, el Worker puede estar sin secreto y deja pasar */
+        setHumanLoading(cual, false);
+      });
+  }
+
+  function lanzarTurnstile(cual) {
+    if (!turnstileSiteKey()) return;
+    var btn = document.querySelector('[data-auth-human="' + cual + '"]');
+    if (btn && btn.classList.contains("is-verified")) return;
+    if (btn && btn.classList.contains("is-loading")) return;
+    setHumanLoading(cual, true);
+    montarTurnstile(cual)
+      .then(function () {
+        if (!window.turnstile || turnstileIds[cual] == null) {
+          setHumanLoading(cual, false);
+          return;
+        }
+        if (tokenTurnstile(turnstileIds[cual])) {
+          setHumanLoading(cual, false);
+          if (btn) {
+            btn.classList.add("is-verified");
+            btn.setAttribute("aria-pressed", "true");
+          }
+          return;
+        }
+        try {
+          window.turnstile.execute(turnstileIds[cual]);
+        } catch (err) {
+          setHumanLoading(cual, false);
+        }
+      })
+      .catch(function () {
+        setHumanLoading(cual, false);
       });
   }
 
@@ -469,7 +534,7 @@
   function asegurarModal() {
     if (modalEl) return modalEl;
     var base = prefijoRutas();
-    var img = base + "images/hero/hero-2.jpg";
+    var img = base + "images/auth/login-side.png";
     modalEl = document.createElement("div");
     modalEl.className = "auth-modal";
     modalEl.id = "andes-auth-modal";
@@ -480,9 +545,11 @@
     modalEl.innerHTML =
       '<div class="auth-modal__backdrop" data-auth-close tabindex="-1"></div>' +
       '<div class="auth-modal__dialog">' +
-      '<div class="auth-modal__media" aria-hidden="true" style="background-image:url(\'' +
+      '<div class="auth-modal__media" aria-hidden="true">' +
+      '<img src="' +
       esc(img) +
-      "')\"></div>" +
+      '" alt="" width="420" height="560" decoding="async" />' +
+      "</div>" +
       '<div class="auth-modal__panel">' +
       '<button type="button" class="auth-modal__close" data-auth-close aria-label="Cerrar">' +
       '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
@@ -490,11 +557,11 @@
       '<div class="auth-modal__brand">' +
       '<img src="' +
       esc(base + "logo_andes.png") +
-      '" alt="Andes Auto Parts" width="150" height="36" />' +
+      '" alt="Andes Auto Parts" width="220" height="52" />' +
       "</div>" +
       '<div data-auth-pane="login">' +
       '<h2 class="auth-modal__title" id="auth-modal-title">Inicia Sesión</h2>' +
-      '<p class="auth-modal__lead">Accede a una experiencia de compra personalizada y ofertas exclusivas.</p>' +
+      '<p class="auth-modal__lead">Compra más rápido y guarda tus ofertas.</p>' +
       '<form class="account-form auth-modal__form" id="auth-modal-login" autocomplete="on">' +
       '<div class="field"><label class="visually-hidden" for="auth-login-email">Correo</label>' +
       '<input type="email" id="auth-login-email" name="email" required autocomplete="email" placeholder="Correo electrónico" /></div>' +
@@ -504,6 +571,11 @@
       '<button type="button" class="auth-modal__eye" data-auth-eye="auth-login-clave" aria-label="Mostrar contraseña">' +
       '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>' +
       "</button></div>" +
+      '<button type="button" class="auth-modal__human" data-auth-human="login" aria-pressed="false">' +
+      '<span class="auth-modal__human-box" aria-hidden="true"></span>' +
+      '<span class="auth-modal__human-spin" aria-hidden="true"></span>' +
+      '<span class="auth-modal__human-label">No soy un robot</span>' +
+      "</button>" +
       '<div class="auth-modal__captcha" id="auth-turnstile-login"></div>' +
       '<p class="auth-modal__forgot">¿Olvidaste tu contraseña? <span>Escríbenos por WhatsApp</span></p>' +
       '<p class="account-error" id="auth-login-error" hidden></p>' +
@@ -515,7 +587,7 @@
       "</div>" +
       '<div data-auth-pane="registro" hidden>' +
       '<h2 class="auth-modal__title">Crear una cuenta</h2>' +
-      '<p class="auth-modal__lead">Guarda tus datos y tu carrito para el próximo pedido.</p>' +
+      '<p class="auth-modal__lead">Guarda tus datos y tu carrito.</p>' +
       '<form class="account-form auth-modal__form" id="auth-modal-registro" autocomplete="on">' +
       '<div class="field"><label class="visually-hidden" for="auth-reg-nombre">Nombre</label>' +
       '<input type="text" id="auth-reg-nombre" name="nombre" required minlength="2" autocomplete="name" placeholder="Nombre y apellido" /></div>' +
@@ -529,6 +601,11 @@
       '<button type="button" class="auth-modal__eye" data-auth-eye="auth-reg-clave" aria-label="Mostrar contraseña">' +
       '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>' +
       "</button></div>" +
+      '<button type="button" class="auth-modal__human" data-auth-human="registro" aria-pressed="false">' +
+      '<span class="auth-modal__human-box" aria-hidden="true"></span>' +
+      '<span class="auth-modal__human-spin" aria-hidden="true"></span>' +
+      '<span class="auth-modal__human-label">No soy un robot</span>' +
+      "</button>" +
       '<div class="auth-modal__captcha" id="auth-turnstile-registro"></div>' +
       '<p class="account-error" id="auth-reg-error" hidden></p>' +
       '<button type="submit" class="btn btn-primary btn-lg auth-modal__submit">Crear cuenta</button>' +
@@ -607,6 +684,12 @@
         var input = document.getElementById(eye.getAttribute("data-auth-eye"));
         if (!input) return;
         input.type = input.type === "password" ? "text" : "password";
+        return;
+      }
+      var human = e.target.closest("[data-auth-human]");
+      if (human) {
+        e.preventDefault();
+        lanzarTurnstile(human.getAttribute("data-auth-human"));
       }
     });
 
