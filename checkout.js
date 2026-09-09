@@ -1119,7 +1119,7 @@
       return (
         " El despacho a " +
         datos.comuna +
-        " va sin costo. Si confirmaste antes de las 10:00, lo enviamos hoy entre " +
+        " va sin costo. Si confirmaste antes de las 10:00 am, lo enviamos hoy entre " +
         "14:00 y 22:00; si fue después, mañana."
       );
     }

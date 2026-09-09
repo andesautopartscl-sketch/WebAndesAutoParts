@@ -175,8 +175,8 @@ window.ANDES_ENVIO = {
     // cobro fijo bajo el mínimo). Pedidos confirmados = transferencia hecha
     // y pedido enviado en el checkout.
     plazoGranSantiago:
-      "En el Gran Santiago, si confirmas tu pedido antes de las 10:00, lo " +
+      "En el Gran Santiago, si confirmas tu pedido antes de las 10:00 am, lo " +
       "despachamos el mismo día entre las 14:00 y las 22:00. Después de las " +
-      "10:00, la entrega queda para el día siguiente.",
+      "10:00 am, la entrega queda para el día siguiente.",
   },
 };

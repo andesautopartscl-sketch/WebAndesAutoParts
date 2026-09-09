@@ -235,7 +235,7 @@ function lineaEntrega(pedido) {
   let flete;
   if (pedido.entrega.despacho === "Gratis") {
     flete =
-      "Despacho sin costo. Si el pedido se confirmó antes de las 10:00, sale el mismo día entre 14:00 y 22:00; si fue después, al día siguiente.";
+      "Despacho sin costo. Si el pedido se confirmó antes de las 10:00 am, sale el mismo día entre 14:00 y 22:00; si fue después, al día siguiente.";
   } else if (pedido.entrega.costo > 0) {
     flete = `Despacho ${clp(pedido.entrega.costo)} con IVA incluido (incluido en el total).`;
   } else {
@@ -316,7 +316,7 @@ ${tablaItems(pedido)}
 <p style="margin:18px 0 0;font-size:14px;line-height:1.6"><strong>Entrega:</strong> ${esc(
       lineaEntrega(pedido)
     )}</p>
-<p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Si no tenemos la pieza te devolvemos el 100% del monto a la misma cuenta desde la que transferiste. Cualquier duda, respóndenos este correo o escríbenos al +56 9 2615 2826.</p>`
+<p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Si no tenemos la pieza te devolvemos el 100% del monto: solo te pediremos tus datos bancarios para hacer la transferencia. Cualquier duda, respóndenos este correo o escríbenos al +56 9 2615 2826.</p>`
   );
 }
 
@@ -325,7 +325,7 @@ function correoClienteConfirmado(pedido) {
     pedido.entrega.modo === "retiro"
       ? "Ya puedes pasar a retirarlo a Salas 8973, La Cisterna. Trae tu número de pedido y tu cédula."
       : pedido.entrega.despacho === "Gratis"
-      ? "Lo despachamos a tu dirección sin costo. Si confirmaste antes de las 10:00, sale hoy entre 14:00 y 22:00; si fue después, mañana. Te avisamos cuando salga."
+      ? "Lo despachamos a tu dirección sin costo. Si confirmaste antes de las 10:00 am, sale hoy entre 14:00 y 22:00; si fue después, mañana. Te avisamos cuando salga."
       : pedido.entrega.costo > 0
       ? `El despacho (${clp(pedido.entrega.costo)} con IVA incluido) ya estaba en tu transferencia. Te avisamos cuando salga.`
       : `Lo despachamos por ${esc(
@@ -355,8 +355,16 @@ function correoClienteRechazado(pedido) {
     )}</strong> y lamentablemente no tenemos disponible el repuesto.</p>
 <p style="margin:0 0 18px;padding:14px;background:#fffbeb;border-left:3px solid #b45309;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6">Te devolvemos ${clp(
       totalPedido(pedido)
-    )} a la misma cuenta desde la que transferiste, dentro de los próximos días hábiles. No tienes que hacer ningún trámite.</p>
-<p style="margin:0;font-size:14px;line-height:1.6">Si quieres, escríbenos al +56 9 2615 2826 y buscamos una alternativa compatible con tu vehículo.</p>`
+    )} dentro de los próximos días hábiles.</p>
+<p style="margin:0 0 18px;font-size:14px;line-height:1.6">Para hacerte la devolución necesitamos tus datos bancarios. <strong>Responde este correo</strong> con:</p>
+<ul style="margin:0 0 18px;padding-left:20px;font-size:14px;line-height:1.8;color:#1f2937">
+<li>Nombre del titular de la cuenta</li>
+<li>RUT del titular</li>
+<li>Banco</li>
+<li>Tipo de cuenta (corriente, vista, ahorro, RUT)</li>
+<li>Número de cuenta</li>
+</ul>
+<p style="margin:0;font-size:14px;line-height:1.6">Si quieres, también podemos buscar una alternativa compatible con tu vehículo. Escríbenos al +56 9 2615 2826.</p>`
   );
 }
 
