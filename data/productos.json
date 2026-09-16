@@ -12,18 +12,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC2225571275",
-    "sku": "VG1001AA",
-    "titulo": "Amortiguadores Delanteros (par) Jmc Vigus 5 / Vigus Plus 2.4",
-    "precio": 195990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_824406-MLC117330321619_092026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2225571275-amortiguadores-delanteros-par-jmc-vigus-5-vigus-plus-24-_JM",
-    "categoria": "MLC22579",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2894854200",
     "sku": "VG3001AA",
     "titulo": "Amortiguadores Delanteros (par) Jmc Vigus Work 2.5 2019-2024",
@@ -152,7 +140,7 @@
     "imagen": "https://http2.mlstatic.com/D_917115-MLC105257826511_012026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1831417237-axiales-de-direccion-par-koreanos-jac-s3-js3-y-grand-s3-_JM",
     "categoria": "MLC425021",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -620,7 +608,7 @@
     "imagen": "https://http2.mlstatic.com/D_843491-MLC94902004610_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3230671070-bieletas-de-suspension-par-jetour-x70-15t-_JM",
     "categoria": "MLC179512",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -692,7 +680,7 @@
     "imagen": "https://http2.mlstatic.com/D_817840-MLC107186506459_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2930285394-bieletas-delanteras-par-maxus-v80-25-2013-2023-_JM",
     "categoria": "MLC179512",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -972,6 +960,30 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2233248123",
+    "sku": "8S614TCHAA",
+    "titulo": "Bujías Punta De Iridium Juego (torch) Jac Js2, Js3 Y Js4",
+    "precio": 34990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_662507-MLC117470751431_092026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2233248123-bujias-punta-de-iridium-juego-torch-jac-js2-js3-y-js4-_JM",
+    "categoria": "MLC441075",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2233247699",
+    "sku": "8S614TCHAA",
+    "titulo": "Bujias Punta De Iridium Juego (torch) Jac S1 / S2 / S3",
+    "precio": 34990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_801748-MLC115995508850_092026-O.webp",
+    "link": "https://articulo.mercadolibre.cl/MLC-2233247699-bujias-punta-de-iridium-juego-torch-jac-s1-s2-s3-_JM",
+    "categoria": "MLC441075",
+    "stock": 2,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3548336118",
     "sku": "CS3508AA",
     "titulo": "Bujías Punta De Iridium Ngk (juego) Changan Cs35 Plus 1.6",
@@ -1040,7 +1052,7 @@
     "imagen": "https://http2.mlstatic.com/D_979695-MLC99152775984_112025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1767846601-bujias-punta-de-iridium-ngk-juego-chery-tiggo-7-7-pro-15-_JM",
     "categoria": "MLC441075",
-    "stock": 2,
+    "stock": 4,
     "condicion": "new"
   },
   {
@@ -1196,7 +1208,7 @@
     "imagen": "https://http2.mlstatic.com/D_721250-MLC95630028932_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1731173211-cazoleta-delantera-con-rodamiento-par-jac-s2-15js2-15-_JM",
     "categoria": "MLC161578",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1340,7 +1352,7 @@
     "imagen": "https://http2.mlstatic.com/D_600243-MLC112648002483_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2878505688-correa-de-accesorios-corta-jmc-vigus-work-25-2019-2024-_JM",
     "categoria": "MLC373343",
-    "stock": 2,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1632,6 +1644,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC4471406968",
+    "sku": "JX265AA01",
+    "titulo": "Electrovalvula De Vacio Enfriador Egr Jac T6 / T8 / X200 Negro",
+    "precio": 54990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_781761-MLC117527367883_092026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4471406968-electrovalvula-de-vacio-enfriador-egr-jac-t6-t8-x200-negro-_JM",
+    "categoria": "MLC459376",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC2059594975",
     "sku": "TP7079AA",
     "titulo": "Eletrovalvula O Valvula Canister (original) Exeed Lx 1.5t",
@@ -1848,6 +1872,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2237657909",
+    "sku": "T33811AA",
+    "titulo": "Filtro De Aceite Caja Automática (cvt) Chery Tiggo 3 New 1.5",
+    "precio": 59990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_839853-MLC116048742052_092026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2237657909-filtro-de-aceite-caja-automatica-cvt-chery-tiggo-3-new-15-_JM",
+    "categoria": "MLC161558",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC4042640376",
     "sku": "DAR155AA",
     "titulo": "Filtro De Aceite Caja Automatica Haval Dargo 2.0/ New H7 2.0",
@@ -1863,7 +1899,7 @@
     "id": "MLC2185676239",
     "sku": "M4315AA",
     "titulo": "Filtro De Aceite De Caja Automática Mg Zs 1.5l",
-    "precio": 49990,
+    "precio": 54990,
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_835577-MLC115190126746_082026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2185676239-filtro-de-aceite-de-caja-automatica-mg-zs-15l-_JM",
@@ -2180,7 +2216,7 @@
     "imagen": "https://http2.mlstatic.com/D_652340-MLC109858613489_032026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3819739162-goma-barra-estabilizadora-del-par-dfm-joyear-x3-sx5-sx6-_JM",
     "categoria": "MLC416687",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -2216,7 +2252,7 @@
     "imagen": "https://http2.mlstatic.com/D_658678-MLC106539486794_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2850883984-gomas-de-barra-estabilizadora-par-maxus-v80-25-2012-2023-_JM",
     "categoria": "MLC416687",
-    "stock": 2,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -2289,6 +2325,18 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2936007852-juego-de-anillos-jmc-vigus-plus-24-y-vigus-5-24-2019-2024-_JM",
     "categoria": "MLC178772",
     "stock": 2,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2233248315",
+    "sku": "8S614TCHAA",
+    "titulo": "Juego De Bujías Punta De Iridium (torch) Jac J3 Vvt / J4",
+    "precio": 34990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_985911-MLC115996367370_092026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2233248315-juego-de-bujias-punta-de-iridium-torch-jac-j3-vvt-j4-_JM",
+    "categoria": "MLC441075",
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -2756,7 +2804,7 @@
     "imagen": "https://http2.mlstatic.com/D_889816-MLC88630177580_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2999366738-kit-de-filtros-mantencion-completa-kaiyi-x3-15t-y-15l-_JM",
     "categoria": "MLC377254",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3032,7 +3080,7 @@
     "imagen": "https://http2.mlstatic.com/D_625233-MLC89160312584_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2919282398-kit-de-filtros-mantencion-gwm-haval-jolion-15t-2020-2024-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3464,7 +3512,7 @@
     "imagen": "https://http2.mlstatic.com/D_707979-MLC113583703034_072026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-4212553362-kit-de-filtros-caja-automatica-cvt-chery-tiggo-2-pro-max-_JM",
     "categoria": "MLC377254",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3944,7 +3992,7 @@
     "imagen": "https://http2.mlstatic.com/D_783836-MLC112008932854_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-4073515946-kit-rodamiento-de-masa-delantera-par-wingle-5-4x4-201224-_JM",
     "categoria": "MLC373438",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -3956,7 +4004,7 @@
     "imagen": "https://http2.mlstatic.com/D_852513-MLC89497854078_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2848911600-kit-rodamiento-de-masa-delantera-wingle-5-4x2-2012-2023-_JM",
     "categoria": "MLC373438",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4004,7 +4052,7 @@
     "imagen": "https://http2.mlstatic.com/D_826878-MLC110464557001_042026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3874669966-maza-de-rueda-delantera-americana-jac-j4-15-_JM",
     "categoria": "MLC161586",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4041,18 +4089,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1770331687-maza-de-rueda-delantera-derizq-exeed-lx-15t-unlimited-_JM",
     "categoria": "MLC161586",
     "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2886090980",
-    "sku": "TOU136AA",
-    "titulo": "Maza De Rueda Delantera Jmc Touring 2.8",
-    "precio": 145990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_714801-MLC84355430715_052025-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2886090980-maza-de-rueda-delantera-jmc-touring-28-_JM",
-    "categoria": "MLC161586",
-    "stock": 2,
     "condicion": "new"
   },
   {
@@ -4268,7 +4304,7 @@
     "imagen": "https://http2.mlstatic.com/D_838334-MLC90567221483_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2874156568-neblinero-trasero-central-great-wall-haval-jolion-15-ambos-lados-rojo-_JM",
     "categoria": "MLC161713",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4316,7 +4352,7 @@
     "imagen": "https://http2.mlstatic.com/D_961286-MLC95347286039_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3230597226-neblineros-delantero-par-changan-hunter-2020-2024-transparente-_JM",
     "categoria": "MLC433655",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4352,7 +4388,7 @@
     "imagen": "https://http2.mlstatic.com/D_811518-MLC115146648414_082026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1761970311-neblineros-delanteros-par-jac-t6-20-2015-2025-vidrio-_JM",
     "categoria": "MLC433655",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -4616,7 +4652,7 @@
     "imagen": "https://http2.mlstatic.com/D_630551-MLC106807452887_022026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1853311259-pastillas-de-freno-delanteras-brilliance-t50-15-t52-15-_JM",
     "categoria": "MLC22887",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -4932,6 +4968,30 @@
     "condicion": "new"
   },
   {
+    "id": "MLC2247627545",
+    "sku": "A013AA",
+    "titulo": "Pernos De Culata Jgo (10) Chery Tiggo 3 New 1.5 / 4 Pro Max",
+    "precio": 95990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_886651-MLC117710325763_092026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2247627545-pernos-de-culata-jgo-10-chery-tiggo-3-new-15-4-pro-max-_JM",
+    "categoria": "MLC373286",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC2247630647",
+    "sku": "A013AAA",
+    "titulo": "Pernos De Culata Jgo (10) Chery Tiggo 7 / 7 Pro / Tiggo 8",
+    "precio": 95990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_856108-MLC117712344965_092026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-2247630647-pernos-de-culata-jgo-10-chery-tiggo-7-7-pro-tiggo-8-_JM",
+    "categoria": "MLC373286",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC1703173209",
     "sku": "GP0055AA",
     "titulo": "Pisadera Trasera Central Great Wall Poer 2.0 2019-2023 Negro",
@@ -5112,18 +5172,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC1675486955",
-    "sku": "JM4075AA",
-    "titulo": "Reten Trasero De Cigueñal Taiwan Jmc Carrying 2.8 2009-2024",
-    "precio": 26990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_701625-MLC90066240996_082025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-1675486955-reten-trasero-de-ciguenal-taiwan-jmc-carrying-28-2009-2024-_JM",
-    "categoria": "MLC373308",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC3066314918",
     "sku": "DF61203AA",
     "titulo": "Reten Trasero De Cigueñal Taiwanes Dongfeng Df-612 2019-2025",
@@ -5228,7 +5276,7 @@
     "imagen": "https://http2.mlstatic.com/D_617143-MLC100782551166_122025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1785465629-rodamiento-de-masa-delantera-par-changan-alsvin-2019-2025-_JM",
     "categoria": "MLC373438",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5288,7 +5336,7 @@
     "imagen": "https://http2.mlstatic.com/D_685565-MLC89295959722_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-3018822566-rodamiento-de-masa-delantera-par-chery-tiggo-8-y-8-pro-max-_JM",
     "categoria": "MLC373438",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -5396,7 +5444,7 @@
     "imagen": "https://http2.mlstatic.com/D_940702-MLC111883793482_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2978929310-rodamiento-de-masa-delantera-par-jmc-vigus-work-25-4x24-_JM",
     "categoria": "MLC161586",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5468,7 +5516,7 @@
     "imagen": "https://http2.mlstatic.com/D_814999-MLC89351216490_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1666721965-rotula-de-bandeja-delantera-par-jac-s3-y-js3-16-2020-2024-_JM",
     "categoria": "MLC425018",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -5984,7 +6032,7 @@
     "imagen": "https://http2.mlstatic.com/D_965416-MLC88805614126_082025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2841550974-sensor-de-presion-diferencial-original-maxus-t60g10g90v80-_JM",
     "categoria": "MLC416795",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -6932,7 +6980,7 @@
     "imagen": "https://http2.mlstatic.com/D_917732-MLC115145857972_082026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2950112552-tensor-correa-de-accesorios-zx-terralord-25t-_JM",
     "categoria": "MLC373307",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -7016,7 +7064,7 @@
     "imagen": "https://http2.mlstatic.com/D_868723-MLC104695108966_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1831377859-terminales-de-direccion-par-koreanos-jac-s3js3-grand-s3-_JM",
     "categoria": "MLC425020",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -7088,18 +7136,6 @@
     "imagen": "https://http2.mlstatic.com/D_891232-MLC81923423818_012025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2840179362-valvula-egr-jmc-vigus-work-25-2019-2024-_JM",
     "categoria": "MLC161569",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2986654794",
-    "sku": "35805AA",
-    "titulo": "Valvula Iac (motec) Gwm Haval H3 2.0/haval H5 2.4/ Hover 2.4",
-    "precio": 29990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_891197-MLC89374605387_082025-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2986654794-valvula-iac-motec-gwm-haval-h3-20haval-h5-24-hover-24-_JM",
-    "categoria": "MLC441058",
     "stock": 1,
     "condicion": "new"
   },
@@ -7160,7 +7196,7 @@
     "imagen": "https://http2.mlstatic.com/D_925310-MLC88169391394_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2986744882-valvula-pcv-changan-cx70-16-2015-2023-_JM",
     "categoria": "MLC178771",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -7184,7 +7220,7 @@
     "imagen": "https://http2.mlstatic.com/D_727150-MLC89923169483_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1641613939-valvula-pcv-o-tapa-pcv-jmc-carrying-28t-isuzu-2011-2023-_JM",
     "categoria": "MLC178771",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -7219,6 +7255,18 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_923740-MLC113305975227_062026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-4085081826-valvula-scv-o-imb-presion-original-bosch-gwm-wingle-28t-_JM",
+    "categoria": "MLC456949",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
+    "id": "MLC4084966764",
+    "sku": "RF1034AA",
+    "titulo": "Valvula Scv O Imb Presión (original Bosch) Jac Refine 1.9t",
+    "precio": 89990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_936172-MLC113304552355_062026-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-4084966764-valvula-scv-o-imb-presion-original-bosch-jac-refine-19t-_JM",
     "categoria": "MLC456949",
     "stock": 1,
     "condicion": "new"
