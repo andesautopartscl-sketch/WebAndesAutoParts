@@ -122,10 +122,12 @@
       const data = await res.json().catch(function () {
         return {};
       });
-      if (!res.ok || !data.ok || !data.access_token) {
-        throw new Error(data.message || data.error || "Error HTTP " + res.status);
+      if (!res.ok || !data.ok) {
+        var err = new Error(data.message || data.error || "Error HTTP " + res.status);
+        err.code = data.error || "";
+        throw err;
       }
-      return data.access_token;
+      return data;
     }
 
     async function exchangeCodeViaMl(code, clientSecret) {
@@ -201,14 +203,22 @@
 
       try {
         log("Intercambiando código por token...", "pending");
-        var accessToken;
+        var accessToken = null;
+        var alreadySaved = false;
         try {
-          accessToken = await exchangeCodeViaWorker(code);
+          var workerData = await exchangeCodeViaWorker(code);
+          alreadySaved = true;
+          accessToken = workerData.access_token || null;
         } catch (workerErr) {
+          // El código TG- es de un solo uso. Solo reintentar en el navegador
+          // si el Worker todavía no se lo envió a Mercado Libre.
+          if (workerErr.code !== "MISSING_CLIENT_SECRET") {
+            throw workerErr;
+          }
           var secret = sessionStorage.getItem("ml_client_secret") || "";
           if (!secret) {
             secret = prompt(
-              "El Worker no pudo intercambiar el código.\nPega ML_CLIENT_SECRET (solo esta vez):"
+              "El Worker no tiene ML_CLIENT_SECRET.\nPega el secreto (solo esta vez):"
             );
             if (secret) sessionStorage.setItem("ml_client_secret", secret.trim());
           }
@@ -216,9 +226,15 @@
           accessToken = await exchangeCodeViaMl(code, secret.trim());
         }
 
-        log("Guardando token en Worker (KV)...", "pending");
-        await pushTokenToWorker(accessToken);
+        if (!alreadySaved) {
+          log("Guardando token en Worker (KV)...", "pending");
+          await pushTokenToWorker(accessToken);
+        }
         log("✓ Token renovado y guardado en KV", "ok");
+
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, "", window.location.pathname);
+        }
 
         await delay(400);
         log("Sincronizando catálogo...", "pending");
@@ -238,6 +254,9 @@
       if (code) {
         codeDisplay.textContent = code;
         step2.classList.remove("hidden");
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, "", window.location.pathname);
+        }
         renovarToken(code);
       }
     };

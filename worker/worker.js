@@ -592,10 +592,11 @@ async function handleExchangeCode(request, env) {
 
   return json({
     ok: true,
+    access_token: tokenData.access_token,
     expires_in: tokenData.expires_in || null,
     kv_key: KV_TOKEN_KEY,
     kv_saved: true,
-    message: "Token guardado en KV (no se devuelve el access_token por seguridad)",
+    message: "Token guardado en KV",
   });
 }
 
