@@ -560,7 +560,7 @@
     "imagen": "https://http2.mlstatic.com/D_896831-MLC103884119999_012026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-3496643542-bieletas-de-suspencion-delanteras-par-jac-s3js3grand-s3-_JM",
     "categoria": "MLC179512",
-    "stock": 1,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -1208,7 +1208,7 @@
     "imagen": "https://http2.mlstatic.com/D_721250-MLC95630028932_102025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1731173211-cazoleta-delantera-con-rodamiento-par-jac-s2-15js2-15-_JM",
     "categoria": "MLC161578",
-    "stock": 3,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -1292,7 +1292,7 @@
     "imagen": "https://http2.mlstatic.com/D_852517-MLC91515558771_092025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1578323645-cilindro-de-freno-great-wall-wingle-5-4x2-y-4x4-2012-2023-_JM",
     "categoria": "MLC176304",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1328,7 +1328,7 @@
     "imagen": "https://http2.mlstatic.com/D_827273-MLC88554551059_072025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2840384416-correa-de-accesorios-americana-chery-tiggo-7-pro-15-_JM",
     "categoria": "MLC373343",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -1412,7 +1412,7 @@
     "imagen": "https://http2.mlstatic.com/D_886817-MLC99034690416_112025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573100871-correa-de-accesorios-chery-tiggo-3-new-15-2019-2023-_JM",
     "categoria": "MLC373343",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -2228,7 +2228,7 @@
     "imagen": "https://http2.mlstatic.com/D_791774-MLC111612447578_062026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1591148739-goma-barra-estabilizadora-frontal-par-jmc-vigus-workplus-_JM",
     "categoria": "MLC416687",
-    "stock": 2,
+    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3080,7 +3080,7 @@
     "imagen": "https://http2.mlstatic.com/D_625233-MLC89160312584_082025-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-2919282398-kit-de-filtros-mantencion-gwm-haval-jolion-15t-2020-2024-_JM",
     "categoria": "MLC377254",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3116,7 +3116,7 @@
     "imagen": "https://http2.mlstatic.com/D_848338-MLC109636894362_042026-O.jpg",
     "link": "https://articulo.mercadolibre.cl/MLC-1928302713-kit-de-filtros-mantencion-jac-js2-pro-15l-luxury-advance-_JM",
     "categoria": "MLC377254",
-    "stock": 1,
+    "stock": 2,
     "condicion": "new"
   },
   {
@@ -3504,90 +3504,6 @@
     "condicion": "new"
   },
   {
-    "id": "MLC4212553362",
-    "sku": "Kit227AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 2 Pro / Max",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_707979-MLC113583703034_072026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-4212553362-kit-de-filtros-caja-automatica-cvt-chery-tiggo-2-pro-max-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2074074821",
-    "sku": "Kit228AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 3 Pro 1.5",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_758476-MLC113586169734_072026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2074074821-kit-de-filtros-caja-automatica-cvt-chery-tiggo-3-pro-15-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC3843385300",
-    "sku": "Kit192AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Chery Tiggo 7 Pro 1.5t",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_628259-MLC109241866696_042026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-3843385300-kit-de-filtros-caja-automatica-cvt-chery-tiggo-7-pro-15t-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2196895699",
-    "sku": "KITFILCVT",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Exeed Lx 1.5t",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_614074-MLC116765077057_082026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-2196895699-kit-de-filtros-caja-automatica-cvt-exeed-lx-15t-_JM",
-    "categoria": "MLC377254",
-    "stock": 3,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4296988210",
-    "sku": "KITFILCVT",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Jaecoo 5 1.5t",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_854274-MLC114318649956_082026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-4296988210-kit-de-filtros-caja-automatica-cvt-jaecoo-5-15t-_JM",
-    "categoria": "MLC377254",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4087914054",
-    "sku": "Kit217AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Kaiyi X3 1,5t / 1.5l",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_723241-MLC113355239279_062026-O.jpg",
-    "link": "https://articulo.mercadolibre.cl/MLC-4087914054-kit-de-filtros-caja-automatica-cvt-kaiyi-x3-15t-15l-_JM",
-    "categoria": "MLC377254",
-    "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4211500082",
-    "sku": "Kit226AA",
-    "titulo": "Kit De Filtros Caja Automatica (cvt) Omoda C5 1.5t",
-    "precio": 69990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_753140-MLC113571786428_072026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-4211500082-kit-de-filtros-caja-automatica-cvt-omoda-c5-15t-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
     "id": "MLC2966278262",
     "sku": "Kit80AA",
     "titulo": "Kit De Filtros Changan Cx70 1.5 Turbo",
@@ -3669,18 +3585,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-2934506292-kit-de-filtros-dfsk-suv-500-15-_JM",
     "categoria": "MLC377254",
     "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2966395048",
-    "sku": "Kit78AA",
-    "titulo": "Kit De Filtros Great Wall H6 1.5 Turbo 2014-2019",
-    "precio": 42990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_960796-MLC111821165822_062026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2966395048-kit-de-filtros-great-wall-h6-15-turbo-2014-2019-_JM",
-    "categoria": "MLC377254",
-    "stock": 1,
     "condicion": "new"
   },
   {
@@ -3800,7 +3704,7 @@
     "imagen": "https://http2.mlstatic.com/D_898546-MLC111547037621_052026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1573114101-kit-de-filtros-mantencion-great-wall-wingle-7-20-diesel-_JM",
     "categoria": "MLC377254",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -5172,6 +5076,18 @@
     "condicion": "new"
   },
   {
+    "id": "MLC1675486955",
+    "sku": "JM4075AA",
+    "titulo": "Reten Trasero De Cigueñal Taiwan Jmc Carrying 2.8 2009-2024",
+    "precio": 26990,
+    "moneda": "CLP",
+    "imagen": "https://http2.mlstatic.com/D_701625-MLC90066240996_082025-O.jpg",
+    "link": "https://articulo.mercadolibre.cl/MLC-1675486955-reten-trasero-de-ciguenal-taiwan-jmc-carrying-28-2009-2024-_JM",
+    "categoria": "MLC373308",
+    "stock": 1,
+    "condicion": "new"
+  },
+  {
     "id": "MLC3066314918",
     "sku": "DF61203AA",
     "titulo": "Reten Trasero De Cigueñal Taiwanes Dongfeng Df-612 2019-2025",
@@ -5731,18 +5647,6 @@
     "moneda": "CLP",
     "imagen": "https://http2.mlstatic.com/D_877768-MLC115655563419_082026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-4296997522-sensor-abs-trasero-derecho-jmc-vigus-plus-vigus-5-24-_JM",
-    "categoria": "MLC161543",
-    "stock": 1,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC4296984470",
-    "sku": "VG52406AA",
-    "titulo": "Sensor Abs Trasero Izquierdo Jmc Vigus Plus / Vigus 5 2.4",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_863841-MLC114314876320_082026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-4296984470-sensor-abs-trasero-izquierdo-jmc-vigus-plus-vigus-5-24-_JM",
     "categoria": "MLC161543",
     "stock": 1,
     "condicion": "new"
@@ -6788,7 +6692,7 @@
     "imagen": "https://http2.mlstatic.com/D_820172-MLC82088391502_022025-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-1575211767-taquies-hidraulicos-juego-16-changan-hunter-19-_JM",
     "categoria": "MLC441062",
-    "stock": 25,
+    "stock": 24,
     "condicion": "new"
   },
   {
@@ -6932,7 +6836,7 @@
     "imagen": "https://http2.mlstatic.com/D_632856-MLC113903764050_072026-O.webp",
     "link": "https://articulo.mercadolibre.cl/MLC-2896965348-taquies-hidraulicos-juego-16-maxus-g10v90g90t90t60-20-_JM",
     "categoria": "MLC441062",
-    "stock": 4,
+    "stock": 3,
     "condicion": "new"
   },
   {
@@ -7065,18 +6969,6 @@
     "link": "https://articulo.mercadolibre.cl/MLC-1831377859-terminales-de-direccion-par-koreanos-jac-s3js3-grand-s3-_JM",
     "categoria": "MLC425020",
     "stock": 2,
-    "condicion": "new"
-  },
-  {
-    "id": "MLC2850871510",
-    "sku": "kit22AA",
-    "titulo": "Terminales De Dirección Rh/lh (par) Maxus V80 2.5 2012-2023",
-    "precio": 49990,
-    "moneda": "CLP",
-    "imagen": "https://http2.mlstatic.com/D_901346-MLC107188526647_022026-O.webp",
-    "link": "https://articulo.mercadolibre.cl/MLC-2850871510-terminales-de-direccion-rhlh-par-maxus-v80-25-2012-2023-_JM",
-    "categoria": "MLC425020",
-    "stock": 1,
     "condicion": "new"
   },
   {
