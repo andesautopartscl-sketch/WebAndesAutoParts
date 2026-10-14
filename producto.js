@@ -40,6 +40,24 @@
     });
   }
 
+  function aplicarAutoEnFicha(p, auto) {
+    var nota = document.getElementById("product-auto");
+    if (nota) {
+      nota.textContent = auto
+        ? "Cotización para tu " + auto.label + "."
+        : "Si nos dices marca, modelo y año, confirmamos si esta pieza sirve.";
+    }
+    var texto =
+      "Hola, me interesa: " +
+      (p.titulo || "un repuesto") +
+      (p.sku ? " (SKU " + p.sku + ")" : "") +
+      ".";
+    if (auto) texto += " Mi auto es " + auto.label + ".";
+    texto += " ¿Tienen stock?";
+    var wa = document.getElementById("product-wa");
+    if (wa) wa.href = "https://wa.me/56926152826?text=" + encodeURIComponent(texto);
+  }
+
   function autoGuardado() {
     try {
       var raw = localStorage.getItem("andes_vehiculo_v1");
@@ -125,19 +143,8 @@
       "<li><strong>Código:</strong> " + (p.sku || p.id || "—") + "</li>";
 
     var auto = autoGuardado();
-    var nota = document.getElementById("product-auto");
-    if (auto) nota.textContent = "Cotización para tu " + auto.label + ".";
-    else nota.textContent = "Si nos dices marca, modelo y año, confirmamos si esta pieza sirve.";
-
-    var texto =
-      "Hola, me interesa: " +
-      (p.titulo || "un repuesto") +
-      (p.sku ? " (SKU " + p.sku + ")" : "") +
-      ".";
-    if (auto) texto += " Mi auto es " + auto.label + ".";
-    texto += " ¿Tienen stock?";
-    document.getElementById("product-wa").href =
-      "https://wa.me/56926152826?text=" + encodeURIComponent(texto);
+    aplicarAutoEnFicha(p, auto);
+    productoActual = p;
 
     var ml = document.getElementById("product-ml");
     if (p.link) {
@@ -225,6 +232,11 @@
       if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
     }
   }
+
+  var productoActual = null;
+  window.addEventListener("andes-vehiculo", function () {
+    if (productoActual) aplicarAutoEnFicha(productoActual, autoGuardado());
+  });
 
   var params = new URLSearchParams(location.search);
   var id = params.get("id") || "";

@@ -184,6 +184,17 @@
                 <label for="perfil-comuna">Comuna</label>
                 <input type="text" id="perfil-comuna" name="comuna" autocomplete="address-level3" />
               </div>
+              <div class="field field--wide">
+                <p class="account-view__lead">Tu auto. Se incluye solo en las cotizaciones de WhatsApp.</p>
+              </div>
+              <div class="field">
+                <label for="perfil-vehiculo">Marca y modelo</label>
+                <input type="text" id="perfil-vehiculo" name="vehiculo" maxlength="120" placeholder="Chery Tiggo 2" />
+              </div>
+              <div class="field">
+                <label for="perfil-anio">Año</label>
+                <input type="text" id="perfil-anio" name="vehiculo_anio" inputmode="numeric" maxlength="4" placeholder="2018" />
+              </div>
             </div>
             <p class="account-error" id="perfil-error" hidden></p>
             <p class="account-ok" id="perfil-ok" hidden>Datos guardados.</p>
@@ -420,7 +431,7 @@
   <script src="cart.js?v=20260909t"></script>
   <script src="favoritos.js?v=20261014f"></script>
   <script src="andes-dialog.js?v=20261014d"></script>
-  <script src="auth.js?v=20261014f"></script>
+  <script src="auth.js?v=20261014v"></script>
   <script>
     (function () {
       var header = document.querySelector(".site-header");
@@ -1060,6 +1071,15 @@
         editando = null;
       });
 
+      function autoParaFormulario(label, anio) {
+        var texto = String(label || "").trim();
+        var year = String(anio || "").trim();
+        if (year && texto.slice(-(year.length + 1)) === " " + year) {
+          texto = texto.slice(0, -(year.length + 1)).trim();
+        }
+        return { texto: texto, anio: year };
+      }
+
       function pintarPerfil(u) {
         if (tokenRecuperar) {
           wrapAuth.hidden = false;
@@ -1087,6 +1107,11 @@
         formPerfil.direccion.value = u.direccion || "";
         setRegion(u.region || "");
         setComuna(u.comuna || "");
+        var auto = autoParaFormulario(u.vehiculo, u.vehiculo_anio);
+        var campoAuto = document.getElementById("perfil-vehiculo");
+        var campoAnio = document.getElementById("perfil-anio");
+        if (campoAuto) campoAuto.value = auto.texto;
+        if (campoAnio) campoAnio.value = auto.anio;
         var admin = document.getElementById("link-admin");
         if (admin) admin.hidden = !(u.rol === "vendedor" || u.rol === "admin");
         var linkAnalitica = document.getElementById("link-analitica");
@@ -1338,6 +1363,17 @@
           btn.disabled = true;
           btn.textContent = "Guardando…";
         }
+        var marcaAuto = document.getElementById("perfil-vehiculo").value.trim();
+        var anioAuto = document.getElementById("perfil-anio").value.trim();
+        if (anioAuto && !/^(19|20)\d{2}$/.test(anioAuto)) {
+          mostrarError(err, "El año del auto debe tener 4 dígitos, por ejemplo 2018.");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Guardar datos";
+          }
+          return;
+        }
+        var etiquetaAuto = [marcaAuto, anioAuto].filter(Boolean).join(" ");
         window.AndesAuth.actualizarYo({
           nombre: formPerfil.nombre.value,
           telefono: formPerfil.telefono.value,
@@ -1345,6 +1381,8 @@
           direccion: formPerfil.direccion.value,
           comuna: comunaValor(),
           region: regionEl.value,
+          vehiculo: etiquetaAuto,
+          vehiculo_anio: anioAuto,
         })
           .then(function (data) {
             if (!data.ok) {

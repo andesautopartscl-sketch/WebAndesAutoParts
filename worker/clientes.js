@@ -96,6 +96,14 @@ function bearer(request) {
   return auth.slice(7).trim();
 }
 
+function anioVehiculo(valor) {
+  const crudo = String(valor == null ? "" : valor).trim();
+  if (!crudo) return "";
+  const limpio = crudo.replace(/\D/g, "").slice(0, 4);
+  if (!/^(19|20)\d{2}$/.test(limpio)) return null;
+  return limpio;
+}
+
 function perfilPublico(u) {
   if (!u) return null;
   return {
@@ -112,6 +120,8 @@ function perfilPublico(u) {
     comuna: u.comuna,
     region: u.region,
     descuento_pct: Number(u.descuento_pct) || 0,
+    vehiculo: u.vehiculo || "",
+    vehiculo_anio: u.vehiculo_anio || "",
     activo: !!u.activo,
     creado_en: u.creado_en,
   };
@@ -697,22 +707,44 @@ async function actualizarYo(request, env, json) {
   }
 
   const nombre = texto(body.nombre, 120) || r.usuario.nombre;
+  const anioPedido = body.vehiculo_anio != null ? anioVehiculo(body.vehiculo_anio) : undefined;
+  if (anioPedido === null) {
+    return json(
+      { ok: false, error: "ANIO", message: "El año del auto debe tener 4 dígitos, por ejemplo 2018." },
+      400
+    );
+  }
+  const previo = (clave, max) =>
+    body[clave] == null ? String(r.usuario[clave] || "") : texto(body[clave], max);
+  const vehiculo = body.vehiculo != null ? texto(body.vehiculo, 120) : String(r.usuario.vehiculo || "");
+  const vehiculoAnio = anioPedido != null ? anioPedido : String(r.usuario.vehiculo_anio || "");
+  const documento =
+    body.documento == null
+      ? r.usuario.documento === "factura"
+        ? "factura"
+        : "boleta"
+      : body.documento === "factura"
+        ? "factura"
+        : "boleta";
   await env.CLIENTES_DB.prepare(
     `UPDATE usuarios SET
       nombre = ?, telefono = ?, rut = ?, documento = ?,
-      razon_social = ?, giro = ?, direccion = ?, comuna = ?, region = ?
+      razon_social = ?, giro = ?, direccion = ?, comuna = ?, region = ?,
+      vehiculo = ?, vehiculo_anio = ?
      WHERE id = ?`
   )
     .bind(
       nombre,
-      texto(body.telefono, 40),
-      texto(body.rut, 20),
-      body.documento === "factura" ? "factura" : "boleta",
-      texto(body.razon_social, 160),
-      texto(body.giro, 160),
-      texto(body.direccion, 200),
-      texto(body.comuna, 80),
-      texto(body.region, 80),
+      previo("telefono", 40),
+      previo("rut", 20),
+      documento,
+      previo("razon_social", 160),
+      previo("giro", 160),
+      previo("direccion", 200),
+      previo("comuna", 80),
+      previo("region", 80),
+      vehiculo,
+      vehiculoAnio,
       r.usuario.id
     )
     .run();

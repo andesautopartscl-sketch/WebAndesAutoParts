@@ -142,6 +142,8 @@
         return fusionarCarrito().then(function () {
           return fusionarFavoritos();
         }).then(function () {
+          return sincronizarVehiculo(data.usuario);
+        }).then(function () {
           return data;
         });
       }
@@ -155,6 +157,8 @@
         guardarSesion(data.token, data.usuario);
         return fusionarCarrito().then(function () {
           return fusionarFavoritos();
+        }).then(function () {
+          return sincronizarVehiculo(data.usuario);
         }).then(function () {
           return data;
         });
@@ -178,7 +182,9 @@
     return api("/auth/yo").then(function (data) {
       if (data.ok && data.usuario) {
         guardarSesion(leerToken(), data.usuario);
-        return data.usuario;
+        return sincronizarVehiculo(data.usuario).then(function () {
+          return data.usuario;
+        });
       }
       if (data._status === 401) guardarSesion("", null);
       return null;
@@ -187,8 +193,66 @@
 
   function actualizarYo(datos) {
     return api("/auth/yo", { method: "PATCH", body: datos }).then(function (data) {
+      if (data.ok && data.usuario) {
+        guardarSesion(leerToken(), data.usuario);
+        escribirVehiculoLocal(data.usuario.vehiculo, data.usuario.vehiculo_anio);
+      }
+      return data;
+    });
+  }
+
+  function leerVehiculoLocal() {
+    try {
+      var data = JSON.parse(window.localStorage.getItem("andes_vehiculo_v1") || "null");
+      return data && data.label ? data : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function escribirVehiculoLocal(label, anio) {
+    try {
+      var texto = String(label || "").trim();
+      if (!texto) window.localStorage.removeItem("andes_vehiculo_v1");
+      else {
+        window.localStorage.setItem(
+          "andes_vehiculo_v1",
+          JSON.stringify({ label: texto, anio: String(anio || "").trim() })
+        );
+      }
+    } catch (err) {
+      /* modo privado */
+    }
+    try {
+      window.dispatchEvent(new Event("andes-vehiculo"));
+    } catch (err) {
+      /* noop */
+    }
+  }
+
+  function sincronizarVehiculo(usuario) {
+    if (!usuario || !leerToken()) return Promise.resolve();
+    var cuenta = String(usuario.vehiculo || "").trim();
+    if (cuenta) {
+      escribirVehiculoLocal(cuenta, usuario.vehiculo_anio || "");
+      return Promise.resolve();
+    }
+    var local = leerVehiculoLocal();
+    if (!local) return Promise.resolve();
+    return api("/auth/yo", {
+      method: "PATCH",
+      body: { vehiculo: local.label, vehiculo_anio: local.anio || "" },
+    }).then(function (data) {
       if (data.ok && data.usuario) guardarSesion(leerToken(), data.usuario);
       return data;
+    });
+  }
+
+  function guardarVehiculo(label, anio) {
+    if (!leerToken()) return Promise.resolve();
+    return actualizarYo({
+      vehiculo: String(label || "").trim(),
+      vehiculo_anio: String(anio || "").trim(),
     });
   }
 
@@ -918,6 +982,7 @@
     sincronizarCarrito: sincronizarCarrito,
     fusionarFavoritos: fusionarFavoritos,
     sincronizarFavoritos: sincronizarFavoritos,
+    guardarVehiculo: guardarVehiculo,
     resolverPrecios: resolverPrecios,
     abrirModal: abrirModal,
     cerrarModal: cerrarModal,

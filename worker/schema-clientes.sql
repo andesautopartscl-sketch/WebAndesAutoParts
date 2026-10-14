@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
   direccion TEXT NOT NULL DEFAULT '',
   comuna TEXT NOT NULL DEFAULT '',
   region TEXT NOT NULL DEFAULT '',
+  vehiculo TEXT NOT NULL DEFAULT '',
+  vehiculo_anio TEXT NOT NULL DEFAULT '',
   descuento_pct REAL NOT NULL DEFAULT 0 CHECK (descuento_pct >= 0 AND descuento_pct <= 100),
   activo INTEGER NOT NULL DEFAULT 1,
   creado_por TEXT,

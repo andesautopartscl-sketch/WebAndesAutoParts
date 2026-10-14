@@ -18,6 +18,12 @@
         );
       }
     } catch (err) {}
+    if (window.AndesAuth && window.AndesAuth.haySesion && window.AndesAuth.haySesion() && window.AndesAuth.guardarVehiculo) {
+      window.AndesAuth.guardarVehiculo(
+        filter && filter.label ? filter.label : "",
+        filter && filter.year ? filter.year : ""
+      );
+    }
   }
 
   function leerAutoBuscado() {
@@ -1632,6 +1638,7 @@
   }
 
   document.addEventListener("input", updateWhatsappMessage);
+  window.addEventListener("andes-vehiculo", updateWhatsappMessage);
   updateWhatsappMessage();
 
   setTimeout(function () {
