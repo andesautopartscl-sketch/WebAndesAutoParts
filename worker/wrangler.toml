@@ -2,6 +2,12 @@ name = "andes-autoparts-ml-sync"
 main = "worker.js"
 compatibility_date = "2024-11-01"
 
+# Solo la ficha: WhatsApp y Google leen el nombre, el precio y la foto
+# sin pasar el resto del sitio por el worker.
+routes = [
+  { pattern = "andesautoparts.cl/producto.html*", zone_name = "andesautoparts.cl" }
+]
+
 # Variables públicas (no sensibles)
 [vars]
 ML_CLIENT_ID = "2004412570250603"

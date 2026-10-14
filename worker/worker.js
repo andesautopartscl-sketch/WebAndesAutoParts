@@ -262,6 +262,84 @@ function extractSku(item) {
   return "";
 }
 
+function esCrawlerDePreview(ua) {
+  return /facebookexternalhit|Facebot|WhatsApp|Twitterbot|TelegramBot|LinkedInBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|DuckDuckBot/i.test(
+    ua || ""
+  );
+}
+
+function escAttr(valor) {
+  return String(valor == null ? "" : valor)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+}
+
+function precioClp(valor) {
+  const n = Math.round(Number(valor) || 0);
+  if (!n) return "";
+  return "$" + n.toLocaleString("es-CL");
+}
+
+function textoFichaPublica(producto) {
+  const precio = precioClp(producto.precio);
+  let texto =
+    (producto.titulo || "Repuesto") +
+    (precio ? " por " + precio : "") +
+    ". Andes Auto Parts, La Cisterna. Consulta stock por WhatsApp.";
+  if (texto.length > 160) texto = texto.slice(0, 157) + "...";
+  return texto;
+}
+
+function fotoCompartible(url) {
+  const u = String(url || "");
+  if (!/^https:\/\//i.test(u)) return "https://andesautoparts.cl/images/auth/login-side.png";
+  return u.replace(/-O\.(webp|jpe?g|png)(\?.*)?$/i, "-F.$1$2");
+}
+
+function ponerMetaHtml(html, attr, clave, valor) {
+  const tag = `<meta ${attr}="${clave}" content="${escAttr(valor)}" />`;
+  const re = new RegExp(`<meta\\s+${attr}="${clave}"\\s+content="[^"]*"\\s*/?>`, "i");
+  if (re.test(html)) return html.replace(re, tag);
+  return html.replace("</head>", tag + "\n</head>");
+}
+
+async function vistaPreviaFicha(request) {
+  if (!esCrawlerDePreview(request.headers.get("User-Agent") || "")) {
+    return fetch(request);
+  }
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id") || "";
+  if (!id) return fetch(request);
+  try {
+    const [pagina, catalogo] = await Promise.all([
+      fetch(request),
+      fetch(new URL("/data/productos.json", url.origin).toString()),
+    ]);
+    if (!pagina.ok || !id || !catalogo.ok) return pagina.ok ? pagina : fetch(request);
+    const productos = await catalogo.json();
+    const producto = (Array.isArray(productos) ? productos : []).find((item) => item && item.id === id);
+    if (!producto) return pagina;
+    const titulo = (producto.titulo || "Repuesto") + " | Andes Auto Parts";
+    const resumen = textoFichaPublica(producto);
+    const imagen = fotoCompartible(producto.imagen);
+    let html = await pagina.text();
+    html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escAttr(titulo)}</title>`);
+    html = ponerMetaHtml(html, "name", "description", resumen);
+    html = ponerMetaHtml(html, "property", "og:title", titulo);
+    html = ponerMetaHtml(html, "property", "og:description", resumen);
+    html = ponerMetaHtml(html, "property", "og:url", url.href);
+    html = ponerMetaHtml(html, "property", "og:image", imagen);
+    const headers = new Headers(pagina.headers);
+    headers.delete("content-length");
+    headers.set("content-type", "text/html; charset=utf-8");
+    headers.set("cache-control", "public, max-age=600");
+    return new Response(html, { status: pagina.status, headers });
+  } catch (err) {
+    return fetch(request);
+  }
+}
+
 function mlHighResImageUrl(url) {
   if (!url) return "";
   return String(url)
@@ -699,6 +777,14 @@ export default {
 
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, "") || "/";
+
+    if (
+      request.method === "GET" &&
+      (url.hostname === "andesautoparts.cl" || url.hostname === "www.andesautoparts.cl") &&
+      path === "/producto.html"
+    ) {
+      return vistaPreviaFicha(request);
+    }
 
     if (path === "/health" || (path === "/" && request.method === "GET")) {
       const hasToken = Boolean(await getMlAccessToken(env));

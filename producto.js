@@ -32,6 +32,26 @@
     return u.replace(/-O\.(webp|jpe?g|png)(\?.*)?$/i, "-F.$1$2");
   }
 
+  function ponerMeta(attr, clave, valor) {
+    var el = document.querySelector('meta[' + attr + '="' + clave + '"]');
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, clave);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", valor);
+  }
+
+  function textoParaBuscadores(p) {
+    var precio = p.precio ? clp(p.precio) : "";
+    var texto =
+      (p.titulo || "Repuesto") +
+      (precio ? " por " + precio : "") +
+      ". Andes Auto Parts, La Cisterna. Consulta stock por WhatsApp.";
+    if (texto.length > 160) texto = texto.slice(0, 157) + "...";
+    return texto;
+  }
+
   function clp(n) {
     return Number(n || 0).toLocaleString("es-CL", {
       style: "currency",
@@ -107,11 +127,16 @@
   }
 
   function pintar(p, todos) {
-    document.title = p.titulo + " | Andes Auto Parts";
+    document.title = (p.titulo || "Repuesto") + " | Andes Auto Parts";
+    var urlFicha = "https://andesautoparts.cl/producto.html?id=" + encodeURIComponent(p.id);
     var canon = document.getElementById("product-canonical");
-    if (canon) canon.href = "https://andesautoparts.cl/producto.html?id=" + encodeURIComponent(p.id);
-    var desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.setAttribute("content", p.titulo + ". Repuesto en Andes Auto Parts, La Cisterna.");
+    if (canon) canon.href = urlFicha;
+    var resumen = textoParaBuscadores(p);
+    ponerMeta("name", "description", resumen);
+    ponerMeta("property", "og:title", document.title);
+    ponerMeta("property", "og:description", resumen);
+    ponerMeta("property", "og:url", urlFicha);
+    ponerMeta("property", "og:image", fotoNitida(p.imagen) || p.imagen || "https://andesautoparts.cl/images/auth/login-side.png");
 
     document.getElementById("product-layout").hidden = false;
     document.getElementById("product-title").textContent = p.titulo || "Repuesto";
