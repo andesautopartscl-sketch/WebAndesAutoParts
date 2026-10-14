@@ -26,6 +26,12 @@
     });
   }
 
+  function fotoNitida(url) {
+    var u = String(url || "");
+    if (!u) return "";
+    return u.replace(/-O\.(webp|jpe?g|png)(\?.*)?$/i, "-F.$1$2");
+  }
+
   function clp(n) {
     return Number(n || 0).toLocaleString("es-CL", {
       style: "currency",
@@ -96,10 +102,19 @@
 
     var img = document.getElementById("product-img");
     img.alt = p.titulo || "Repuesto";
-    img.src = p.imagen || "logo_andes.png";
-    img.addEventListener("error", function () {
+    var grande = fotoNitida(p.imagen);
+    var chica = p.imagen || "";
+    var paso = 0;
+    img.onerror = function () {
+      paso += 1;
+      if (paso === 1 && chica && chica !== grande) {
+        img.src = chica;
+        return;
+      }
+      img.onerror = null;
       img.src = "logo_andes.png";
-    });
+    };
+    img.src = grande || chica || "logo_andes.png";
 
     var stock = p.stock != null && p.stock !== "" ? Number(p.stock) : null;
     var stockTxt = stock == null ? "Consultar" : stock > 0 ? stock + " unidades" : "Sin stock";
