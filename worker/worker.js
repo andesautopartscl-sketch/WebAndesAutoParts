@@ -359,9 +359,8 @@ function githubAuthHeader(env) {
     : `token ${token}`;
 }
 
-async function githubGetFile(env) {
-  const filePath = env.GITHUB_FILE_PATH || "data/productos.json";
-  const path = encodeURIComponent(filePath);
+async function githubGetFile(env, filePath) {
+  const path = encodeURIComponent(filePath || env.GITHUB_FILE_PATH || "data/productos.json");
   const url =
     `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}` +
     `/contents/${path}?ref=${encodeURIComponent(env.GITHUB_BRANCH || "main")}`;
@@ -381,18 +380,35 @@ async function githubGetFile(env) {
   return res.json();
 }
 
-async function githubCommitCatalog(env, content) {
-  const existing = await githubGetFile(env);
-  const filePath = env.GITHUB_FILE_PATH || "data/productos.json";
+function construirSitemap(productos) {
+  const urls = ["https://andesautoparts.cl/"];
+  const vistos = new Set();
+  for (const p of productos || []) {
+    const id = String((p && p.id) || "").trim();
+    if (!id || vistos.has(id)) continue;
+    vistos.add(id);
+    urls.push("https://andesautoparts.cl/producto.html?id=" + encodeURIComponent(id));
+  }
+  const lineas = urls
+    .map((loc) => "  <url><loc>" + loc.replace(/&/g, "&amp;") + "</loc></url>")
+    .join("\n");
+  return (
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    lineas +
+    "\n</urlset>\n"
+  );
+}
+
+async function githubPutFile(env, filePath, content, message) {
+  const existing = await githubGetFile(env, filePath);
   const body = {
-    message: "chore: actualizar catálogo desde Mercado Libre (Worker)",
+    message,
     content: toBase64Utf8(content),
     branch: env.GITHUB_BRANCH || "main",
   };
-  if (existing && existing.sha) {
-    body.sha = existing.sha;
-  }
-  const url = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${filePath}`;
+  if (existing && existing.sha) body.sha = existing.sha;
+  const url = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${encodeURIComponent(filePath)}`;
   const res = await fetch(url, {
     method: "PUT",
     headers: {
@@ -409,6 +425,23 @@ async function githubCommitCatalog(env, content) {
     throw new Error(`GitHub PUT ${res.status}: ${err}`);
   }
   return res.json();
+}
+
+async function githubCommitCatalog(env, content, productos) {
+  const filePath = env.GITHUB_FILE_PATH || "data/productos.json";
+  const catalogo = await githubPutFile(
+    env,
+    filePath,
+    content,
+    "chore: actualizar catálogo desde Mercado Libre (Worker)"
+  );
+  const sitemap = await githubPutFile(
+    env,
+    "sitemap.xml",
+    construirSitemap(productos),
+    "chore: actualizar el mapa del sitio con el catálogo (Worker)"
+  );
+  return { catalogo, sitemap };
 }
 
 async function handleSync(request, env) {
@@ -473,7 +506,7 @@ async function handleSync(request, env) {
     const productos = [...batch.productos];
     productos.sort((a, b) => a.titulo.localeCompare(b.titulo, "es"));
     const fileContent = JSON.stringify(productos, null, 2) + "\n";
-    const gh = await githubCommitCatalog(env, fileContent);
+    const gh = await githubCommitCatalog(env, fileContent, productos);
     await clearSyncState(env);
 
     return json({
@@ -484,8 +517,9 @@ async function handleSync(request, env) {
       seller_id: batch.meta.sellerId,
       seller_nickname: batch.meta.nickname,
       github: {
-        commit_sha: gh.commit && gh.commit.sha,
-        content_sha: gh.content && gh.content.sha,
+        commit_sha: gh.catalogo && gh.catalogo.commit && gh.catalogo.commit.sha,
+        content_sha: gh.catalogo && gh.catalogo.content && gh.catalogo.content.sha,
+        sitemap_sha: gh.sitemap && gh.sitemap.commit && gh.sitemap.commit.sha,
       },
       synced_at: new Date().toISOString(),
     });
