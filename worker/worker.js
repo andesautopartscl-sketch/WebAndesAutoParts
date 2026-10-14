@@ -305,7 +305,7 @@ function ponerMetaHtml(html, attr, clave, valor) {
 }
 
 async function vistaPreviaFicha(request) {
-  if (!esCrawlerDePreview(request.headers.get("User-Agent") || "")) {
+  if (request.method === "HEAD" || !esCrawlerDePreview(request.headers.get("User-Agent") || "")) {
     return fetch(request);
   }
   const url = new URL(request.url);
@@ -779,7 +779,7 @@ export default {
     const path = url.pathname.replace(/\/+$/, "") || "/";
 
     if (
-      request.method === "GET" &&
+      (request.method === "GET" || request.method === "HEAD") &&
       (url.hostname === "andesautoparts.cl" || url.hostname === "www.andesautoparts.cl") &&
       path === "/producto.html"
     ) {
