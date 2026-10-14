@@ -2167,7 +2167,30 @@ body {
 }
 
 .map-embed-wrap {
+  position: relative;
   margin-top: 1.75rem;
+}
+
+.map-embed-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: min(280px, 50vh);
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: #1a2b4b;
+  pointer-events: none;
+}
+
+.map-embed-note[hidden] {
+  display: none;
 }
 
 .map-embed {

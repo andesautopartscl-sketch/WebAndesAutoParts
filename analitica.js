@@ -7,7 +7,10 @@
 
   var VISITANTE_KEY = "andes_visitante_v1";
   var SESION_KEY = "andes_sesion_analitica";
+  var CONSENT_KEY = "andes_cookie_consent";
   var inicio = Date.now();
+  var activo = false;
+  var cola = [];
   var acumulado = 0;
   var tiempoEnviado = false;
   var ultimaBusqueda = "";
@@ -49,7 +52,33 @@
     return /cuenta\.html|renovar-token|editor-catalogo/i.test(location.pathname);
   }
 
+  function hayConsentimiento() {
+    try {
+      return localStorage.getItem(CONSENT_KEY) === "1";
+    } catch (err) {
+      return false;
+    }
+  }
+
   function enviar(extra, beacon) {
+    if (!activo) {
+      cola.push({ extra: extra || null, beacon: !!beacon });
+      return;
+    }
+    enviarYa(extra, beacon);
+  }
+
+  function activar() {
+    if (activo || !hayConsentimiento()) return;
+    activo = true;
+    var pendientes = cola;
+    cola = [];
+    pendientes.forEach(function (item) {
+      enviarYa(item.extra, item.beacon);
+    });
+  }
+
+  function enviarYa(extra, beacon) {
     var visitante = idEn(localStorage, VISITANTE_KEY);
     var sesion = idEn(sessionStorage, SESION_KEY);
     if (!visitante || !sesion) return;
@@ -103,9 +132,13 @@
   });
   window.addEventListener("pagehide", enviarTiempo);
 
+  if (hayConsentimiento()) activar();
+
   if (!paginaPropia()) {
     enviar({ tipo: "page" });
   }
+
+  window.addEventListener("andes-cookies", activar);
 
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest("a") : null;
@@ -148,6 +181,26 @@
       enviar({ tipo: "busqueda", titulo: q.slice(0, 80) });
     }, 900);
   });
+
+  function mostrarAviso() {
+    var banner = document.getElementById("cookie-banner");
+    var btn = document.getElementById("cookie-accept");
+    if (!banner || !btn || hayConsentimiento()) return;
+    banner.removeAttribute("hidden");
+    btn.addEventListener("click", function () {
+      try {
+        localStorage.setItem(CONSENT_KEY, "1");
+      } catch (err) {}
+      banner.setAttribute("hidden", "");
+      window.dispatchEvent(new Event("andes-cookies"));
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mostrarAviso);
+  } else {
+    mostrarAviso();
+  }
 
   window.AndesAnalitica = { evento: enviar };
 })();

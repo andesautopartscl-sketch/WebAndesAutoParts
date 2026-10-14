@@ -279,20 +279,21 @@
     });
   })();
 
-  (function initCookieBanner() {
-    var banner = document.getElementById("cookie-banner");
-    var btn = document.getElementById("cookie-accept");
-    if (!banner || !btn) return;
-    try {
-      if (localStorage.getItem("andes_cookie_consent") === "1") return;
-    } catch (err) {}
-    banner.removeAttribute("hidden");
-    btn.addEventListener("click", function () {
+  (function initMapaConConsentimiento() {
+    function cargar() {
+      var ok = false;
       try {
-        localStorage.setItem("andes_cookie_consent", "1");
+        ok = localStorage.getItem("andes_cookie_consent") === "1";
       } catch (err) {}
-      banner.setAttribute("hidden", "");
-    });
+      if (!ok) return;
+      document.querySelectorAll("iframe[data-map-src]").forEach(function (frame) {
+        if (!frame.getAttribute("src")) frame.setAttribute("src", frame.getAttribute("data-map-src"));
+        var nota = frame.parentNode && frame.parentNode.querySelector(".map-embed-note");
+        if (nota) nota.hidden = true;
+      });
+    }
+    cargar();
+    window.addEventListener("andes-cookies", cargar);
   })();
 
   (function initHeroCarousel() {
