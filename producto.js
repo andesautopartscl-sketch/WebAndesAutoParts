@@ -1,8 +1,30 @@
 (function () {
   "use strict";
 
+  var header = document.querySelector(".site-header");
+  var toggle = document.querySelector(".nav-toggle");
+  var nav = document.getElementById("site-nav");
   var year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
+
+  function closeMenu() {
+    if (!header || !toggle) return;
+    header.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  if (toggle && nav && header) {
+    toggle.addEventListener("click", function () {
+      var open = !header.classList.contains("is-open");
+      header.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.style.overflow = open ? "hidden" : "";
+    });
+    nav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", closeMenu);
+    });
+  }
 
   function clp(n) {
     return Number(n || 0).toLocaleString("es-CL", {
@@ -108,17 +130,19 @@
       ml.href = p.link;
     }
 
+    var favFoto = document.getElementById("product-fav-photo");
     var fav = document.getElementById("product-fav");
-    if (fav && p.id) {
-      fav.hidden = false;
-      fav.setAttribute("data-fav-id", p.id);
-      fav.setAttribute("data-fav-titulo", p.titulo || "");
-      fav.setAttribute("data-fav-sku", p.sku || "");
-      fav.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
-      fav.setAttribute("data-fav-imagen", p.imagen || "");
-      fav.setAttribute("data-fav-link", "producto.html?id=" + encodeURIComponent(p.id));
-      if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
-    }
+    [favFoto, fav].forEach(function (btn) {
+      if (!btn || !p.id) return;
+      btn.hidden = false;
+      btn.setAttribute("data-fav-id", p.id);
+      btn.setAttribute("data-fav-titulo", p.titulo || "");
+      btn.setAttribute("data-fav-sku", p.sku || "");
+      btn.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
+      btn.setAttribute("data-fav-imagen", p.imagen || "");
+      btn.setAttribute("data-fav-link", "producto.html?id=" + encodeURIComponent(p.id));
+    });
+    if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
 
     var cartBtn = document.getElementById("product-cart");
     if (stock != null && stock <= 0) {
@@ -153,24 +177,39 @@
     }
 
     var otros = relacionados(todos, p);
-    if (otros.length) {
+    var grid = document.getElementById("product-related-grid");
+    if (otros.length && grid) {
       document.getElementById("product-related").hidden = false;
-      document.getElementById("product-related-grid").innerHTML = otros
-        .map(function (item) {
-          var href = "producto.html?id=" + encodeURIComponent(item.id);
-          return (
-            '<a href="' +
-            href +
-            '"><img src="' +
-            (item.imagen || "logo_andes.png") +
-            '" alt=""><p>' +
-            String(item.titulo || "Repuesto")
-              .replace(/&/g, "&amp;")
-              .replace(/</g, "&lt;") +
-            "</p></a>"
-          );
-        })
-        .join("");
+      grid.innerHTML = "";
+      otros.forEach(function (item) {
+        var href = "producto.html?id=" + encodeURIComponent(item.id);
+        var card = document.createElement("article");
+        card.className = "product-related-card";
+        var favBtn = document.createElement("button");
+        favBtn.type = "button";
+        favBtn.className = "fav-btn";
+        favBtn.innerHTML =
+          '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z"></path></svg>';
+        favBtn.setAttribute("data-fav-id", item.id || "");
+        favBtn.setAttribute("data-fav-titulo", item.titulo || "");
+        favBtn.setAttribute("data-fav-sku", item.sku || "");
+        favBtn.setAttribute("data-fav-precio", item.precio != null ? String(item.precio) : "0");
+        favBtn.setAttribute("data-fav-imagen", item.imagen || "");
+        favBtn.setAttribute("data-fav-link", href);
+        var link = document.createElement("a");
+        link.href = href;
+        var img = document.createElement("img");
+        img.src = item.imagen || "logo_andes.png";
+        img.alt = item.titulo || "Repuesto";
+        var titulo = document.createElement("p");
+        titulo.textContent = item.titulo || "Repuesto";
+        link.appendChild(img);
+        link.appendChild(titulo);
+        card.appendChild(favBtn);
+        card.appendChild(link);
+        grid.appendChild(card);
+      });
+      if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
     }
   }
 
