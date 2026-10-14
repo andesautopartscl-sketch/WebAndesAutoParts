@@ -196,6 +196,13 @@
     }
 
     guardar(items);
+    if (window.AndesAnalitica && window.AndesAnalitica.evento) {
+      window.AndesAnalitica.evento({
+        tipo: "carrito",
+        producto_id: id,
+        producto_titulo: producto.titulo || "",
+      });
+    }
     return items;
   }
 

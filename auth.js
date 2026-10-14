@@ -464,7 +464,11 @@
       items +=
         '<div class="account-menu__sep"></div>' +
         itemMenu(base + "cuenta.html#clientes", "Central de clientes");
+      if (u.rol === "admin") {
+        items += itemMenu(base + "cuenta.html#analitica", "Analítica del sitio");
+      }
     }
+    items += itemMenu(base + "cuenta.html#seguridad", "Cambiar contraseña");
     items +=
       '<div class="account-menu__sep"></div>' +
       '<button type="button" class="account-menu__item account-menu__item--btn" data-auth-logout role="menuitem">' +
@@ -577,7 +581,7 @@
       '<span class="auth-modal__human-label">No soy un robot</span>' +
       "</button>" +
       '<div class="auth-modal__captcha" id="auth-turnstile-login"></div>' +
-      '<p class="auth-modal__forgot">¿Olvidaste tu contraseña? <span>Escríbenos por WhatsApp</span></p>' +
+      '<p class="auth-modal__forgot"><button type="button" class="auth-modal__forgot-btn" data-auth-tab="olvide">¿Olvidaste tu contraseña?</button></p>' +
       '<p class="account-error" id="auth-login-error" hidden></p>' +
       '<button type="submit" class="btn btn-primary btn-lg auth-modal__submit">Iniciar Sesión</button>' +
       "</form>" +
@@ -614,6 +618,19 @@
       '<p class="auth-modal__switch-q">¿Ya tienes cuenta?</p>' +
       '<button type="button" class="btn auth-modal__ghost" data-auth-tab="login">Iniciar Sesión</button>' +
       "</div>" +
+      '<div data-auth-pane="olvide" hidden>' +
+      '<h2 class="auth-modal__title">Recuperar contraseña</h2>' +
+      '<p class="auth-modal__lead">Te enviamos un enlace al correo de la cuenta para crear una clave nueva.</p>' +
+      '<form class="account-form auth-modal__form" id="auth-modal-olvide" autocomplete="on">' +
+      '<div class="field"><label class="visually-hidden" for="auth-olvide-email">Correo</label>' +
+      '<input type="email" id="auth-olvide-email" name="email" required autocomplete="email" placeholder="Correo de la cuenta" /></div>' +
+      '<p class="account-error" id="auth-olvide-error" hidden></p>' +
+      '<p class="account-ok" id="auth-olvide-ok" hidden></p>' +
+      '<button type="submit" class="btn btn-primary btn-lg auth-modal__submit">Enviar enlace</button>' +
+      "</form>" +
+      '<div class="auth-modal__divider"></div>' +
+      '<button type="button" class="btn auth-modal__ghost" data-auth-tab="login">Volver a iniciar sesión</button>' +
+      "</div>" +
       "</div>" +
       "</div>";
     document.body.appendChild(modalEl);
@@ -634,10 +651,10 @@
     });
     var title = modal.querySelector("#auth-modal-title");
     if (title && tab === "login") title.id = "auth-modal-title";
-    var focusId = tab === "registro" ? "auth-reg-nombre" : "auth-login-email";
+    var focusId = tab === "registro" ? "auth-reg-nombre" : tab === "olvide" ? "auth-olvide-email" : "auth-login-email";
     var focus = document.getElementById(focusId);
     if (focus) focus.focus();
-    montarTurnstile(tab === "registro" ? "registro" : "login");
+    if (tab === "login" || tab === "registro") montarTurnstile(tab);
   }
 
   function abrirModal(tab) {
@@ -695,6 +712,7 @@
 
     var formLogin = modal.querySelector("#auth-modal-login");
     var formReg = modal.querySelector("#auth-modal-registro");
+    var formOlvide = modal.querySelector("#auth-modal-olvide");
 
     if (formLogin) {
       formLogin.addEventListener("submit", function (e) {
@@ -722,6 +740,39 @@
           .catch(function () {
             mostrarError(err, "Error de red. Intenta de nuevo.");
             resetTurnstile("login");
+          });
+      });
+    }
+
+    if (formOlvide) {
+      formOlvide.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var err = document.getElementById("auth-olvide-error");
+        var ok = document.getElementById("auth-olvide-ok");
+        var btn = formOlvide.querySelector('[type="submit"]');
+        mostrarError(err, "");
+        if (ok) ok.hidden = true;
+        if (btn) btn.disabled = true;
+        api("/auth/olvide", {
+          method: "POST",
+          body: { email: formOlvide.email.value },
+        })
+          .then(function (data) {
+            if (!data.ok) {
+              mostrarError(err, data.message || "No pudimos enviar el enlace.");
+              return;
+            }
+            if (ok) {
+              ok.hidden = false;
+              ok.textContent = data.message || "Si el correo está registrado, te enviamos el enlace.";
+            }
+            formOlvide.reset();
+          })
+          .catch(function () {
+            mostrarError(err, "Error de red. Intenta de nuevo.");
+          })
+          .then(function () {
+            if (btn) btn.disabled = false;
           });
       });
     }

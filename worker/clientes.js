@@ -6,12 +6,17 @@
  *
  * Rutas:
  *   POST /auth/registro | /auth/login | /auth/logout | /auth/bootstrap
+ *   POST /auth/olvide | /auth/restablecer
  *   GET|PATCH /auth/yo
  *   GET|PUT /cart | POST /cart/merge
  *   POST /pricing/resolver
+ *   POST /analitica/evento
+ *   GET /admin/analitica
  *   GET|POST /admin/usuarios | PATCH /admin/usuarios/:id
  *   PUT|DELETE /admin/usuarios/:id/precios/:productoId
  */
+
+import { registrarEvento, resumenAnalitica } from "./analitica.js";
 
 const SESION_DIAS = 30;
 const DIAS_SIN_COMPRA = 30;
@@ -137,7 +142,7 @@ function precioEfectivo(precioLista, descuentoPct, especial) {
 
 /* ================================ Auth ================================ */
 
-async function rateLimit(env, clave) {
+async function rateLimit(env, clave, max = MAX_AUTH_INTENTOS) {
   if (!env.CLIENTES_DB) return true;
   const ventana = new Date().toISOString().slice(0, 13); // por hora
   const row = await env.CLIENTES_DB.prepare(
@@ -154,7 +159,7 @@ async function rateLimit(env, clave) {
       .run();
     return true;
   }
-  if (row.contador >= MAX_AUTH_INTENTOS) return false;
+  if (row.contador >= max) return false;
   await env.CLIENTES_DB.prepare(
     "UPDATE auth_rate SET contador = contador + 1 WHERE clave = ?"
   )
@@ -498,6 +503,152 @@ async function yo(request, env, json) {
   return json({ ok: true, usuario: perfilPublico(r.usuario) });
 }
 
+const MSG_OLVIDE =
+  "Si el correo está registrado, te enviamos un enlace para crear una clave nueva. Revisa también el spam.";
+
+async function enviarCorreoClave(env, usuario, link) {
+  const key = (env.RESEND_API_KEY || "").trim();
+  if (!key) throw new Error("RESEND_API_KEY no está configurado");
+  const nombre = texto(usuario.nombre, 80) || "Hola";
+  const html =
+    `<p>${nombre}, recibimos una solicitud para cambiar la contraseña de tu cuenta en Andes Auto Parts.</p>` +
+    `<p><a href="${link}">Crear una contraseña nueva</a></p>` +
+    `<p>El enlace sirve por 1 hora y solo se puede usar una vez. Si no fuiste tú, ignora este correo.</p>`;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: env.PEDIDOS_FROM || "Andes Auto Parts <pedidos@andesautoparts.cl>",
+      to: [usuario.email],
+      subject: "Crea una contraseña nueva — Andes Auto Parts",
+      html,
+    }),
+  });
+  if (!res.ok) {
+    const detalle = await res.text();
+    throw new Error(`Resend ${res.status}: ${detalle.slice(0, 180)}`);
+  }
+}
+
+async function olvidarClave(request, env, json) {
+  if (!env.CLIENTES_DB) return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const email = texto(body.email, 160).toLowerCase();
+  if (!emailOk(email)) {
+    return json({ ok: true, message: MSG_OLVIDE });
+  }
+  const ip = request.headers.get("CF-Connecting-IP") || "local";
+  const okCorreo = await rateLimit(env, "olvide:" + email, 5);
+  const okIp = await rateLimit(env, "olvide-ip:" + ip, 12);
+  if (!okCorreo || !okIp) {
+    return json({ ok: true, message: MSG_OLVIDE });
+  }
+
+  const u = await env.CLIENTES_DB.prepare(
+    "SELECT id, email, nombre, activo FROM usuarios WHERE email = ? COLLATE NOCASE"
+  )
+    .bind(email)
+    .first();
+  if (!u || !u.activo) return json({ ok: true, message: MSG_OLVIDE });
+
+  const token = nuevoToken();
+  const tokenHash = await sha256Hex(token);
+  const expira = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  await env.CLIENTES_DB.prepare("DELETE FROM restablecer_claves WHERE usuario_id = ?")
+    .bind(u.id)
+    .run();
+  await env.CLIENTES_DB.prepare(
+    `INSERT INTO restablecer_claves (token_hash, usuario_id, expira_en, usado, creado_en)
+     VALUES (?, ?, ?, 0, ?)`
+  )
+    .bind(tokenHash, u.id, expira, ahoraIso())
+    .run();
+
+  const link =
+    "https://andesautoparts.cl/cuenta.html?recuperar=" + encodeURIComponent(token);
+  try {
+    await enviarCorreoClave(env, u, link);
+  } catch (err) {
+    return json(
+      {
+        ok: false,
+        error: "CORREO",
+        message: "No pudimos enviar el correo. Intenta más tarde o escríbenos por WhatsApp.",
+      },
+      502
+    );
+  }
+  return json({ ok: true, message: MSG_OLVIDE });
+}
+
+async function restablecerClave(request, env, json) {
+  if (!env.CLIENTES_DB) return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const token = texto(body.token, 80);
+  const clave = String(body.clave || "");
+  if (!token || clave.length < 8) {
+    return json(
+      { ok: false, error: "DATOS", message: "La clave nueva debe tener al menos 8 caracteres" },
+      400
+    );
+  }
+  const ip = request.headers.get("CF-Connecting-IP") || "local";
+  if (!(await rateLimit(env, "reset:" + ip, 12))) {
+    return json(
+      { ok: false, error: "RATE", message: "Demasiados intentos. Espera un momento." },
+      429
+    );
+  }
+
+  const tokenHash = await sha256Hex(token);
+  const row = await env.CLIENTES_DB.prepare(
+    "SELECT * FROM restablecer_claves WHERE token_hash = ?"
+  )
+    .bind(tokenHash)
+    .first();
+  if (!row || row.usado || Date.parse(row.expira_en) < Date.now()) {
+    return json(
+      {
+        ok: false,
+        error: "TOKEN",
+        message: "El enlace venció o ya se usó. Pide uno nuevo desde el inicio de sesión.",
+      },
+      400
+    );
+  }
+
+  const salt = nuevoSalt();
+  const hash = await hashClave(clave, salt);
+  await env.CLIENTES_DB.prepare(
+    "UPDATE usuarios SET password_hash = ?, password_salt = ? WHERE id = ?"
+  )
+    .bind(hash, salt, row.usuario_id)
+    .run();
+  await env.CLIENTES_DB.prepare("UPDATE restablecer_claves SET usado = 1 WHERE token_hash = ?")
+    .bind(tokenHash)
+    .run();
+  await env.CLIENTES_DB.prepare("DELETE FROM sesiones WHERE usuario_id = ?")
+    .bind(row.usuario_id)
+    .run();
+  return json({
+    ok: true,
+    message: "Contraseña actualizada. Ya puedes iniciar sesión.",
+  });
+}
+
 async function actualizarYo(request, env, json) {
   const r = await exigirSesion(env, request, json);
   if (r.error) return r.error;
@@ -507,6 +658,42 @@ async function actualizarYo(request, env, json) {
     body = await request.json();
   } catch (err) {
     return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+
+  if (body.clave_nueva != null || body.clave_actual != null) {
+    const actual = String(body.clave_actual || "");
+    const nueva = String(body.clave_nueva || "");
+    if (nueva.length < 8) {
+      return json(
+        { ok: false, error: "CLAVE_CORTA", message: "La clave nueva debe tener al menos 8 caracteres" },
+        400
+      );
+    }
+    const hashActual = await hashClave(actual, r.usuario.password_salt);
+    if (hashActual !== r.usuario.password_hash) {
+      return json(
+        { ok: false, error: "CLAVE", message: "La contraseña actual no coincide" },
+        401
+      );
+    }
+    const salt = nuevoSalt();
+    const hash = await hashClave(nueva, salt);
+    await env.CLIENTES_DB.prepare(
+      "UPDATE usuarios SET password_hash = ?, password_salt = ? WHERE id = ?"
+    )
+      .bind(hash, salt, r.usuario.id)
+      .run();
+    const tokenHash = await sha256Hex(bearer(request));
+    await env.CLIENTES_DB.prepare(
+      "DELETE FROM sesiones WHERE usuario_id = ? AND token_hash != ?"
+    )
+      .bind(r.usuario.id, tokenHash)
+      .run();
+    return json({
+      ok: true,
+      message: "Contraseña actualizada",
+      usuario: perfilPublico(r.usuario),
+    });
   }
 
   const nombre = texto(body.nombre, 120) || r.usuario.nombre;
@@ -976,6 +1163,9 @@ async function listarPrecios(request, env, json, userId) {
 /* ================================ Router ================================ */
 
 export async function rutearClientes(path, request, env, { json }) {
+  if (path === "/analitica/evento" && request.method === "POST") {
+    return registrarEvento(request, env, json, rateLimit);
+  }
   if (!path.startsWith("/auth") && !path.startsWith("/cart") && !path.startsWith("/pricing") && !path.startsWith("/admin")) {
     return null;
   }
@@ -1001,6 +1191,12 @@ export async function rutearClientes(path, request, env, { json }) {
   if (path === "/auth/yo" && request.method === "PATCH") {
     return actualizarYo(request, env, json);
   }
+  if (path === "/auth/olvide" && request.method === "POST") {
+    return olvidarClave(request, env, json);
+  }
+  if (path === "/auth/restablecer" && request.method === "POST") {
+    return restablecerClave(request, env, json);
+  }
 
   if (path === "/cart" && request.method === "GET") {
     return getCart(request, env, json);
@@ -1016,6 +1212,9 @@ export async function rutearClientes(path, request, env, { json }) {
     return resolverPrecios(request, env, json);
   }
 
+  if (path === "/admin/analitica" && request.method === "GET") {
+    return resumenAnalitica(request, env, json, exigirSesion);
+  }
   if (path === "/admin/usuarios" && request.method === "GET") {
     return listarUsuarios(request, env, json);
   }

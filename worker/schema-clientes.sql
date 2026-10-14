@@ -65,3 +65,32 @@ CREATE TABLE IF NOT EXISTS auth_rate (
   contador INTEGER NOT NULL DEFAULT 0,
   ventana_en TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS restablecer_claves (
+  token_hash TEXT PRIMARY KEY,
+  usuario_id TEXT NOT NULL,
+  expira_en TEXT NOT NULL,
+  usado INTEGER NOT NULL DEFAULT 0,
+  creado_en TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_restablecer_usuario ON restablecer_claves(usuario_id);
+
+CREATE TABLE IF NOT EXISTS analitica_eventos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  visitante TEXT NOT NULL,
+  sesion TEXT NOT NULL,
+  tipo TEXT NOT NULL,
+  path TEXT NOT NULL DEFAULT '',
+  titulo TEXT NOT NULL DEFAULT '',
+  producto_id TEXT NOT NULL DEFAULT '',
+  producto_titulo TEXT NOT NULL DEFAULT '',
+  referrer TEXT NOT NULL DEFAULT '',
+  dispositivo TEXT NOT NULL DEFAULT '',
+  duracion_ms INTEGER NOT NULL DEFAULT 0,
+  creado_en TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_analitica_creado ON analitica_eventos(creado_en);
+CREATE INDEX IF NOT EXISTS idx_analitica_tipo ON analitica_eventos(tipo, creado_en);
+CREATE INDEX IF NOT EXISTS idx_analitica_sesion ON analitica_eventos(sesion);
