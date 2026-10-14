@@ -5428,7 +5428,7 @@ body.auth-modal-open {
   width: min(1480px, calc(100% - 1.25rem)) !important;
   max-width: none;
   display: grid;
-  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 1.35rem;
   align-items: start;
 }
@@ -5509,6 +5509,7 @@ body.auth-modal-open {
 .account-form .field select,
 .account-toolbar input {
   width: 100%;
+  min-width: 0;
   padding: 0.65rem 0.75rem;
   border: 1px solid #dde3ea;
   border-radius: 0.5rem;
@@ -5557,6 +5558,7 @@ body.auth-modal-open {
 
 /* Dashboard cuenta: sidebar + contenido */
 .account-side {
+  width: 260px;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
@@ -5592,6 +5594,7 @@ body.auth-modal-open {
   font-size: 0.9rem;
   font-weight: 500;
   text-align: left;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
 }
@@ -5632,6 +5635,7 @@ body.auth-modal-open {
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   padding: 1.6rem 1.75rem 1.85rem;
+  min-width: 0;
   min-height: 34rem;
   box-shadow: 0 8px 28px rgba(15, 35, 60, 0.05);
 }
@@ -6028,6 +6032,7 @@ body.auth-modal-open {
   border-radius: 0.75rem;
   padding: 0.9rem 1rem;
   background: #fff;
+  min-width: 0;
 }
 
 .order-card__head,
@@ -6059,6 +6064,12 @@ body.auth-modal-open {
   padding: 0.35rem 0;
   border-top: 1px solid #eef2f6;
   font-size: 0.86rem;
+  min-width: 0;
+}
+
+.order-card__items li span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .order-card__items small {
@@ -6128,6 +6139,10 @@ body.auth-modal-open {
 @media (max-width: 860px) {
   .account__wrap--dash {
     grid-template-columns: 1fr;
+  }
+
+  .account-side {
+    width: 100%;
   }
 
   .account-view__help {

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014f" />
+  <link rel="stylesheet" href="styles.css?v=20261014w" />
 </head>
 <body>
   <header class="site-header">
@@ -560,10 +560,15 @@
         document.querySelectorAll(".account-view").forEach(function (view) {
           view.hidden = view.getAttribute("data-view") !== id;
         });
-        try {
-          history.replaceState(null, "", "#" + id);
-        } catch (err) {
-          /* noop */
+        var destino = "#" + id;
+        if (location.hash !== destino) {
+          var scrollY = window.scrollY;
+          try {
+            history.replaceState(null, "", location.pathname + location.search + destino);
+          } catch (err) {
+            /* noop */
+          }
+          window.scrollTo(0, scrollY);
         }
         if (id === "clientes") cargarClientes();
         if (id === "analitica") cargarAnalitica(diasAnalitica);
@@ -1303,9 +1308,20 @@
       actualizarComunaUi();
 
       document.querySelectorAll("[data-section]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
           mostrarSeccion(btn.getAttribute("data-section"));
         });
+      });
+
+      document.addEventListener("click", function (e) {
+        var link = e.target.closest("a.account-menu__item");
+        if (!link) return;
+        var href = link.getAttribute("href") || "";
+        var hash = (href.split("#")[1] || "").trim();
+        if (!hash || href.indexOf("cuenta.html") === -1) return;
+        e.preventDefault();
+        mostrarSeccion(hash);
       });
 
       var listaFavoritos = document.getElementById("favoritos-lista");
