@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014p" />
+  <link rel="stylesheet" href="styles.css?v=20261014r" />
 </head>
 <body>
   <header class="site-header">
@@ -246,6 +246,7 @@
             </div>
           </div>
           <p class="account-error" id="analitica-error" hidden></p>
+          <div class="channel-grid" id="channel-grid"></div>
           <div class="metrics-grid" id="metrics-grid"></div>
           <div class="metrics-layout">
             <section class="metrics-card">
@@ -257,8 +258,12 @@
               <ol id="metrics-paginas" class="metrics-list"></ol>
             </section>
             <section class="metrics-card">
-              <h2>Productos más cliqueados</h2>
+              <h2>Fichas más vistas</h2>
               <ol id="metrics-productos" class="metrics-list"></ol>
+            </section>
+            <section class="metrics-card">
+              <h2>Se fueron a Mercado Libre</h2>
+              <ol id="metrics-ml" class="metrics-list"></ol>
             </section>
             <section class="metrics-card">
               <h2>Dispositivo y origen</h2>
@@ -1000,12 +1005,19 @@
             return;
           }
           var r = data.resumen || {};
+          document.getElementById("channel-grid").innerHTML =
+            '<article class="channel-card channel-card--web"><p>Compras en la web</p><strong>' +
+            fmtNum(r.pedidos_web) +
+            "</strong><span>Pedidos registrados en el sitio, sin contar los rechazados.</span></article>" +
+            '<article class="channel-card channel-card--ml"><p>Salidas a Mercado Libre</p><strong>' +
+            fmtNum(r.salidas_ml) +
+            "</strong><span>Clics que se van a Mercado Libre. Allá no vemos si terminaron la compra.</span></article>";
           var cards = [
             ["Páginas vistas", fmtNum(r.paginas)],
             ["Visitantes", fmtNum(r.visitantes)],
             ["Sesiones", fmtNum(r.sesiones)],
             ["Tiempo promedio", fmtTiempo(r.tiempo_promedio_ms)],
-            ["Clics en productos", fmtNum(r.clics_producto)],
+            ["Fichas vistas", fmtNum(r.clics_producto)],
             ["Clics en WhatsApp", fmtNum(r.clics_whatsapp)],
             ["Agregados al carrito", fmtNum(r.carritos)],
             ["Búsquedas", fmtNum(r.busquedas)],
@@ -1056,13 +1068,29 @@
           }
 
           var prodEl = document.getElementById("metrics-productos");
-          if (!(data.productos || []).length) listaVacia(prodEl, "Todavía nadie abre un producto.");
+          if (!(data.productos || []).length) listaVacia(prodEl, "Todavía nadie abre una ficha.");
           else {
             prodEl.innerHTML = data.productos
               .map(function (p) {
                 return (
                   "<li><span>" +
                   escHtml(p.producto_titulo || p.producto_id || "Producto") +
+                  "</span><strong>" +
+                  fmtNum(p.clics) +
+                  "</strong></li>"
+                );
+              })
+              .join("");
+          }
+
+          var mlEl = document.getElementById("metrics-ml");
+          if (!(data.mercadolibre || []).length) listaVacia(mlEl, "Nadie ha salido a Mercado Libre en este periodo.");
+          else {
+            mlEl.innerHTML = data.mercadolibre
+              .map(function (p) {
+                return (
+                  "<li><span>" +
+                  escHtml(p.producto_titulo || "Tienda Mercado Libre") +
                   "</span><strong>" +
                   fmtNum(p.clics) +
                   "</strong></li>"

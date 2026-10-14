@@ -3,7 +3,7 @@
  * No guarda IP ni correo. El id de visitante lo genera el navegador.
  */
 
-const TIPOS = new Set(["page", "tiempo", "producto", "whatsapp", "carrito", "busqueda"]);
+const TIPOS = new Set(["page", "tiempo", "producto", "whatsapp", "carrito", "busqueda", "mercadolibre", "compra"]);
 const DISPOSITIVOS = new Set(["móvil", "tablet", "escritorio"]);
 
 function texto(valor, max) {
@@ -14,6 +14,31 @@ function texto(valor, max) {
 
 function ahoraIso() {
   return new Date().toISOString();
+}
+
+async function contarPedidosWeb(env, desde) {
+  if (!env.TOKEN_KV) return 0;
+  let total = 0;
+  let cursor;
+  for (let i = 0; i < 5; i++) {
+    const page = await env.TOKEN_KV.list({ prefix: "PEDIDO:", limit: 200, cursor });
+    const filas = await Promise.all((page.keys || []).map((k) => env.TOKEN_KV.get(k.name)));
+    filas.forEach((raw) => {
+      if (!raw) return;
+      try {
+        const pedido = JSON.parse(raw);
+        if (!pedido.creado || pedido.creado < desde) return;
+        if (pedido.estado === "rechazado") return;
+        total += 1;
+      } catch (err) {
+        /* pedido ilegible */
+      }
+    });
+    if (page.list_complete) break;
+    cursor = page.cursor;
+    if (!cursor) break;
+  }
+  return total;
 }
 
 function diasPedidos(request) {
@@ -91,7 +116,7 @@ export async function resumenAnalitica(request, env, json, exigirSesion) {
     .run();
 
   const db = env.CLIENTES_DB;
-  const [paginas, visitantes, sesiones, tiempo, productosN, whatsapp, carritos, busquedas, porDia, topPaginas, topProductos, dispositivos, origenes] =
+  const [paginas, visitantes, sesiones, tiempo, productosN, whatsapp, carritos, busquedas, salidasMl, pedidosWeb, topMl, porDia, topPaginas, topProductos, dispositivos, origenes] =
     await Promise.all([
       db.prepare("SELECT COUNT(*) AS n FROM analitica_eventos WHERE tipo = 'page' AND creado_en >= ?").bind(desde).first(),
       db.prepare("SELECT COUNT(DISTINCT visitante) AS n FROM analitica_eventos WHERE tipo = 'page' AND creado_en >= ?").bind(desde).first(),
@@ -103,6 +128,16 @@ export async function resumenAnalitica(request, env, json, exigirSesion) {
       db.prepare("SELECT COUNT(*) AS n FROM analitica_eventos WHERE tipo = 'whatsapp' AND creado_en >= ?").bind(desde).first(),
       db.prepare("SELECT COUNT(*) AS n FROM analitica_eventos WHERE tipo = 'carrito' AND creado_en >= ?").bind(desde).first(),
       db.prepare("SELECT COUNT(*) AS n FROM analitica_eventos WHERE tipo = 'busqueda' AND creado_en >= ?").bind(desde).first(),
+      db.prepare("SELECT COUNT(*) AS n FROM analitica_eventos WHERE tipo = 'mercadolibre' AND creado_en >= ?").bind(desde).first(),
+      contarPedidosWeb(env, desde),
+      db.prepare(
+        `SELECT producto_id, producto_titulo, COUNT(*) AS clics
+         FROM analitica_eventos
+         WHERE tipo = 'mercadolibre' AND creado_en >= ? AND producto_titulo != ''
+         GROUP BY producto_id, producto_titulo
+         ORDER BY clics DESC
+         LIMIT 8`
+      ).bind(desde).all(),
       db.prepare(
         `SELECT substr(creado_en, 1, 10) AS dia,
                 SUM(CASE WHEN tipo = 'page' THEN 1 ELSE 0 END) AS paginas,
@@ -158,6 +193,8 @@ export async function resumenAnalitica(request, env, json, exigirSesion) {
       clics_whatsapp: num(whatsapp),
       carritos: num(carritos),
       busquedas: num(busquedas),
+      salidas_ml: num(salidasMl),
+      pedidos_web: Number(pedidosWeb) || 0,
     },
     por_dia: (porDia.results || []).map((row) => ({
       dia: row.dia,
@@ -171,6 +208,11 @@ export async function resumenAnalitica(request, env, json, exigirSesion) {
     productos: (topProductos.results || []).map((row) => ({
       producto_id: row.producto_id || "",
       producto_titulo: row.producto_titulo || "Producto",
+      clics: Number(row.clics) || 0,
+    })),
+    mercadolibre: (topMl.results || []).map((row) => ({
+      producto_id: row.producto_id || "",
+      producto_titulo: row.producto_titulo || "Mercado Libre",
       clics: Number(row.clics) || 0,
     })),
     dispositivos: (dispositivos.results || []).map((row) => ({

@@ -1378,6 +1378,13 @@
           }
           var numFinal = resultado.numero || numero;
           var resumenFinal = textoPedido(numFinal, datos, items, sub);
+          if (window.AndesAnalitica && window.AndesAnalitica.evento) {
+            window.AndesAnalitica.evento({
+              tipo: "compra",
+              titulo: numFinal,
+              path: "/checkout.html",
+            });
+          }
           mostrarConfirmacion(numFinal, datos, resumenFinal);
           window.AndesCart.vaciar();
           submitBtn.disabled = false;

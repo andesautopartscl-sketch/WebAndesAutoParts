@@ -118,10 +118,10 @@
     if (/mercadolibre\./i.test(href)) {
       var card = a.closest("article");
       var tituloEl = card && card.querySelector(".producto-titulo, h3");
-      var titulo = tituloEl ? tituloEl.textContent.trim() : a.getAttribute("aria-label") || "";
+      var titulo = tituloEl ? tituloEl.textContent.trim() : a.getAttribute("aria-label") || "Tienda Mercado Libre";
       var idMatch = href.match(/ML[A-Z]-?\d+/i);
       enviar({
-        tipo: "producto",
+        tipo: "mercadolibre",
         producto_id: idMatch ? idMatch[0].replace("-", "") : "",
         producto_titulo: titulo.replace(/^Ver en Mercado Libre:\s*/i, ""),
         path: href.slice(0, 300),
