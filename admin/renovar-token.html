@@ -71,6 +71,7 @@
     <div id="log" class="panel hidden" aria-live="polite"></div>
   </div>
 
+  <script src="../andes-dialog.js?v=20261014d"></script>
   <script>
     const CLIENT_ID = "2004412570250603";
     const REDIRECT_URI =
@@ -217,9 +218,13 @@
           }
           var secret = sessionStorage.getItem("ml_client_secret") || "";
           if (!secret) {
-            secret = prompt(
-              "El Worker no tiene ML_CLIENT_SECRET.\nPega el secreto (solo esta vez):"
-            );
+            secret = await AndesDialog.prompt({
+              titulo: "Secreto de Mercado Libre",
+              mensaje: "El Worker no tiene ML_CLIENT_SECRET. Pégalo aquí; solo se guarda en esta pestaña.",
+              placeholder: "Client secret",
+              inputType: "password",
+              confirmar: "Continuar",
+            });
             if (secret) sessionStorage.setItem("ml_client_secret", secret.trim());
           }
           if (!secret) throw workerErr;

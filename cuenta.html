@@ -390,6 +390,7 @@
 
   <script src="contact-config.js?v=20260909x"></script>
   <script src="cart.js?v=20260909t"></script>
+  <script src="andes-dialog.js?v=20261014d"></script>
   <script src="auth.js?v=20261014p"></script>
   <script>
     (function () {
@@ -713,28 +714,45 @@
         var numero = btn.getAttribute("data-numero");
         var aviso =
           accion === "rechazar"
-            ? "Se avisará al cliente que no hay stock y que se le devuelve el dinero."
+            ? {
+                titulo: "Rechazar pedido",
+                mensaje: "Se avisará al cliente que no hay stock y que se le devuelve el dinero.",
+                confirmar: "Rechazar",
+                tono: "danger",
+              }
             : accion === "despachado"
-            ? "Se avisará al cliente que el pedido va en camino."
-            : "Se avisará al cliente que la compra está confirmada.";
-        if (!window.confirm(aviso)) return;
-        var err = document.getElementById("gestion-error");
-        var ok = document.getElementById("gestion-ok");
-        mostrarError(err, "");
-        ok.hidden = true;
-        btn.disabled = true;
-        window.AndesAuth.api("/admin/pedidos/estado", {
-          method: "POST",
-          body: { numero: numero, accion: accion },
-        }).then(function (data) {
-          btn.disabled = false;
-          if (!data.ok) {
-            mostrarError(err, data.message || "No se pudo actualizar el pedido.");
-            return;
-          }
-          ok.hidden = false;
-          ok.textContent = data.message || "Pedido actualizado";
-          cargarGestion();
+            ? {
+                titulo: "Despachar pedido",
+                mensaje: "Se avisará al cliente que el pedido va en camino.",
+                confirmar: "Despachar",
+                tono: "primary",
+              }
+            : {
+                titulo: "Confirmar pedido",
+                mensaje: "Se avisará al cliente que la compra está confirmada.",
+                confirmar: "Confirmar",
+                tono: "primary",
+              };
+        window.AndesDialog.confirm(aviso).then(function (acepta) {
+          if (!acepta) return;
+          var err = document.getElementById("gestion-error");
+          var ok = document.getElementById("gestion-ok");
+          mostrarError(err, "");
+          ok.hidden = true;
+          btn.disabled = true;
+          window.AndesAuth.api("/admin/pedidos/estado", {
+            method: "POST",
+            body: { numero: numero, accion: accion },
+          }).then(function (data) {
+            btn.disabled = false;
+            if (!data.ok) {
+              mostrarError(err, data.message || "No se pudo actualizar el pedido.");
+              return;
+            }
+            ok.hidden = false;
+            ok.textContent = data.message || "Pedido actualizado";
+            cargarGestion();
+          });
         });
       });
 

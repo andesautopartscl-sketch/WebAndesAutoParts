@@ -220,6 +220,7 @@
     </footer>
   </div>
 
+  <script src="andes-dialog.js?v=20261014d"></script>
   <script>
 (function () {
   var products = [];
@@ -535,9 +536,16 @@
   });
 
   document.getElementById("btn-clear").addEventListener("click", function () {
-    if (!window.confirm("¿Vaciar toda la lista?")) return;
-    products = [emptyProduct()];
-    render();
+    window.AndesDialog.confirm({
+      titulo: "Vaciar la lista",
+      mensaje: "Se borran todos los productos del editor. Esta acción no se puede deshacer.",
+      confirmar: "Vaciar",
+      tono: "danger",
+    }).then(function (acepta) {
+      if (!acepta) return;
+      products = [emptyProduct()];
+      render();
+    });
   });
 
   document.getElementById("file-in").addEventListener("change", function (e) {

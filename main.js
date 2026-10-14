@@ -128,11 +128,19 @@
           subject +
           "&body=" +
           encodeURIComponent(body);
-        alert(
-          "Modo local: al aceptar, se abrirá tu correo con el mensaje listo.\n\n" +
-            "En GitHub Pages puedes usar Web3Forms (contact-config.js) o WhatsApp."
-        );
-        window.location.href = mailto;
+        var abrirCorreo = function () {
+          window.location.href = mailto;
+        };
+        if (window.AndesDialog) {
+          window.AndesDialog.alert({
+            titulo: "Modo local",
+            mensaje:
+              "Al continuar se abrirá tu correo con el mensaje listo. En el sitio publicado este formulario usa el envío configurado.",
+            confirmar: "Abrir correo",
+          }).then(abrirCorreo);
+          return;
+        }
+        abrirCorreo();
       },
       true
     );
