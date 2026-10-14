@@ -427,6 +427,11 @@ ${tablaItems(pedido)}
   );
 }
 
+function lineaOpinion() {
+  const url = "https://andesautoparts.cl/cuenta.html#compras";
+  return `<p style="margin:18px 0 0;font-size:14px;line-height:1.6">Cuando tengas el repuesto, cuéntanos cómo te fue. Entra a <a href="${url}" style="color:${MARCA};font-weight:700">Mi cuenta</a> con este mismo correo y deja una nota corta. La publicamos en la portada después de revisarla.</p>`;
+}
+
 function correoClienteConfirmado(pedido) {
   const cierre =
     pedido.entrega.modo === "retiro"
@@ -448,6 +453,7 @@ function correoClienteConfirmado(pedido) {
       pedido.numero
     )} ha sido confirmada.</strong> ${cierre}</p>
 ${tablaItems(pedido)}
+${lineaOpinion()}
 <p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Gracias por comprarnos directo. Cualquier duda, responde este correo o escríbenos al +56 9 2615 2826.</p>`
   );
 }
@@ -492,6 +498,7 @@ function correoClienteDespachado(pedido) {
     )}, tu pedido <strong>${esc(pedido.numero)}</strong> ya fue despachado.</p>
 <p style="margin:0 0 18px;padding:14px;background:#eff6ff;border-left:3px solid #1d4ed8;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6"><strong>Tu compra ya va en camino.</strong> ${cierre}</p>
 ${tablaItems(pedido)}
+${lineaOpinion()}
 <p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Gracias por comprar en Andes Auto Parts. Si necesitas ayuda con la recepción de tu pedido, responde este correo o escríbenos al +56 9 2615 2826.</p>`
   );
 }
