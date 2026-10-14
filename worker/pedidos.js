@@ -711,13 +711,33 @@ async function ejecutarAccion(request, env) {
     return html(paginaResultado("Enlace inv?lido", "No encontramos ese pedido."), 404);
   }
 
+  const resultado = await aplicarEstado(env, pedido, accion);
+  if (!resultado.ok) {
+    return html(paginaResultado("No se pudo actualizar", resultado.message), resultado.status || 400);
+  }
+  return html(paginaResultado(resultado.titulo, resultado.mensaje));
+}
+
+async function aplicarEstado(env, pedido, accion) {
   const confirmar = accion === "confirmar";
   const despachado = accion === "despachado";
+  const rechazar = accion === "rechazar";
+  if (!confirmar && !despachado && !rechazar) {
+    return { ok: false, status: 400, message: "Acción desconocida" };
+  }
+  if (pedido.estado === "rechazado" || pedido.estado === "despachado") {
+    return { ok: false, status: 400, message: "Ese pedido ya está cerrado" };
+  }
+  const nuevo = confirmar ? "confirmado" : despachado ? "despachado" : "rechazado";
+  if (pedido.estado === nuevo) {
+    return { ok: false, status: 400, message: "El pedido ya está en ese estado" };
+  }
+
   try {
     await enviarCorreo(env, {
       para: pedido.cliente.email,
       asunto: confirmar
-        ? `Tu compra ${pedido.numero} est? confirmada`
+        ? `Tu compra ${pedido.numero} está confirmada`
         : despachado
         ? `Tu pedido ${pedido.numero} va en camino`
         : `Sobre tu pedido ${pedido.numero}`,
@@ -729,52 +749,141 @@ async function ejecutarAccion(request, env) {
       responderA: env.PEDIDOS_AVISO || "andesautopartscl@gmail.com",
     });
   } catch (err) {
-    return html(
-      paginaResultado("No pudimos enviar el correo", String(err.message).slice(0, 200)),
-      502
-    );
+    return {
+      ok: false,
+      status: 502,
+      message: "No pudimos enviar el correo al cliente. El estado no cambió.",
+    };
   }
 
-  pedido.estado = confirmar ? "confirmado" : despachado ? "despachado" : "rechazado";
+  pedido.estado = nuevo;
   pedido.resueltoEn = new Date().toISOString();
   await guardarPedido(env, pedido);
 
-  return html(
-    paginaResultado(
-      confirmar ? "Compra confirmada" : despachado ? "Pedido despachado" : "Aviso enviado",
-      confirmar
-        ? `Le avisamos a ${pedido.cliente.email} que su compra est? confirmada.`
-        : despachado
-        ? `Le avisamos a ${pedido.cliente.email} que su pedido ya va en camino.`
-        : `Le avisamos a ${pedido.cliente.email} que no hay stock y que le devuelves ${clp(
-            totalPedido(pedido)
-          )}.`
-    )
-  );
+  const titulo = confirmar ? "Compra confirmada" : despachado ? "Pedido despachado" : "Aviso enviado";
+  const mensaje = confirmar
+    ? `Le avisamos a ${pedido.cliente.email} que su compra está confirmada.`
+    : despachado
+    ? `Le avisamos a ${pedido.cliente.email} que su pedido ya va en camino.`
+    : `Le avisamos a ${pedido.cliente.email} que no hay stock y que se le devuelve ${clp(totalPedido(pedido))}.`;
+  return { ok: true, estado: nuevo, titulo, mensaje, message: mensaje };
+}
+
+function pedidoCliente(p) {
+  const entrega = p.entrega || {};
+  const pago = p.pago || {};
+  return {
+    numero: p.numero,
+    creado: p.creado,
+    estado: p.estado || "pendiente",
+    resueltoEn: p.resueltoEn || "",
+    items: (p.items || []).map((it) => ({
+      titulo: it.titulo,
+      sku: it.sku || "",
+      qty: it.qty,
+      precio: it.precio,
+    })),
+    subtotal: p.subtotal || 0,
+    total: p.total || p.subtotal || 0,
+    entrega: {
+      modo: entrega.modo === "retiro" ? "retiro" : "envio",
+      comuna: entrega.comuna || "",
+      region: entrega.region || "",
+    },
+    pago: { metodo: pago.metodo === "whatsapp" ? "whatsapp" : "transferencia" },
+  };
+}
+
+function pedidoAdmin(p) {
+  const base = pedidoCliente(p);
+  const cliente = p.cliente || {};
+  return {
+    ...base,
+    cliente: cliente.nombre || "",
+    email: cliente.email || "",
+    telefono: cliente.telefono || "",
+    notas: p.notas || "",
+    pagoDeclarado: Boolean(p.pago && p.pago.declarado),
+  };
+}
+
+async function todosLosPedidos(env) {
+  if (!env.TOKEN_KV) return [];
+  const crudos = [];
+  let cursor;
+  for (let i = 0; i < 5; i++) {
+    const page = await env.TOKEN_KV.list({ prefix: KV_PEDIDO, limit: 200, cursor });
+    const batch = await Promise.all(
+      (page.keys || []).map(async (k) => leerPedido(env, k.name.slice(KV_PEDIDO.length)))
+    );
+    crudos.push(...batch.filter(Boolean));
+    if (page.list_complete) break;
+    cursor = page.cursor;
+    if (!cursor) break;
+  }
+  return crudos.sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
+}
+
+function esStaff(usuario) {
+  return usuario && (usuario.rol === "admin" || usuario.rol === "vendedor");
 }
 
 async function listarPedidos(env, json) {
   if (!env.TOKEN_KV) return json({ ok: false, error: "KV_NO_CONFIGURADO" }, 500);
-
-  const { keys } = await env.TOKEN_KV.list({ prefix: KV_PEDIDO, limit: 200 });
-  const pedidos = await Promise.all(
-    keys.map(async (k) => {
-      const p = await leerPedido(env, k.name.slice(KV_PEDIDO.length));
-      if (!p) return null;
-      return {
-        numero: p.numero,
-        creado: p.creado,
-        estado: p.estado,
-        cliente: p.cliente.nombre,
-        email: p.cliente.email,
-        subtotal: p.subtotal,
-        pagoDeclarado: p.pago.declarado,
-      };
-    })
-  );
-
-  const lista = pedidos.filter(Boolean).sort((a, b) => b.creado.localeCompare(a.creado));
+  const lista = (await todosLosPedidos(env)).map((p) => ({
+    numero: p.numero,
+    creado: p.creado,
+    estado: p.estado,
+    cliente: p.cliente.nombre,
+    email: p.cliente.email,
+    subtotal: p.subtotal,
+    pagoDeclarado: p.pago.declarado,
+  }));
   return json({ ok: true, total: lista.length, pedidos: lista });
+}
+
+async function misPedidos(request, env, json, usuarioDesdeRequest) {
+  const usuario = await usuarioDesdeRequest(env, request);
+  if (!usuario) {
+    return json({ ok: false, error: "NO_AUTENTICADO", message: "Inicia sesión" }, 401);
+  }
+  const email = String(usuario.email || "").toLowerCase();
+  const mios = (await todosLosPedidos(env)).filter((p) => {
+    if (p.usuario_id && p.usuario_id === usuario.id) return true;
+    return String(p.cliente && p.cliente.email ? p.cliente.email : "").toLowerCase() === email;
+  });
+  return json({ ok: true, pedidos: mios.map(pedidoCliente) });
+}
+
+async function listarPedidosStaff(request, env, json, usuarioDesdeRequest) {
+  const usuario = await usuarioDesdeRequest(env, request);
+  if (!esStaff(usuario)) {
+    return json({ ok: false, error: "PROHIBIDO", message: "Solo el equipo de la tienda" }, usuario ? 403 : 401);
+  }
+  const pedidos = (await todosLosPedidos(env)).map(pedidoAdmin);
+  return json({ ok: true, total: pedidos.length, pedidos });
+}
+
+async function cambiarEstadoStaff(request, env, json, usuarioDesdeRequest) {
+  const usuario = await usuarioDesdeRequest(env, request);
+  if (!esStaff(usuario)) {
+    return json({ ok: false, error: "PROHIBIDO", message: "Solo el equipo de la tienda" }, usuario ? 403 : 401);
+  }
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const numero = texto(body.numero, 32);
+  const accion = texto(body.accion, 20);
+  const pedido = await leerPedido(env, numero);
+  if (!pedido) return json({ ok: false, error: "NO_ENCONTRADO", message: "No encontramos ese pedido" }, 404);
+  const resultado = await aplicarEstado(env, pedido, accion);
+  if (!resultado.ok) {
+    return json({ ok: false, error: "ESTADO", message: resultado.message }, resultado.status || 400);
+  }
+  return json({ ok: true, message: resultado.message, estado: resultado.estado, pedido: pedidoAdmin(pedido) });
 }
 
 /* ================================ Router ================================ */
@@ -809,6 +918,18 @@ export async function rutearPedidos(
   if (path === "/orders/lista" && request.method === "GET") {
     if (!checkAuth(request, env)) return unauthorized();
     return listarPedidos(env, json);
+  }
+
+  if (path === "/orders/mios" && request.method === "GET") {
+    return misPedidos(request, env, json, usuarioDesdeRequest);
+  }
+
+  if (path === "/admin/pedidos" && request.method === "GET") {
+    return listarPedidosStaff(request, env, json, usuarioDesdeRequest);
+  }
+
+  if (path === "/admin/pedidos/estado" && request.method === "POST") {
+    return cambiarEstadoStaff(request, env, json, usuarioDesdeRequest);
   }
 
   return null;

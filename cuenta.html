@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014s" />
+  <link rel="stylesheet" href="styles.css?v=20261014p" />
 </head>
 <body>
   <header class="site-header">
@@ -83,6 +83,10 @@
           <button type="button" class="account-side__link" data-section="seguridad">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
             Seguridad
+          </button>
+          <button type="button" class="account-side__link" data-section="gestion" id="link-pedidos" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+            Pedidos
           </button>
           <button type="button" class="account-side__link" data-section="analitica" id="link-analitica" hidden>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5"/><path d="M12 16V8"/><path d="M16 16v-3"/></svg>
@@ -179,9 +183,11 @@
               <a href="tel:+56926152826">+56 9 2615 2826</a>
             </p>
           </div>
-          <div class="account-empty" id="compras-empty">
-            <p>Aún no mostramos el historial aquí.</p>
-            <p class="account-view__lead">Cada pedido te llega por correo con el número de referencia. Pronto verás el listado en esta sección.</p>
+          <p class="account-error" id="compras-error" hidden></p>
+          <div id="compras-lista" class="order-list"></div>
+          <div class="account-empty" id="compras-empty" hidden>
+            <p>Aún no tienes compras con este correo.</p>
+            <p class="account-view__lead">Cuando hagas un pedido, verás aquí el número, el estado y los productos.</p>
             <a class="btn btn-outline" href="index.html#productos">Seguir comprando</a>
           </div>
         </section>
@@ -259,6 +265,25 @@
               <div id="metrics-extra"></div>
             </section>
           </div>
+        </section>
+
+        <section class="account-view" id="view-gestion" data-view="gestion" hidden>
+          <div class="account-view__head">
+            <div>
+              <h1 class="account-view__title">Pedidos</h1>
+              <p class="account-view__lead">Confirma, despacha o rechaza. El cliente recibe el correo y ve el mismo estado en Mis compras.</p>
+            </div>
+          </div>
+          <div class="metrics-range" role="group" aria-label="Filtrar pedidos">
+            <button type="button" class="btn btn-outline btn-sm is-active" data-filtro-pedido="todos">Todos</button>
+            <button type="button" class="btn btn-outline btn-sm" data-filtro-pedido="pendiente">Recibidos</button>
+            <button type="button" class="btn btn-outline btn-sm" data-filtro-pedido="confirmado">Confirmados</button>
+            <button type="button" class="btn btn-outline btn-sm" data-filtro-pedido="despachado">Despachados</button>
+            <button type="button" class="btn btn-outline btn-sm" data-filtro-pedido="rechazado">Rechazados</button>
+          </div>
+          <p class="account-error" id="gestion-error" hidden></p>
+          <p class="account-ok" id="gestion-ok" hidden></p>
+          <div id="gestion-lista" class="order-list"></div>
         </section>
 
         <section class="account-view" id="view-clientes" data-view="clientes" hidden>
@@ -365,7 +390,7 @@
 
   <script src="contact-config.js?v=20260909x"></script>
   <script src="cart.js?v=20260909t"></script>
-  <script src="auth.js?v=20261014s"></script>
+  <script src="auth.js?v=20261014p"></script>
   <script>
     (function () {
       var COMUNAS_RM = [
@@ -466,6 +491,9 @@
         if (id === "analitica" && !(u && u.rol === "admin")) {
           id = "datos";
         }
+        if (id === "gestion" && !(u && (u.rol === "admin" || u.rol === "vendedor"))) {
+          id = "datos";
+        }
         document.querySelectorAll(".account-side__link[data-section]").forEach(function (btn) {
           btn.classList.toggle("is-active", btn.getAttribute("data-section") === id);
         });
@@ -479,15 +507,236 @@
         }
         if (id === "clientes") cargarClientes();
         if (id === "analitica") cargarAnalitica(diasAnalitica);
+        if (id === "compras") cargarCompras();
+        if (id === "gestion") cargarGestion();
       }
 
       function seccionDesdeHash() {
         var h = (location.hash || "#datos").replace(/^#/, "");
         if (h === "pedidos") h = "compras";
         if (h === "perfil") h = "datos";
-        if (["datos", "compras", "favoritos", "clientes", "seguridad", "analitica"].indexOf(h) < 0) h = "datos";
+        if (["datos", "compras", "favoritos", "clientes", "seguridad", "analitica", "gestion"].indexOf(h) < 0) h = "datos";
         return h;
       }
+
+      var filtroPedido = "todos";
+      var pedidosStaff = [];
+
+      function fmtClp(n) {
+        return Number(n || 0).toLocaleString("es-CL", {
+          style: "currency",
+          currency: "CLP",
+          maximumFractionDigits: 0,
+        });
+      }
+
+      function fmtFecha(iso) {
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return "";
+        try {
+          return d.toLocaleString("es-CL", { dateStyle: "medium", timeStyle: "short" });
+        } catch (err) {
+          return d.toLocaleString("es-CL");
+        }
+      }
+
+      function etiquetaEstado(estado) {
+        if (estado === "confirmado") return "Confirmado";
+        if (estado === "despachado") return "Despachado";
+        if (estado === "rechazado") return "Rechazado";
+        return "Recibido";
+      }
+
+      function htmlItems(items) {
+        return (items || [])
+          .map(function (it) {
+            return (
+              "<li><span>" +
+              escHtml(it.qty) +
+              " × " +
+              escHtml(it.titulo || "Producto") +
+              (it.sku ? " <small>" + escHtml(it.sku) + "</small>" : "") +
+              "</span><strong>" +
+              fmtClp(it.precio * it.qty) +
+              "</strong></li>"
+            );
+          })
+          .join("");
+      }
+
+      function htmlPedidoCliente(p) {
+        var entrega =
+          p.entrega && p.entrega.modo === "retiro"
+            ? "Retiro en tienda"
+            : "Envío" + (p.entrega && p.entrega.comuna ? " · " + p.entrega.comuna : "");
+        return (
+          '<article class="order-card">' +
+          '<header class="order-card__head"><div><strong>' +
+          escHtml(p.numero) +
+          "</strong><p>" +
+          escHtml(fmtFecha(p.creado)) +
+          "</p></div><span class=\"order-badge order-badge--" +
+          escHtml(p.estado || "pendiente") +
+          '">' +
+          etiquetaEstado(p.estado) +
+          "</span></header>" +
+          '<ul class="order-card__items">' +
+          htmlItems(p.items) +
+          "</ul>" +
+          '<footer class="order-card__foot"><span>' +
+          escHtml(entrega) +
+          "</span><strong>" +
+          fmtClp(p.total) +
+          "</strong></footer></article>"
+        );
+      }
+
+      function cargarCompras() {
+        var lista = document.getElementById("compras-lista");
+        var vacio = document.getElementById("compras-empty");
+        var err = document.getElementById("compras-error");
+        if (!lista || !window.AndesAuth.haySesion()) return;
+        mostrarError(err, "");
+        lista.innerHTML = '<p class="metrics-empty">Cargando compras…</p>';
+        vacio.hidden = true;
+        window.AndesAuth.api("/orders/mios").then(function (data) {
+          if (!data.ok) {
+            lista.innerHTML = "";
+            mostrarError(err, data.message || "No se pudieron cargar las compras.");
+            return;
+          }
+          var pedidos = data.pedidos || [];
+          if (!pedidos.length) {
+            lista.innerHTML = "";
+            vacio.hidden = false;
+            return;
+          }
+          vacio.hidden = true;
+          lista.innerHTML = pedidos.map(htmlPedidoCliente).join("");
+        });
+      }
+
+      function accionesPedido(p) {
+        if (p.estado === "despachado" || p.estado === "rechazado") return "";
+        var botones = "";
+        if (p.estado === "pendiente") {
+          botones +=
+            '<button type="button" class="btn btn-primary btn-sm" data-accion="confirmar" data-numero="' +
+            escHtml(p.numero) +
+            '">Confirmar</button>';
+        }
+        botones +=
+          '<button type="button" class="btn btn-outline btn-sm" data-accion="despachado" data-numero="' +
+          escHtml(p.numero) +
+          '">Despachar</button>' +
+          '<button type="button" class="btn btn-outline btn-sm" data-accion="rechazar" data-numero="' +
+          escHtml(p.numero) +
+          '">Rechazar</button>';
+        return '<div class="order-card__actions">' + botones + "</div>";
+      }
+
+      function pintarGestion() {
+        var lista = document.getElementById("gestion-lista");
+        var visibles = pedidosStaff.filter(function (p) {
+          return filtroPedido === "todos" || p.estado === filtroPedido;
+        });
+        if (!visibles.length) {
+          lista.innerHTML = '<p class="metrics-empty">No hay pedidos en este filtro.</p>';
+          return;
+        }
+        lista.innerHTML = visibles
+          .map(function (p) {
+            return (
+              '<article class="order-card">' +
+              '<header class="order-card__head"><div><strong>' +
+              escHtml(p.numero) +
+              "</strong><p>" +
+              escHtml(p.cliente || "Cliente") +
+              " · " +
+              escHtml(p.email || "") +
+              "<br>" +
+              escHtml(fmtFecha(p.creado)) +
+              (p.telefono ? " · " + escHtml(p.telefono) : "") +
+              "</p></div><span class=\"order-badge order-badge--" +
+              escHtml(p.estado || "pendiente") +
+              '">' +
+              etiquetaEstado(p.estado) +
+              "</span></header>" +
+              '<ul class="order-card__items">' +
+              htmlItems(p.items) +
+              "</ul>" +
+              (p.notas ? '<p class="order-card__note">' + escHtml(p.notas) + "</p>" : "") +
+              '<footer class="order-card__foot"><span>' +
+              (p.pago && p.pago.metodo === "whatsapp" ? "WhatsApp" : "Transferencia") +
+              (p.pagoDeclarado ? " · declaró pago" : "") +
+              "</span><strong>" +
+              fmtClp(p.total) +
+              "</strong></footer>" +
+              accionesPedido(p) +
+              "</article>"
+            );
+          })
+          .join("");
+      }
+
+      function cargarGestion() {
+        var err = document.getElementById("gestion-error");
+        var lista = document.getElementById("gestion-lista");
+        if (!lista) return;
+        mostrarError(err, "");
+        lista.innerHTML = '<p class="metrics-empty">Cargando pedidos…</p>';
+        window.AndesAuth.api("/admin/pedidos").then(function (data) {
+          if (!data.ok) {
+            lista.innerHTML = "";
+            mostrarError(err, data.message || "No se pudieron cargar los pedidos.");
+            return;
+          }
+          pedidosStaff = data.pedidos || [];
+          pintarGestion();
+        });
+      }
+
+      document.querySelectorAll("[data-filtro-pedido]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          filtroPedido = btn.getAttribute("data-filtro-pedido") || "todos";
+          document.querySelectorAll("[data-filtro-pedido]").forEach(function (otro) {
+            otro.classList.toggle("is-active", otro === btn);
+          });
+          pintarGestion();
+        });
+      });
+
+      document.getElementById("gestion-lista").addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-accion]");
+        if (!btn) return;
+        var accion = btn.getAttribute("data-accion");
+        var numero = btn.getAttribute("data-numero");
+        var aviso =
+          accion === "rechazar"
+            ? "Se avisará al cliente que no hay stock y que se le devuelve el dinero."
+            : accion === "despachado"
+            ? "Se avisará al cliente que el pedido va en camino."
+            : "Se avisará al cliente que la compra está confirmada.";
+        if (!window.confirm(aviso)) return;
+        var err = document.getElementById("gestion-error");
+        var ok = document.getElementById("gestion-ok");
+        mostrarError(err, "");
+        ok.hidden = true;
+        btn.disabled = true;
+        window.AndesAuth.api("/admin/pedidos/estado", {
+          method: "POST",
+          body: { numero: numero, accion: accion },
+        }).then(function (data) {
+          btn.disabled = false;
+          if (!data.ok) {
+            mostrarError(err, data.message || "No se pudo actualizar el pedido.");
+            return;
+          }
+          ok.hidden = false;
+          ok.textContent = data.message || "Pedido actualizado";
+          cargarGestion();
+        });
+      });
 
       /* —— Central de clientes (misma página) —— */
       var tbody = document.querySelector("#tabla tbody");
@@ -696,6 +945,8 @@
         if (admin) admin.hidden = !(u.rol === "vendedor" || u.rol === "admin");
         var linkAnalitica = document.getElementById("link-analitica");
         if (linkAnalitica) linkAnalitica.hidden = u.rol !== "admin";
+        var linkPedidos = document.getElementById("link-pedidos");
+        if (linkPedidos) linkPedidos.hidden = !(u.rol === "admin" || u.rol === "vendedor");
         mostrarSeccion(seccionDesdeHash());
       }
 

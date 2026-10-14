@@ -681,6 +681,8 @@ export default {
           "GET /auth-url",
           "GET /health",
           "POST /orders (público, desde el checkout)",
+          "GET /orders/mios",
+          "GET|POST /admin/pedidos",
           "GET|POST /orders/accion (confirmar o rechazar un pedido)",
           "GET /orders/lista (requiere WORKER_SYNC_SECRET)",
           "POST /auth/registro | /auth/login | /auth/logout | /auth/bootstrap",

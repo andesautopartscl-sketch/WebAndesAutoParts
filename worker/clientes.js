@@ -1166,6 +1166,8 @@ export async function rutearClientes(path, request, env, { json }) {
   if (path === "/analitica/evento" && request.method === "POST") {
     return registrarEvento(request, env, json, rateLimit);
   }
+  // Los atiende pedidos.js (sesión de staff, no el secreto de sync).
+  if (path === "/admin/pedidos" || path === "/admin/pedidos/estado") return null;
   if (!path.startsWith("/auth") && !path.startsWith("/cart") && !path.startsWith("/pricing") && !path.startsWith("/admin")) {
     return null;
   }

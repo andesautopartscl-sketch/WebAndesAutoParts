@@ -463,7 +463,8 @@
     if (esStaff(u)) {
       items +=
         '<div class="account-menu__sep"></div>' +
-        itemMenu(base + "cuenta.html#clientes", "Central de clientes");
+        itemMenu(base + "cuenta.html#clientes", "Central de clientes") +
+        itemMenu(base + "cuenta.html#gestion", "Pedidos");
       if (u.rol === "admin") {
         items += itemMenu(base + "cuenta.html#analitica", "Analítica del sitio");
       }
