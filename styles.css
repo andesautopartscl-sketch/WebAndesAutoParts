@@ -1814,9 +1814,9 @@ body {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
-  background: #f7f9fb;
+  background: #fff;
 }
 
 .product-panel {
@@ -1933,9 +1933,9 @@ body {
 
 .product-related img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
-  background: #f7f9fb;
+  background: #fff;
 }
 
 .product-related p {
