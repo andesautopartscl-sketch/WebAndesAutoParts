@@ -108,6 +108,19 @@ CREATE TABLE IF NOT EXISTS favoritos (
 
 CREATE INDEX IF NOT EXISTS idx_favoritos_usuario ON favoritos(usuario_id, creado_en);
 
+CREATE TABLE IF NOT EXISTS opiniones (
+  id TEXT PRIMARY KEY,
+  usuario_id TEXT NOT NULL,
+  pedido_numero TEXT NOT NULL UNIQUE,
+  nombre TEXT NOT NULL,
+  texto TEXT NOT NULL,
+  estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'publicada', 'oculta')),
+  creado_en TEXT NOT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_opiniones_estado ON opiniones(estado, creado_en);
+
 CREATE INDEX IF NOT EXISTS idx_analitica_creado ON analitica_eventos(creado_en);
 CREATE INDEX IF NOT EXISTS idx_analitica_tipo ON analitica_eventos(tipo, creado_en);
 CREATE INDEX IF NOT EXISTS idx_analitica_sesion ON analitica_eventos(sesion);

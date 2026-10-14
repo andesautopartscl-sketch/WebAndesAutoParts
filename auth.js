@@ -555,6 +555,7 @@
         itemMenu(base + "cuenta.html#clientes", "Central de clientes") +
         itemMenu(base + "cuenta.html#gestion", "Pedidos");
       if (u.rol === "admin") {
+        items += itemMenu(base + "cuenta.html#opiniones", "Opiniones");
         items += itemMenu(base + "cuenta.html#analitica", "Analítica del sitio");
       }
     }

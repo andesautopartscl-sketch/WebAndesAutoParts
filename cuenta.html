@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014x" />
+  <link rel="stylesheet" href="styles.css?v=20261014y" />
 </head>
 <body>
   <header class="site-header">
@@ -105,6 +105,10 @@
           <button type="button" class="account-side__link" data-section="gestion" id="link-pedidos" hidden>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
             Pedidos
+          </button>
+          <button type="button" class="account-side__link" data-section="opiniones" id="link-opiniones" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Opiniones
           </button>
           <button type="button" class="account-side__link" data-section="analitica" id="link-analitica" hidden>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5"/><path d="M12 16V8"/><path d="M16 16v-3"/></svg>
@@ -265,6 +269,18 @@
               <button type="submit" class="btn btn-primary">Guardar contraseña</button>
             </div>
           </form>
+        </section>
+
+        <section class="account-view" id="view-opiniones" data-view="opiniones" hidden>
+          <div class="account-view__head">
+            <div>
+              <h1 class="account-view__title">Opiniones</h1>
+              <p class="account-view__lead">Las deja quien compra en la web. En la portada solo se ven las que publiques.</p>
+            </div>
+          </div>
+          <p class="account-error" id="opiniones-error" hidden></p>
+          <p class="account-ok" id="opiniones-ok" hidden></p>
+          <div id="opiniones-lista" class="order-list"></div>
         </section>
 
         <section class="account-view" id="view-analitica" data-view="analitica" hidden>
@@ -431,7 +447,7 @@
   <script src="cart.js?v=20260909t"></script>
   <script src="favoritos.js?v=20261014f"></script>
   <script src="andes-dialog.js?v=20261014d"></script>
-  <script src="auth.js?v=20261014v"></script>
+  <script src="auth.js?v=20261014w"></script>
   <script>
     (function () {
       var header = document.querySelector(".site-header");
@@ -551,6 +567,9 @@
         if (id === "analitica" && !(u && u.rol === "admin")) {
           id = "datos";
         }
+        if (id === "opiniones" && !(u && u.rol === "admin")) {
+          id = "datos";
+        }
         if (id === "gestion" && !(u && (u.rol === "admin" || u.rol === "vendedor"))) {
           id = "datos";
         }
@@ -575,13 +594,14 @@
         if (id === "compras") cargarCompras();
         if (id === "favoritos") cargarFavoritos();
         if (id === "gestion") cargarGestion();
+        if (id === "opiniones") cargarOpinionesAdmin();
       }
 
       function seccionDesdeHash() {
         var h = (location.hash || "#datos").replace(/^#/, "");
         if (h === "pedidos") h = "compras";
         if (h === "perfil") h = "datos";
-        if (["datos", "compras", "favoritos", "clientes", "seguridad", "analitica", "gestion"].indexOf(h) < 0) h = "datos";
+        if (["datos", "compras", "favoritos", "clientes", "seguridad", "analitica", "gestion", "opiniones"].indexOf(h) < 0) h = "datos";
         return h;
       }
 
@@ -630,7 +650,51 @@
           .join("");
       }
 
-      function htmlPedidoCliente(p) {
+      function bloqueOpinion(p, opinion) {
+        if (p.estado === "rechazado") return "";
+        if (p.estado !== "confirmado" && p.estado !== "despachado") {
+          return '<p class="order-card__note order-review">Cuando confirmemos el pedido podrás dejar tu opinión.</p>';
+        }
+        if (opinion) {
+          var aviso =
+            opinion.estado === "publicada"
+              ? "Ya está publicada en la portada."
+              : opinion.estado === "oculta"
+                ? "Esta opinión no se publicó."
+                : "La recibimos. La publicamos cuando la revisemos.";
+          return (
+            '<div class="order-review"><p class="order-card__note">' +
+            escHtml(aviso) +
+            '</p><p class="testimonio-texto">' +
+            escHtml(opinion.texto) +
+            "</p></div>"
+          );
+        }
+        var u = window.AndesAuth.usuario();
+        var nombre = u && u.nombre ? String(u.nombre).trim().split(/\s+/)[0] : "";
+        var numero = escHtml(p.numero).replace(/"/g, "&quot;");
+        return (
+          '<form class="order-review" data-opinion-pedido="' +
+          numero +
+          '"><p class="order-card__note">Cuéntanos cómo te fue. La publicamos en la portada después de revisarla. Se ven el nombre y la fecha.</p>' +
+          '<div class="field"><label for="opinion-nombre-' +
+          numero +
+          '">Nombre que se verá</label><input id="opinion-nombre-' +
+          numero +
+          '" name="nombre" maxlength="40" required value="' +
+          escHtml(nombre).replace(/"/g, "&quot;") +
+          '"></div>' +
+          '<div class="field"><label for="opinion-texto-' +
+          numero +
+          '">Tu opinión</label><textarea id="opinion-texto-' +
+          numero +
+          '" name="texto" maxlength="400" minlength="12" required rows="3" placeholder="Una nota corta sobre tu compra"></textarea></div>' +
+          '<p class="account-error" data-opinion-error hidden></p>' +
+          '<button type="submit" class="btn btn-primary btn-sm">Enviar opinión</button></form>'
+        );
+      }
+
+      function htmlPedidoCliente(p, opinion) {
         var entrega =
           p.entrega && p.entrega.modo === "retiro"
             ? "Retiro en tienda"
@@ -653,7 +717,9 @@
           escHtml(entrega) +
           "</span><strong>" +
           fmtClp(p.total) +
-          "</strong></footer></article>"
+          "</strong></footer>" +
+          bloqueOpinion(p, opinion) +
+          "</article>"
         );
       }
 
@@ -744,12 +810,21 @@
         mostrarError(err, "");
         lista.innerHTML = '<p class="metrics-empty">Cargando compras…</p>';
         vacio.hidden = true;
-        window.AndesAuth.api("/orders/mios").then(function (data) {
+        Promise.all([
+          window.AndesAuth.api("/orders/mios"),
+          window.AndesAuth.api("/opiniones/mias"),
+        ]).then(function (respuestas) {
+          var data = respuestas[0] || {};
+          var ops = respuestas[1] || {};
           if (!data.ok) {
             lista.innerHTML = "";
             mostrarError(err, data.message || "No se pudieron cargar las compras.");
             return;
           }
+          var porPedido = {};
+          (ops.opiniones || []).forEach(function (op) {
+            if (op && op.pedido_numero) porPedido[op.pedido_numero] = op;
+          });
           var pedidos = data.pedidos || [];
           if (!pedidos.length) {
             lista.innerHTML = "";
@@ -757,7 +832,73 @@
             return;
           }
           vacio.hidden = true;
-          lista.innerHTML = pedidos.map(htmlPedidoCliente).join("");
+          lista.innerHTML = pedidos
+            .map(function (p) {
+              return htmlPedidoCliente(p, porPedido[p.numero] || null);
+            })
+            .join("");
+        });
+      }
+
+      function etiquetaOpinion(estado) {
+        if (estado === "publicada") return "Publicada";
+        if (estado === "oculta") return "Oculta";
+        return "Por revisar";
+      }
+
+      function cargarOpinionesAdmin() {
+        var lista = document.getElementById("opiniones-lista");
+        var err = document.getElementById("opiniones-error");
+        if (!lista || !window.AndesAuth.haySesion()) return;
+        mostrarError(err, "");
+        lista.innerHTML = '<p class="metrics-empty">Cargando opiniones…</p>';
+        window.AndesAuth.api("/admin/opiniones").then(function (data) {
+          if (!data.ok) {
+            lista.innerHTML = "";
+            mostrarError(err, data.message || "No se pudieron cargar las opiniones.");
+            return;
+          }
+          var items = data.opiniones || [];
+          if (!items.length) {
+            lista.innerHTML =
+              '<p class="metrics-empty">Todavía no hay opiniones. Aparecen aquí cuando un cliente las deja en Mis compras.</p>';
+            return;
+          }
+          lista.innerHTML = items
+            .map(function (op) {
+              var id = escHtml(op.id).replace(/"/g, "&quot;");
+              var acciones = "";
+              if (op.estado !== "publicada") {
+                acciones +=
+                  '<button type="button" class="btn btn-primary btn-sm" data-opinion-estado="publicada" data-opinion-id="' +
+                  id +
+                  '">Publicar</button>';
+              }
+              if (op.estado !== "oculta") {
+                acciones +=
+                  '<button type="button" class="btn btn-outline btn-sm" data-opinion-estado="oculta" data-opinion-id="' +
+                  id +
+                  '">Ocultar</button>';
+              }
+              return (
+                '<article class="order-card"><header class="order-card__head"><div><strong>' +
+                escHtml(op.nombre || "Cliente") +
+                "</strong><p>" +
+                escHtml(fmtFecha(op.creado_en)) +
+                " · " +
+                escHtml(op.pedido_numero || "") +
+                '</p></div><span class="order-badge order-badge--' +
+                escHtml(op.estado || "pendiente") +
+                '">' +
+                etiquetaOpinion(op.estado) +
+                '</span></header><p class="testimonio-texto">' +
+                escHtml(op.texto || "") +
+                '</p><div class="order-card__actions">' +
+                acciones +
+                "</div></article>"
+              );
+            })
+            .join("");
         });
       }
 
@@ -1121,6 +1262,8 @@
         if (admin) admin.hidden = !(u.rol === "vendedor" || u.rol === "admin");
         var linkAnalitica = document.getElementById("link-analitica");
         if (linkAnalitica) linkAnalitica.hidden = u.rol !== "admin";
+        var linkOpiniones = document.getElementById("link-opiniones");
+        if (linkOpiniones) linkOpiniones.hidden = u.rol !== "admin";
         var linkPedidos = document.getElementById("link-pedidos");
         if (linkPedidos) linkPedidos.hidden = !(u.rol === "admin" || u.rol === "vendedor");
         mostrarSeccion(seccionDesdeHash());
@@ -1323,6 +1466,80 @@
         e.preventDefault();
         mostrarSeccion(hash);
       });
+
+      var listaCompras = document.getElementById("compras-lista");
+      if (listaCompras) {
+        listaCompras.addEventListener("submit", function (e) {
+          var form = e.target.closest("form[data-opinion-pedido]");
+          if (!form) return;
+          e.preventDefault();
+          var error = form.querySelector("[data-opinion-error]");
+          var btn = form.querySelector('[type="submit"]');
+          mostrarError(error, "");
+          if (btn) btn.disabled = true;
+          window.AndesAuth.api("/opiniones", {
+            method: "POST",
+            body: {
+              pedido: form.getAttribute("data-opinion-pedido"),
+              nombre: form.nombre.value,
+              texto: form.texto.value,
+            },
+          }).then(function (data) {
+            if (btn) btn.disabled = false;
+            if (!data.ok) {
+              mostrarError(error, data.message || "No se pudo enviar la opinión.");
+              return;
+            }
+            cargarCompras();
+          }).catch(function () {
+            if (btn) btn.disabled = false;
+            mostrarError(error, "No se pudo enviar la opinión.");
+          });
+        });
+      }
+
+      var listaOpiniones = document.getElementById("opiniones-lista");
+      if (listaOpiniones) {
+        listaOpiniones.addEventListener("click", function (e) {
+          var btn = e.target.closest("[data-opinion-estado]");
+          if (!btn) return;
+          var estado = btn.getAttribute("data-opinion-estado");
+          var id = btn.getAttribute("data-opinion-id");
+          var ok = document.getElementById("opiniones-ok");
+          var err = document.getElementById("opiniones-error");
+          var aviso = {
+            titulo: estado === "publicada" ? "Publicar opinión" : "Ocultar opinión",
+            mensaje:
+              estado === "publicada"
+                ? "Se va a ver en la portada, con el nombre y la fecha."
+                : "Deja de verse en la portada.",
+            confirmar: estado === "publicada" ? "Publicar" : "Ocultar",
+            tono: estado === "oculta" ? "danger" : "primary",
+          };
+          var pedir = window.AndesDialog
+            ? window.AndesDialog.confirm(aviso)
+            : Promise.resolve(true);
+          pedir.then(function (acepta) {
+            if (!acepta) return;
+            if (ok) ok.hidden = true;
+            mostrarError(err, "");
+            window.AndesAuth.api("/admin/opiniones/estado", {
+              method: "POST",
+              body: { id: id, estado: estado },
+            }).then(function (data) {
+              if (!data.ok) {
+                mostrarError(err, data.message || "No se pudo actualizar.");
+                return;
+              }
+              if (ok) {
+                ok.hidden = false;
+                ok.textContent = estado === "publicada" ? "Publicada en la portada." : "Oculta.";
+              }
+              cargarOpinionesAdmin();
+            });
+          });
+        });
+      }
 
       var listaFavoritos = document.getElementById("favoritos-lista");
       if (listaFavoritos) {

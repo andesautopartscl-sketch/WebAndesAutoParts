@@ -1641,6 +1641,68 @@
   window.addEventListener("andes-vehiculo", updateWhatsappMessage);
   updateWhatsappMessage();
 
+  (function initOpiniones() {
+    var caja = document.getElementById("opiniones-reales");
+    if (!caja) return;
+    var cfg = window.ANDES_PEDIDOS || {};
+    var base = String(cfg.workerUrl || "").replace(/\/+$/, "");
+    if (!base) return;
+
+    function esc(valor) {
+      return String(valor == null ? "" : valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function dia(iso) {
+      var d = new Date(String(iso || "").slice(0, 10) + "T12:00:00");
+      if (isNaN(d.getTime())) return "";
+      try {
+        return d.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" });
+      } catch (err) {
+        return String(iso || "").slice(0, 10);
+      }
+    }
+
+    fetch(base + "/opiniones")
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (data) {
+        var items = (data && data.opiniones) || [];
+        if (!items.length) return;
+        caja.hidden = false;
+        caja.innerHTML = items
+          .map(function (op) {
+            var nombre = String(op.nombre || "Cliente").trim();
+            var inicial = nombre.charAt(0).toUpperCase() || "A";
+            var fecha = dia(op.fecha);
+            return (
+              '<article class="testimonio-card">' +
+              '<div class="testimonio-header"><span class="testimonio-avatar" aria-hidden="true">' +
+              esc(inicial) +
+              '</span><div><p class="testimonio-nombre">' +
+              esc(nombre) +
+              "</p>" +
+              (fecha ? '<p class="testimonio-tag">' + esc(fecha) + "</p>" : "") +
+              "</div></div>" +
+              '<p class="testimonio-texto">“' +
+              esc(op.texto) +
+              "”</p></article>"
+            );
+          })
+          .join("");
+        var desc = document.getElementById("opiniones-desc");
+        if (desc) {
+          desc.textContent =
+            "Comentarios de quienes compraron en la web, con nombre y fecha. Los publicamos después de revisarlos. La reputación de Mercado Libre sigue en su tienda.";
+        }
+      })
+      .catch(function () {});
+  })();
+
   setTimeout(function () {
     if (whatsappBubble && !whatsappBubble.classList.contains("open")) {
       setWhatsappBubbleOpen(true);

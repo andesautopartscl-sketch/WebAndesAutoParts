@@ -9,6 +9,8 @@
  *   POST /auth/olvide | /auth/restablecer
  *   GET|PATCH /auth/yo
  *   GET|PUT /cart | POST /cart/merge
+ *   GET /opiniones | POST /opiniones | GET /opiniones/mias
+ *   GET /admin/opiniones | POST /admin/opiniones/estado
  *   POST /pricing/resolver
  *   POST /analitica/evento
  *   GET /admin/analitica
@@ -1296,9 +1298,230 @@ async function listarPrecios(request, env, json, userId) {
   return json({ ok: true, precios: res.results || [] });
 }
 
+/* ============================== Opiniones =============================== */
+
+function nombreOpinion(valor) {
+  const limpio = texto(valor, 40).replace(/\s+/g, " ");
+  if (limpio.length < 2 || limpio.length > 40) return "";
+  if (/[<>@]/.test(limpio) || /https?:/i.test(limpio) || /\d{4,}/.test(limpio)) return "";
+  return limpio;
+}
+
+function textoOpinion(valor) {
+  return String(valor == null ? "" : valor)
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 400);
+}
+
+function opinionCliente(row) {
+  return {
+    pedido_numero: row.pedido_numero,
+    nombre: row.nombre,
+    texto: row.texto,
+    estado: row.estado,
+    creado_en: row.creado_en,
+  };
+}
+
+async function exigirAdmin(env, request, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r;
+  if (r.usuario.rol !== "admin") {
+    return {
+      error: json({ ok: false, error: "PROHIBIDO", message: "Solo el administrador" }, 403),
+    };
+  }
+  return r;
+}
+
+async function pedidoDelCliente(env, usuario, numero) {
+  if (!env.TOKEN_KV) return null;
+  if (!/^AAP-\d{6}-\d{4}$/.test(numero)) return null;
+  const crudo = await env.TOKEN_KV.get("PEDIDO:" + numero);
+  if (!crudo) return null;
+  let pedido;
+  try {
+    pedido = JSON.parse(crudo);
+  } catch (err) {
+    return null;
+  }
+  if (!pedido || pedido.numero !== numero) return null;
+  const email = String(usuario.email || "").toLowerCase();
+  const delCliente =
+    (pedido.usuario_id && pedido.usuario_id === usuario.id) ||
+    String(pedido.cliente && pedido.cliente.email ? pedido.cliente.email : "").toLowerCase() === email;
+  return delCliente ? pedido : null;
+}
+
+async function listarOpinionesPublicas(env, json) {
+  if (!env.CLIENTES_DB) return json({ ok: true, opiniones: [] });
+  const res = await env.CLIENTES_DB.prepare(
+    `SELECT nombre, texto, creado_en FROM opiniones
+     WHERE estado = 'publicada'
+     ORDER BY creado_en DESC
+     LIMIT 12`
+  ).all();
+  const opiniones = (res.results || []).map((row) => ({
+    nombre: row.nombre,
+    texto: row.texto,
+    fecha: String(row.creado_en || "").slice(0, 10),
+  }));
+  return json({ ok: true, opiniones });
+}
+
+async function misOpiniones(request, env, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r.error;
+  const res = await env.CLIENTES_DB.prepare(
+    `SELECT pedido_numero, nombre, texto, estado, creado_en
+     FROM opiniones WHERE usuario_id = ?
+     ORDER BY creado_en DESC`
+  )
+    .bind(r.usuario.id)
+    .all();
+  return json({ ok: true, opiniones: (res.results || []).map(opinionCliente) });
+}
+
+async function crearOpinion(request, env, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r.error;
+  if (!env.CLIENTES_DB) return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+
+  const numero = texto(body.pedido, 32);
+  const pedido = await pedidoDelCliente(env, r.usuario, numero);
+  if (!pedido) {
+    return json({ ok: false, error: "PEDIDO", message: "No encontramos esa compra en tu cuenta." }, 404);
+  }
+  if (pedido.estado !== "confirmado" && pedido.estado !== "despachado") {
+    return json(
+      {
+        ok: false,
+        error: "ESTADO",
+        message: "Podrás opinar cuando el pedido esté confirmado.",
+      },
+      400
+    );
+  }
+
+  const previa = await env.CLIENTES_DB.prepare(
+    "SELECT pedido_numero, nombre, texto, estado, creado_en FROM opiniones WHERE pedido_numero = ?"
+  )
+    .bind(numero)
+    .first();
+  if (previa) {
+    return json({
+      ok: true,
+      opinion: opinionCliente(previa),
+      message: "Este pedido ya tiene una opinión.",
+    });
+  }
+
+  const nombre = nombreOpinion(body.nombre) || nombreOpinion(String(r.usuario.nombre || "").split(/\s+/)[0]);
+  const nota = textoOpinion(body.texto);
+  if (!nombre) {
+    return json({ ok: false, error: "NOMBRE", message: "Escribe el nombre que quieres que se vea." }, 400);
+  }
+  if (nota.length < 12) {
+    return json({ ok: false, error: "TEXTO", message: "La opinión tiene que ser una nota corta, de al menos unas palabras." }, 400);
+  }
+
+  const id = nuevoId();
+  const creado = ahoraIso();
+  try {
+    await env.CLIENTES_DB.prepare(
+      `INSERT INTO opiniones (id, usuario_id, pedido_numero, nombre, texto, estado, creado_en)
+       VALUES (?, ?, ?, ?, ?, 'pendiente', ?)`
+    )
+      .bind(id, r.usuario.id, numero, nombre, nota, creado)
+      .run();
+  } catch (err) {
+    const otra = await env.CLIENTES_DB.prepare(
+      "SELECT pedido_numero, nombre, texto, estado, creado_en FROM opiniones WHERE pedido_numero = ?"
+    )
+      .bind(numero)
+      .first();
+    if (otra) {
+      return json({
+        ok: true,
+        opinion: opinionCliente(otra),
+        message: "Este pedido ya tiene una opinión.",
+      });
+    }
+    return json({ ok: false, error: "GUARDAR", message: "No se pudo guardar la opinión." }, 500);
+  }
+
+  return json({
+    ok: true,
+    opinion: { pedido_numero: numero, nombre, texto: nota, estado: "pendiente", creado_en: creado },
+    message: "Recibimos tu opinión. La publicamos cuando la revisemos.",
+  });
+}
+
+async function listarOpinionesAdmin(request, env, json) {
+  const r = await exigirAdmin(env, request, json);
+  if (r.error) return r.error;
+  const res = await env.CLIENTES_DB.prepare(
+    `SELECT id, pedido_numero, nombre, texto, estado, creado_en
+     FROM opiniones
+     ORDER BY creado_en DESC
+     LIMIT 100`
+  ).all();
+  return json({ ok: true, opiniones: res.results || [] });
+}
+
+async function estadoOpinion(request, env, json) {
+  const r = await exigirAdmin(env, request, json);
+  if (r.error) return r.error;
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const id = texto(body.id, 40);
+  const estado = body.estado === "publicada" || body.estado === "oculta" ? body.estado : "";
+  if (!/^[a-zA-Z0-9]{16,40}$/.test(id) || !estado) {
+    return json({ ok: false, error: "DATOS", message: "No se pudo actualizar esa opinión." }, 400);
+  }
+  const res = await env.CLIENTES_DB.prepare(
+    "UPDATE opiniones SET estado = ? WHERE id = ?"
+  )
+    .bind(estado, id)
+    .run();
+  if (res && res.meta && Number(res.meta.changes) === 0) {
+    return json({ ok: false, error: "NO_ENCONTRADA", message: "No encontramos esa opinión." }, 404);
+  }
+  return json({ ok: true, id, estado });
+}
+
 /* ================================ Router ================================ */
 
 export async function rutearClientes(path, request, env, { json }) {
+  if (path === "/opiniones" && request.method === "GET") {
+    return listarOpinionesPublicas(env, json);
+  }
+  if (path === "/opiniones" && request.method === "POST") {
+    return crearOpinion(request, env, json);
+  }
+  if (path === "/opiniones/mias" && request.method === "GET") {
+    return misOpiniones(request, env, json);
+  }
+  if (path === "/admin/opiniones" && request.method === "GET") {
+    return listarOpinionesAdmin(request, env, json);
+  }
+  if (path === "/admin/opiniones/estado" && request.method === "POST") {
+    return estadoOpinion(request, env, json);
+  }
+
   if (path === "/analitica/evento" && request.method === "POST") {
     return registrarEvento(request, env, json, rateLimit);
   }

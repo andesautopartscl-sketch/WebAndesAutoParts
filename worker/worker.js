@@ -726,6 +726,8 @@ export default {
           "GET /admin/analitica",
           "GET|PUT /cart | POST /cart/merge",
           "GET|PUT /favoritos | POST /favoritos/merge",
+          "GET /opiniones | POST /opiniones | GET /opiniones/mias",
+          "GET /admin/opiniones | POST /admin/opiniones/estado",
           "POST /pricing/resolver",
           "GET|POST|PATCH /admin/usuarios (+ precios especiales)",
         ],

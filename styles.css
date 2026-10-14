@@ -2523,6 +2523,40 @@ body {
   font-size: 11px;
   color: #aaa;
   font-weight: 500;
+  margin: 0;
+}
+
+.opiniones-reales {
+  margin-bottom: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.order-review {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eef2f6;
+}
+
+.order-review .field {
+  margin-bottom: 0.55rem;
+}
+
+.order-review input,
+.order-review textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.order-badge--publicada {
+  background: #e8f6ee;
+  color: #146c43;
+}
+
+.order-badge--oculta {
+  background: #f3f4f6;
+  color: #4b5563;
 }
 
 .testimonial-card {
