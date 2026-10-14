@@ -1862,10 +1862,32 @@ body {
 }
 
 .product-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.product-actions .btn {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.7rem 0.75rem;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  white-space: normal;
+  text-align: center;
+}
+
+.product-actions #product-cart {
+  grid-column: 1 / -1;
+}
+
+.product-actions:has(#product-ml[hidden]) #product-wa {
+  grid-column: 1 / -1;
+}
+
+.product-actions #product-ml[hidden] {
+  display: none !important;
 }
 
 .product-note {

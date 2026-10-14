@@ -131,17 +131,15 @@
     }
 
     var favFoto = document.getElementById("product-fav-photo");
-    var fav = document.getElementById("product-fav");
-    [favFoto, fav].forEach(function (btn) {
-      if (!btn || !p.id) return;
-      btn.hidden = false;
-      btn.setAttribute("data-fav-id", p.id);
-      btn.setAttribute("data-fav-titulo", p.titulo || "");
-      btn.setAttribute("data-fav-sku", p.sku || "");
-      btn.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
-      btn.setAttribute("data-fav-imagen", p.imagen || "");
-      btn.setAttribute("data-fav-link", "producto.html?id=" + encodeURIComponent(p.id));
-    });
+    if (favFoto && p.id) {
+      favFoto.hidden = false;
+      favFoto.setAttribute("data-fav-id", p.id);
+      favFoto.setAttribute("data-fav-titulo", p.titulo || "");
+      favFoto.setAttribute("data-fav-sku", p.sku || "");
+      favFoto.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
+      favFoto.setAttribute("data-fav-imagen", p.imagen || "");
+      favFoto.setAttribute("data-fav-link", "producto.html?id=" + encodeURIComponent(p.id));
+    }
     if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
 
     var cartBtn = document.getElementById("product-cart");
