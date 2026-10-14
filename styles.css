@@ -5427,10 +5427,9 @@ body.auth-modal-open {
 .account__wrap--dash {
   width: min(1480px, calc(100% - 1.25rem)) !important;
   max-width: none;
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  display: flex;
+  align-items: flex-start;
   gap: 1.35rem;
-  align-items: start;
 }
 
 /* Igual que en checkout: display:grid gana al [hidden] nativo. */
@@ -5558,7 +5557,13 @@ body.auth-modal-open {
 
 /* Dashboard cuenta: sidebar + contenido */
 .account-side {
+  flex: 0 0 260px;
   width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+  align-self: flex-start;
+  height: auto;
+  box-sizing: border-box;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
@@ -5631,12 +5636,15 @@ body.auth-modal-open {
 }
 
 .account-main {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   padding: 1.6rem 1.75rem 1.85rem;
-  min-width: 0;
   min-height: 34rem;
+  box-sizing: border-box;
   box-shadow: 0 8px 28px rgba(15, 35, 60, 0.05);
 }
 
@@ -6138,10 +6146,17 @@ body.auth-modal-open {
 
 @media (max-width: 860px) {
   .account__wrap--dash {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .account-side {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .account-main {
     width: 100%;
   }
 
