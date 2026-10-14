@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repuesto | Andes Auto Parts</title>
+  <meta name="description" content="Ficha de repuesto en Andes Auto Parts. Stock, precio y consulta por WhatsApp." />
+  <link rel="canonical" id="product-canonical" href="https://andesautoparts.cl/producto.html" />
+  <link rel="icon" href="logo_andes.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20261014q" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Andes Auto Parts — Inicio">
+        <span class="logo-surface">
+          <img src="logo_andes.png" alt="Andes Auto Parts" class="logo-img" width="200" height="48" />
+        </span>
+      </a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav">
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html#catalogo">Catálogo</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="header-actions">
+          <a href="tel:+56926152826" class="header-phone">+56 9 2615 2826</a>
+          <span data-auth-slot></span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <div class="container">
+      <a class="product-back" href="index.html#catalogo">← Volver al catálogo</a>
+      <p class="product-missing" id="product-missing" hidden>No encontramos ese repuesto. Vuelve al catálogo o escríbenos por WhatsApp.</p>
+      <article class="product-layout" id="product-layout" hidden>
+        <div class="product-photo">
+          <img id="product-img" alt="" width="800" height="600" />
+        </div>
+        <div class="product-panel">
+          <p class="product-kicker" id="product-sku"></p>
+          <h1 id="product-title">Repuesto</h1>
+          <p class="product-price" id="product-price"></p>
+          <ul class="product-meta" id="product-meta"></ul>
+          <div class="product-actions">
+            <button type="button" class="btn btn-primary" id="product-cart">Agregar al carrito</button>
+            <a class="btn btn-wa" id="product-wa" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+            <a class="btn btn-ml btn-sm" id="product-ml" target="_blank" rel="noopener noreferrer" hidden>Ver en Mercado Libre</a>
+          </div>
+          <p class="product-note" id="product-auto"></p>
+        </div>
+      </article>
+      <section class="product-related" id="product-related" hidden>
+        <h2>También puede servirte</h2>
+        <div class="product-related-grid" id="product-related-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-nap">Salas 8973, La Cisterna · Lun a vie 8:00–18:00 · Sáb 9:00–14:00 · <a href="tel:+56926152826">+56 9 2615 2826</a></p>
+      <p class="footer-copy">© <span id="year"></span> Andes Auto Parts. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="contact-config.js?v=20260909x"></script>
+  <script src="cart.js?v=20261014s"></script>
+  <script src="analitica.js?v=20261014s"></script>
+  <script src="auth.js?v=20261014p"></script>
+  <script src="producto.js?v=20261014q"></script>
+</body>
+</html>

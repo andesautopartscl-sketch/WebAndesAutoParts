@@ -8,6 +8,29 @@
     year.textContent = String(new Date().getFullYear());
   }
 
+  function guardarAutoBuscado(filter) {
+    try {
+      if (!filter || !filter.label) localStorage.removeItem("andes_vehiculo_v1");
+      else {
+        localStorage.setItem(
+          "andes_vehiculo_v1",
+          JSON.stringify({ label: filter.label, anio: filter.year || "" })
+        );
+      }
+    } catch (err) {}
+  }
+
+  function leerAutoBuscado() {
+    try {
+      var raw = localStorage.getItem("andes_vehiculo_v1");
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      return data && data.label ? data : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
   document.querySelectorAll(".hero-marcas-logos img").forEach(function (img) {
     img.onerror = function () {
       this.style.display = "none";
@@ -791,6 +814,7 @@
 
     function clearVehicleSearch(scroll) {
       activeVehicleSearch = null;
+      guardarAutoBuscado(null);
       if (vehicleTextInput) vehicleTextInput.value = "";
       if (vehicleBrandSelect) vehicleBrandSelect.value = "";
       populateVehicleModels("");
@@ -802,6 +826,7 @@
       syncVehicleUrl();
       syncCategoryUrl();
       render(allProducts, { resetPage: true });
+      updateWhatsappMessage();
       if (scroll) scrollToCatalogTop();
     }
 
@@ -812,9 +837,11 @@
         return;
       }
       activeVehicleSearch = filter;
+      guardarAutoBuscado(filter);
       syncVehicleUrl();
       render(allProducts, { resetPage: true });
       scrollToCatalogTop();
+      updateWhatsappMessage();
     }
 
     function applyBrandLogoFilter(brandKey) {
@@ -843,8 +870,10 @@
       }
 
       syncVehicleUrl();
+      guardarAutoBuscado(activeVehicleSearch);
       render(allProducts, { resetPage: true });
       scrollToCatalogTop();
+      updateWhatsappMessage();
     }
 
     function initBrandLogoGrid() {
@@ -951,6 +980,12 @@
 
     function isMlCategoryId(label) {
       return /^MLC\d+$/i.test(String(label || "").trim());
+    }
+
+    function fichaHref(p) {
+      var id = productMlId(p);
+      if (!id) return "";
+      return "producto.html?id=" + encodeURIComponent(id);
     }
 
     function productLink(p) {
@@ -1164,15 +1199,23 @@
         image.height = 480;
         image.loading = idx < 6 ? "eager" : "lazy";
         image.decoding = "async";
-        if (url && esMl) {
+        var ficha = fichaHref(p);
+        if (ficha) {
           var imgLink = document.createElement("a");
           imgLink.className = "card-image-link";
-          imgLink.href = url;
-          imgLink.target = "_blank";
-          imgLink.rel = "noopener noreferrer";
-          imgLink.setAttribute("aria-label", "Ver en Mercado Libre: " + titulo);
+          imgLink.href = ficha;
+          imgLink.setAttribute("aria-label", "Ver ficha: " + titulo);
           imgLink.appendChild(image);
           wrap.appendChild(imgLink);
+        } else if (url && esMl) {
+          var imgLinkMl = document.createElement("a");
+          imgLinkMl.className = "card-image-link";
+          imgLinkMl.href = url;
+          imgLinkMl.target = "_blank";
+          imgLinkMl.rel = "noopener noreferrer";
+          imgLinkMl.setAttribute("aria-label", "Ver en Mercado Libre: " + titulo);
+          imgLinkMl.appendChild(image);
+          wrap.appendChild(imgLinkMl);
         } else {
           wrap.appendChild(image);
         }
@@ -1185,7 +1228,15 @@
         var h3 = document.createElement("h3");
         h3.id = headingId;
         h3.className = "producto-titulo";
-        h3.textContent = titulo;
+        if (ficha) {
+          var titleLink = document.createElement("a");
+          titleLink.className = "producto-titulo-link";
+          titleLink.href = ficha;
+          titleLink.textContent = titulo;
+          h3.appendChild(titleLink);
+        } else {
+          h3.textContent = titulo;
+        }
         row.appendChild(h3);
         if (code) {
           var badge = document.createElement("span");
@@ -1289,6 +1340,14 @@
         var actions = document.createElement("div");
         actions.className = "card-actions";
         actions.appendChild(buildCartButton(p, titulo, stock));
+
+        if (ficha) {
+          var fichaBtn = document.createElement("a");
+          fichaBtn.className = "btn btn-outline btn-sm";
+          fichaBtn.href = ficha;
+          fichaBtn.textContent = "Ver ficha";
+          actions.appendChild(fichaBtn);
+        }
 
         if (url && esMl) {
           var mlBtn = document.createElement("a");
@@ -1527,12 +1586,18 @@
       document.querySelector('input[type="search"], input[placeholder*="Buscar"]');
     var searchValue = searchInput && searchInput.value ? searchInput.value.trim() : "";
 
+    var auto = leerAutoBuscado();
     var mensaje = "Hola, necesito un repuesto para mi auto.";
+    if (auto && auto.label) {
+      mensaje = "Hola, busco un repuesto para mi " + auto.label + ".";
+    }
     if (searchValue.length > 2) {
-      mensaje =
-        "Hola, busco repuestos de: " +
-        searchValue +
-        ". ¿Tienen disponibilidad?";
+      mensaje += " Busco: " + searchValue + ". ¿Tienen disponibilidad?";
+    }
+
+    var mensajeHome = document.getElementById("mensaje-home");
+    if (mensajeHome && auto && auto.label && !mensajeHome.value) {
+      mensajeHome.placeholder = "Repuesto para " + auto.label + "…";
     }
 
     if (whatsappLink) {
