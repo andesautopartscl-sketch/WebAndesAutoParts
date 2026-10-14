@@ -175,11 +175,9 @@
     );
   })();
 
-  (function initContactFormEmailJS() {
-    var form =
-      document.getElementById("contact-form-home") ||
-      document.querySelector("#contacto form, .contact-form, form[name='contacto']");
-    if (!form || typeof emailjs === "undefined") return;
+  (function initContactForm() {
+    var form = document.getElementById("contact-form-home");
+    if (!form) return;
 
     var host = (window.location.hostname || "").toLowerCase();
     var isLocal =
@@ -189,36 +187,94 @@
       host === "::1";
     if (isLocal) return;
 
-    emailjs.init("TU_PUBLIC_KEY");
+    function avisar(mensaje) {
+      if (window.AndesDialog) {
+        window.AndesDialog.alert({
+          titulo: "No se pudo enviar",
+          mensaje: mensaje,
+          confirmar: "Entendido",
+        });
+      }
+    }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var btn = form.querySelector('button[type="submit"], input[type="submit"]');
-      if (!btn) return;
-      var originalText = btn.textContent;
-      btn.textContent = "Enviando...";
-      btn.disabled = true;
+      var fd = new FormData(form);
+      var nombre = String(fd.get("nombre") || "").trim();
+      var email = String(fd.get("email") || "").trim();
+      var telefono = String(fd.get("telefono") || "").trim();
+      var patente = String(fd.get("patente") || "").trim();
+      var chasis = String(fd.get("chasis") || "").trim();
+      var mensaje = String(fd.get("mensaje") || "").trim();
+      var botcheck = fd.get("botcheck");
+      var btn = form.querySelector('button[type="submit"]');
+      var cfg = window.ANDES_CONTACT || {};
+      var key = String(cfg.web3formsAccessKey || "").trim();
 
-      emailjs
-        .sendForm("service_andes", "template_andes", form)
-        .then(function () {
-          btn.textContent = "✓ Mensaje enviado";
-          btn.style.background = "#22c55e";
-          form.reset();
-          setTimeout(function () {
-            btn.textContent = originalText;
-            btn.style.background = "";
-            btn.disabled = false;
-          }, 4000);
+      if (nombre.length < 2) {
+        avisar("Escribe tu nombre.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        avisar("Revisa el correo. Tiene que ser uno válido.");
+        return;
+      }
+      if (mensaje.length < 8) {
+        avisar("Cuéntanos un poco más en el mensaje: marca, modelo y el repuesto.");
+        return;
+      }
+
+      if (!key) {
+        var wa = String(cfg.whatsappNumber || "56926152826").replace(/\D/g, "");
+        var texto =
+          "Hola, soy " +
+          nombre +
+          ". " +
+          mensaje +
+          (telefono ? " Teléfono: " + telefono + "." : "") +
+          (patente ? " Patente: " + patente + "." : "") +
+          (chasis ? " Chasis: " + chasis + "." : "");
+        window.location.href =
+          "https://wa.me/" + wa + "?text=" + encodeURIComponent(texto);
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: key,
+          subject: "Mensaje desde la web",
+          from_name: nombre,
+          name: nombre,
+          email: email,
+          telefono: telefono,
+          patente: patente,
+          chasis: chasis,
+          message: mensaje,
+          botcheck: botcheck ? "sí" : "",
+        }),
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok && data && data.success };
+          });
+        })
+        .then(function (resultado) {
+          if (!resultado.ok) {
+            if (btn) btn.disabled = false;
+            avisar("No pudimos enviar el mensaje. Escríbenos por WhatsApp y te respondemos igual.");
+            return;
+          }
+          window.location.href = graciasPageUrl();
         })
         .catch(function () {
-          btn.textContent = "Error al enviar";
-          btn.style.background = "#ef4444";
-          btn.disabled = false;
-          setTimeout(function () {
-            btn.textContent = originalText;
-            btn.style.background = "";
-          }, 3000);
+          if (btn) btn.disabled = false;
+          avisar("No pudimos enviar el mensaje. Revisa tu conexión o escríbenos por WhatsApp.");
         });
     });
   })();
