@@ -791,6 +791,110 @@ async function putCart(request, env, json) {
   return json({ ok: true, items: await leerCarritoDb(env, r.usuario.id) });
 }
 
+function itemFavorito(raw) {
+  if (!raw || typeof raw !== "object") return { id: "" };
+  return {
+    id: texto(raw.id || raw.producto_id, 40),
+    titulo: texto(raw.titulo, 200),
+    sku: texto(raw.sku, 60),
+    precio: Math.max(0, Math.round(Number(raw.precio) || 0)),
+    imagen: texto(raw.imagen, 500),
+    link: texto(raw.link, 500),
+  };
+}
+
+async function leerFavoritosDb(env, usuarioId) {
+  const { results } = await env.CLIENTES_DB.prepare(
+    "SELECT * FROM favoritos WHERE usuario_id = ? ORDER BY creado_en DESC"
+  )
+    .bind(usuarioId)
+    .all();
+  return (results || []).map((row) => ({
+    id: row.producto_id,
+    titulo: row.titulo,
+    sku: row.sku,
+    precio: row.precio,
+    imagen: row.imagen,
+    link: row.link,
+  }));
+}
+
+async function guardarFavoritosDb(env, usuarioId, items) {
+  await env.CLIENTES_DB.prepare("DELETE FROM favoritos WHERE usuario_id = ?")
+    .bind(usuarioId)
+    .run();
+  const base = Date.now();
+  const lista = items.slice(0, 80);
+  for (let i = 0; i < lista.length; i++) {
+    const it = lista[i];
+    const creado = new Date(base - i).toISOString();
+    await env.CLIENTES_DB.prepare(
+      `INSERT INTO favoritos (
+        usuario_id, producto_id, titulo, sku, precio, imagen, link, creado_en
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+      .bind(usuarioId, it.id, it.titulo, it.sku, it.precio, it.imagen, it.link, creado)
+      .run();
+  }
+}
+
+async function getFavoritos(request, env, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r.error;
+  return json({ ok: true, items: await leerFavoritosDb(env, r.usuario.id) });
+}
+
+async function putFavoritos(request, env, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r.error;
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const items = Array.isArray(body.items) ? body.items.map(itemFavorito).filter((i) => i.id) : [];
+  await guardarFavoritosDb(env, r.usuario.id, items);
+  return json({ ok: true, items: await leerFavoritosDb(env, r.usuario.id) });
+}
+
+async function mergeFavoritos(request, env, json) {
+  const r = await exigirSesion(env, request, json);
+  if (r.error) return r.error;
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+  const mapa = new Map();
+  const existentes = await leerFavoritosDb(env, r.usuario.id);
+  existentes.forEach((it) => mapa.set(it.id, it));
+  const locales = Array.isArray(body.items) ? body.items.map(itemFavorito).filter((i) => i.id) : [];
+  locales.forEach((it) => {
+    const prev = mapa.get(it.id);
+    mapa.delete(it.id);
+    mapa.set(it.id, {
+      id: it.id,
+      titulo: it.titulo || (prev && prev.titulo) || "",
+      sku: it.sku || (prev && prev.sku) || "",
+      precio: it.precio || (prev && prev.precio) || 0,
+      imagen: it.imagen || (prev && prev.imagen) || "",
+      link: it.link || (prev && prev.link) || "",
+    });
+  });
+  const orden = [...locales.map((it) => it.id), ...existentes.map((it) => it.id)];
+  const vistos = new Set();
+  const merged = [];
+  orden.forEach((id) => {
+    if (vistos.has(id) || !mapa.has(id)) return;
+    vistos.add(id);
+    merged.push(mapa.get(id));
+  });
+  await guardarFavoritosDb(env, r.usuario.id, merged);
+  return json({ ok: true, items: await leerFavoritosDb(env, r.usuario.id) });
+}
+
 async function mergeCart(request, env, json) {
   const r = await exigirSesion(env, request, json);
   if (r.error) return r.error;
@@ -1168,7 +1272,13 @@ export async function rutearClientes(path, request, env, { json }) {
   }
   // Los atiende pedidos.js (sesión de staff, no el secreto de sync).
   if (path === "/admin/pedidos" || path === "/admin/pedidos/estado") return null;
-  if (!path.startsWith("/auth") && !path.startsWith("/cart") && !path.startsWith("/pricing") && !path.startsWith("/admin")) {
+  if (
+    !path.startsWith("/auth") &&
+    !path.startsWith("/cart") &&
+    !path.startsWith("/favoritos") &&
+    !path.startsWith("/pricing") &&
+    !path.startsWith("/admin")
+  ) {
     return null;
   }
 
@@ -1208,6 +1318,16 @@ export async function rutearClientes(path, request, env, { json }) {
   }
   if (path === "/cart/merge" && request.method === "POST") {
     return mergeCart(request, env, json);
+  }
+
+  if (path === "/favoritos" && request.method === "GET") {
+    return getFavoritos(request, env, json);
+  }
+  if (path === "/favoritos" && request.method === "PUT") {
+    return putFavoritos(request, env, json);
+  }
+  if (path === "/favoritos/merge" && request.method === "POST") {
+    return mergeFavoritos(request, env, json);
   }
 
   if (path === "/pricing/resolver" && request.method === "POST") {

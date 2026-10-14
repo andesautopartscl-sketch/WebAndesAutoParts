@@ -140,6 +140,8 @@
       if (data.ok && data.token) {
         guardarSesion(data.token, data.usuario);
         return fusionarCarrito().then(function () {
+          return fusionarFavoritos();
+        }).then(function () {
           return data;
         });
       }
@@ -152,6 +154,8 @@
       if (data.ok && data.token) {
         guardarSesion(data.token, data.usuario);
         return fusionarCarrito().then(function () {
+          return fusionarFavoritos();
+        }).then(function () {
           return data;
         });
       }
@@ -204,6 +208,27 @@
     return api("/cart", {
       method: "PUT",
       body: { items: window.AndesCart.items() },
+    });
+  }
+
+  function fusionarFavoritos() {
+    if (!window.AndesFavoritos || !leerToken()) return Promise.resolve();
+    return api("/favoritos/merge", {
+      method: "POST",
+      body: { items: window.AndesFavoritos.items() },
+    }).then(function (data) {
+      if (data.ok && Array.isArray(data.items) && window.AndesFavoritos.reemplazar) {
+        window.AndesFavoritos.reemplazar(data.items);
+      }
+      return data;
+    });
+  }
+
+  function sincronizarFavoritos() {
+    if (!window.AndesFavoritos || !leerToken()) return Promise.resolve();
+    return api("/favoritos", {
+      method: "PUT",
+      body: { items: window.AndesFavoritos.items() },
     });
   }
 
@@ -592,7 +617,7 @@
       "</div>" +
       '<div data-auth-pane="registro" hidden>' +
       '<h2 class="auth-modal__title">Crear una cuenta</h2>' +
-      '<p class="auth-modal__lead">Guarda tus datos y tu carrito.</p>' +
+      '<p class="auth-modal__lead">Guarda tus datos, tu carrito y tus favoritos.</p>' +
       '<form class="account-form auth-modal__form" id="auth-modal-registro" autocomplete="on">' +
       '<div class="field"><label class="visually-hidden" for="auth-reg-nombre">Nombre</label>' +
       '<input type="text" id="auth-reg-nombre" name="nombre" required minlength="2" autocomplete="name" placeholder="Nombre y apellido" /></div>' +
@@ -891,6 +916,8 @@
     actualizarYo: actualizarYo,
     fusionarCarrito: fusionarCarrito,
     sincronizarCarrito: sincronizarCarrito,
+    fusionarFavoritos: fusionarFavoritos,
+    sincronizarFavoritos: sincronizarFavoritos,
     resolverPrecios: resolverPrecios,
     abrirModal: abrirModal,
     cerrarModal: cerrarModal,

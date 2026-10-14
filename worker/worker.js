@@ -691,6 +691,7 @@ export default {
           "POST /analitica/evento",
           "GET /admin/analitica",
           "GET|PUT /cart | POST /cart/merge",
+          "GET|PUT /favoritos | POST /favoritos/merge",
           "POST /pricing/resolver",
           "GET|POST|PATCH /admin/usuarios (+ precios especiales)",
         ],

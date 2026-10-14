@@ -91,6 +91,21 @@ CREATE TABLE IF NOT EXISTS analitica_eventos (
   creado_en TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS favoritos (
+  usuario_id TEXT NOT NULL,
+  producto_id TEXT NOT NULL,
+  titulo TEXT NOT NULL DEFAULT '',
+  sku TEXT NOT NULL DEFAULT '',
+  precio REAL NOT NULL DEFAULT 0,
+  imagen TEXT NOT NULL DEFAULT '',
+  link TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL,
+  PRIMARY KEY (usuario_id, producto_id),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_favoritos_usuario ON favoritos(usuario_id, creado_en);
+
 CREATE INDEX IF NOT EXISTS idx_analitica_creado ON analitica_eventos(creado_en);
 CREATE INDEX IF NOT EXISTS idx_analitica_tipo ON analitica_eventos(tipo, creado_en);
 CREATE INDEX IF NOT EXISTS idx_analitica_sesion ON analitica_eventos(sesion);

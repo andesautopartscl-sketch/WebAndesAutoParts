@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014q" />
+  <link rel="stylesheet" href="styles.css?v=20261014f" />
 </head>
 <body>
   <header class="site-header">
@@ -52,6 +52,10 @@
           <ul class="product-meta" id="product-meta"></ul>
           <div class="product-actions">
             <button type="button" class="btn btn-primary" id="product-cart">Agregar al carrito</button>
+            <button type="button" class="fav-btn fav-btn--inline" id="product-fav" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z"></path></svg>
+              <span class="fav-btn__text">Guardar</span>
+            </button>
             <a class="btn btn-wa" id="product-wa" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
             <a class="btn btn-ml btn-sm" id="product-ml" target="_blank" rel="noopener noreferrer" hidden>Ver en Mercado Libre</a>
           </div>
@@ -74,8 +78,9 @@
 
   <script src="contact-config.js?v=20260909x"></script>
   <script src="cart.js?v=20261014s"></script>
+  <script src="favoritos.js?v=20261014f"></script>
   <script src="analitica.js?v=20261014r"></script>
-  <script src="auth.js?v=20261014p"></script>
-  <script src="producto.js?v=20261014q"></script>
+  <script src="auth.js?v=20261014f"></script>
+  <script src="producto.js?v=20261014f"></script>
 </body>
 </html>

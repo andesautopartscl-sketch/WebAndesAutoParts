@@ -108,6 +108,18 @@
       ml.href = p.link;
     }
 
+    var fav = document.getElementById("product-fav");
+    if (fav && p.id) {
+      fav.hidden = false;
+      fav.setAttribute("data-fav-id", p.id);
+      fav.setAttribute("data-fav-titulo", p.titulo || "");
+      fav.setAttribute("data-fav-sku", p.sku || "");
+      fav.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
+      fav.setAttribute("data-fav-imagen", p.imagen || "");
+      fav.setAttribute("data-fav-link", "producto.html?id=" + encodeURIComponent(p.id));
+      if (window.AndesFavoritos && window.AndesFavoritos.pintarBotones) window.AndesFavoritos.pintarBotones();
+    }
+
     var cartBtn = document.getElementById("product-cart");
     if (stock != null && stock <= 0) {
       cartBtn.disabled = true;

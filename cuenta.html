@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261014r" />
+  <link rel="stylesheet" href="styles.css?v=20261014f" />
 </head>
 <body>
   <header class="site-header">
@@ -38,7 +38,7 @@
         <h1 class="account-panel__title">Mi cuenta</h1>
         <p class="account-panel__lead">
           Guarda tus datos para el próximo pedido. Si agregaste productos sin sesión,
-          se suman a tu carrito al entrar.
+          se suman a tu carrito y a tus favoritos al entrar.
         </p>
         <p class="account-panel__lead">
           También puedes iniciar sesión desde el icono de usuario en el menú superior.
@@ -194,11 +194,16 @@
 
         <section class="account-view" id="view-favoritos" data-view="favoritos" hidden>
           <div class="account-view__head">
-            <h1 class="account-view__title">Mis productos favoritos</h1>
+            <div>
+              <h1 class="account-view__title">Mis productos favoritos</h1>
+              <p class="account-view__lead">Los que marques con el corazón en el catálogo o en la ficha quedan guardados en esta cuenta.</p>
+            </div>
           </div>
-          <div class="account-empty">
-            <p>Aún no tienes productos favoritos agregados</p>
-            <p class="account-view__lead">Cuando marquemos favoritos en el catálogo, aparecerán acá.</p>
+          <p class="account-error" id="favoritos-error" hidden></p>
+          <div id="favoritos-lista" class="fav-list"></div>
+          <div class="account-empty" id="favoritos-empty" hidden>
+            <p>Aún no tienes productos favoritos</p>
+            <p class="account-view__lead">Marca el corazón en el catálogo o en la ficha del repuesto.</p>
             <a class="btn btn-outline" href="index.html#productos">Ver catálogo</a>
           </div>
         </section>
@@ -395,8 +400,9 @@
 
   <script src="contact-config.js?v=20260909x"></script>
   <script src="cart.js?v=20260909t"></script>
+  <script src="favoritos.js?v=20261014f"></script>
   <script src="andes-dialog.js?v=20261014d"></script>
-  <script src="auth.js?v=20261014p"></script>
+  <script src="auth.js?v=20261014f"></script>
   <script>
     (function () {
       var COMUNAS_RM = [
@@ -514,6 +520,7 @@
         if (id === "clientes") cargarClientes();
         if (id === "analitica") cargarAnalitica(diasAnalitica);
         if (id === "compras") cargarCompras();
+        if (id === "favoritos") cargarFavoritos();
         if (id === "gestion") cargarGestion();
       }
 
@@ -595,6 +602,85 @@
           fmtClp(p.total) +
           "</strong></footer></article>"
         );
+      }
+
+      function cargarFavoritos() {
+        var lista = document.getElementById("favoritos-lista");
+        var vacio = document.getElementById("favoritos-empty");
+        var err = document.getElementById("favoritos-error");
+        if (!lista || !window.AndesAuth.haySesion()) return;
+        mostrarError(err, "");
+        lista.innerHTML = '<p class="metrics-empty">Cargando favoritos…</p>';
+        vacio.hidden = true;
+        var listo = window.AndesAuth.fusionarFavoritos
+          ? window.AndesAuth.fusionarFavoritos()
+          : Promise.resolve();
+        listo.then(function (data) {
+          if (data && data.ok === false) {
+            lista.innerHTML = "";
+            mostrarError(err, data.message || "No se pudieron cargar los favoritos.");
+            return;
+          }
+          pintarFavoritos();
+        }).catch(function () {
+          pintarFavoritos();
+        });
+      }
+
+      function enlaceFavorito(link, id) {
+        var href = String(link || "");
+        if (/^producto\.html\?id=/i.test(href)) return href;
+        if (/^https:\/\/([a-z0-9.-]+\.)?mercadolibre\./i.test(href)) return href;
+        if (id) return "producto.html?id=" + encodeURIComponent(id);
+        return "index.html#productos";
+      }
+
+      function imagenFavorito(src) {
+        var s = String(src || "");
+        if (/^https:\/\//i.test(s) || /^[\w./-]+$/.test(s)) return s;
+        return "logo_andes.png";
+      }
+
+      function pintarFavoritos() {
+        var lista = document.getElementById("favoritos-lista");
+        var vacio = document.getElementById("favoritos-empty");
+        if (!lista || !window.AndesFavoritos) return;
+        var items = window.AndesFavoritos.items();
+        if (!items.length) {
+          lista.innerHTML = "";
+          vacio.hidden = false;
+          return;
+        }
+        vacio.hidden = true;
+        lista.innerHTML = items
+          .map(function (it) {
+            var href = enlaceFavorito(it.link, it.id);
+            var externo = /^https:\/\//i.test(href);
+            return (
+              '<article class="fav-card">' +
+              '<img src="' +
+              escHtml(imagenFavorito(it.imagen)).replace(/"/g, "&quot;") +
+              '" alt="">' +
+              "<div><h2><a href=\"" +
+              escHtml(href).replace(/"/g, "&quot;") +
+              '"' +
+              (externo ? ' target="_blank" rel="noopener noreferrer"' : "") +
+              ">" +
+              escHtml(it.titulo || "Repuesto") +
+              "</a></h2><p>" +
+              (it.precio ? fmtClp(it.precio) : "Consultar precio") +
+              "</p></div>" +
+              '<div class="fav-card__actions">' +
+              '<button type="button" class="btn btn-primary btn-sm" data-fav-cart="' +
+              escHtml(it.id).replace(/"/g, "&quot;") +
+              '">Al carrito</button>' +
+              '<button type="button" class="btn btn-outline btn-sm" data-fav-quitar="' +
+              escHtml(it.id).replace(/"/g, "&quot;") +
+              '">Quitar</button>' +
+              "</div></article>"
+            );
+          })
+          .join("");
       }
 
       function cargarCompras() {
@@ -1159,6 +1245,42 @@
           mostrarSeccion(btn.getAttribute("data-section"));
         });
       });
+
+      var listaFavoritos = document.getElementById("favoritos-lista");
+      if (listaFavoritos) {
+        listaFavoritos.addEventListener("click", function (e) {
+          var quitarBtn = e.target.closest("[data-fav-quitar]");
+          var cartBtn = e.target.closest("[data-fav-cart]");
+          if (quitarBtn && window.AndesFavoritos) {
+            window.AndesFavoritos.quitar(quitarBtn.getAttribute("data-fav-quitar"));
+            return;
+          }
+          if (!cartBtn || !window.AndesCart || !window.AndesFavoritos) return;
+          var id = cartBtn.getAttribute("data-fav-cart");
+          var item = window.AndesFavoritos.items().filter(function (it) {
+            return it.id === id;
+          })[0];
+          if (!item) return;
+          window.AndesCart.agregar(
+            {
+              id: item.id,
+              sku: item.sku,
+              titulo: item.titulo,
+              precio: item.precio,
+              imagen: item.imagen,
+              link: item.link,
+            },
+            1
+          );
+          cartBtn.textContent = "Agregado";
+        });
+      }
+      if (window.AndesFavoritos) {
+        window.AndesFavoritos.onChange(function () {
+          var view = document.getElementById("view-favoritos");
+          if (view && !view.hidden) pintarFavoritos();
+        });
+      }
 
       window.addEventListener("hashchange", function () {
         if (window.AndesAuth.usuario()) mostrarSeccion(seccionDesdeHash());

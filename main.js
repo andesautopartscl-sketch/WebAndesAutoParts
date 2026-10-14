@@ -1153,6 +1153,29 @@
       return btn;
     }
 
+    var FAV_SVG =
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z"></path></svg>';
+
+    function buildFavButton(p, titulo) {
+      var id = productMlId(p) || productSku(p);
+      if (!id) return null;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "fav-btn";
+      btn.innerHTML = FAV_SVG;
+      btn.setAttribute("data-fav-id", id);
+      btn.setAttribute("data-fav-titulo", titulo);
+      btn.setAttribute("data-fav-sku", productSku(p) || "");
+      btn.setAttribute("data-fav-precio", p.precio != null ? String(p.precio) : "0");
+      btn.setAttribute("data-fav-imagen", primeraImagen(p) || "");
+      btn.setAttribute("data-fav-link", fichaHref(p) || productLink(p) || "");
+      var activo = window.AndesFavoritos && window.AndesFavoritos.tiene(id);
+      btn.classList.toggle("is-on", !!activo);
+      btn.setAttribute("aria-pressed", activo ? "true" : "false");
+      btn.setAttribute("aria-label", (activo ? "Quitar de favoritos: " : "Guardar en favoritos: ") + titulo);
+      return btn;
+    }
+
     function renderProductCard(p, idx) {
         var titulo = (p.titulo || "Sin título").trim();
         var desc = (p.descripcion || "").trim();
@@ -1219,6 +1242,8 @@
         } else {
           wrap.appendChild(image);
         }
+        var fav = buildFavButton(p, titulo);
+        if (fav) wrap.appendChild(fav);
 
         var body = document.createElement("div");
         body.className = "card-body producto-info";
