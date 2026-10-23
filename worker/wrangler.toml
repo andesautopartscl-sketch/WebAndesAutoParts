@@ -1,6 +1,9 @@
 name = "andes-autoparts-ml-sync"
 main = "worker.js"
 compatibility_date = "2024-11-01"
+# El panel admin llama a esta URL. Sin esto, Cloudflare responde 1042 y el
+# navegador muestra "Failed to fetch".
+workers_dev = true
 
 # Solo la ficha: WhatsApp y Google leen el nombre, el precio y la foto
 # sin pasar el resto del sitio por el worker.
