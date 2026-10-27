@@ -5308,6 +5308,11 @@ body.auth-modal-open {
   font-size: 0.95rem;
 }
 
+.auth-modal__submit:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
 .auth-modal__divider {
   height: 1px;
   margin: 0.95rem 0 0.75rem;

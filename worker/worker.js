@@ -778,7 +778,7 @@ async function handleUpdateToken(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const jsonReq = (data, status = 200) => jsonResponse(data, status, request);
     const unauthorizedReq = () => unauthorized(request);
 
@@ -847,6 +847,7 @@ export default {
 
     const respuestaClientes = await rutearClientes(path, request, env, {
       json: jsonReq,
+      ctx,
     });
     if (respuestaClientes) return respuestaClientes;
 

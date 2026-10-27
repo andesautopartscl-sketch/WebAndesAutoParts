@@ -23,7 +23,9 @@ import { registrarEvento, resumenAnalitica } from "./analitica.js";
 const SESION_DIAS = 30;
 const DIAS_SIN_COMPRA = 30;
 const MAX_AUTH_INTENTOS = 12;
-const PBKDF2_ITER = 100000;
+const PBKDF2_ITER_RAPIDO = 12000;
+const PBKDF2_ITER_LEGACY = 100000;
+const PREFIJO_HASH = "v2:";
 
 /* ============================== Utilidades ============================== */
 
@@ -61,7 +63,7 @@ async function sha256Hex(str) {
   return bytesToHex(dig);
 }
 
-async function hashClave(clave, saltHex) {
+async function derivarClave(clave, saltHex, iter) {
   const salt = hexToBytes(saltHex);
   const key = await crypto.subtle.importKey(
     "raw",
@@ -71,11 +73,27 @@ async function hashClave(clave, saltHex) {
     ["deriveBits"]
   );
   const bits = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", hash: "SHA-256", salt, iterations: PBKDF2_ITER },
+    { name: "PBKDF2", hash: "SHA-256", salt, iterations: iter },
     key,
     256
   );
   return bytesToHex(bits);
+}
+
+async function hashClave(clave, saltHex) {
+  const bits = await derivarClave(clave, saltHex, PBKDF2_ITER_RAPIDO);
+  return PREFIJO_HASH + bits;
+}
+
+async function claveCoincide(clave, saltHex, guardado) {
+  const rapido = String(guardado || "").startsWith(PREFIJO_HASH);
+  const bits = await derivarClave(
+    clave,
+    saltHex,
+    rapido ? PBKDF2_ITER_RAPIDO : PBKDF2_ITER_LEGACY
+  );
+  const esperado = rapido ? String(guardado).slice(PREFIJO_HASH.length) : String(guardado || "");
+  return { ok: bits === esperado, legacy: !rapido };
 }
 
 function nuevoSalt() {
@@ -389,7 +407,7 @@ async function registrar(request, env, json, { rol = "cliente", creadoPor = null
   return json({ ok: true, token, usuario: perfilPublico(usuario) });
 }
 
-async function login(request, env, json) {
+async function login(request, env, json, ctx) {
   if (!env.CLIENTES_DB) return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
 
   const ip = request.headers.get("CF-Connecting-IP") || "ip";
@@ -404,32 +422,34 @@ async function login(request, env, json) {
     return json({ ok: false, error: "JSON_INVALIDO" }, 400);
   }
 
-  const cap = await verificarTurnstile(
+  const capPromise = verificarTurnstile(
     env,
     body.turnstileToken || body["cf-turnstile-response"],
     ip
   );
-  if (!cap.ok) {
-    return json({ ok: false, error: "CAPTCHA", message: cap.message }, 400);
-  }
 
   const email = texto(body.email, 160).toLowerCase();
   const clave = String(body.clave || body.password || "");
   if (!(await rateLimit(env, "login-mail:" + email))) {
+    await capPromise;
     return json({ ok: false, error: "RATE_LIMIT", message: "Demasiados intentos. Espera una hora." }, 429);
   }
-  const u = await env.CLIENTES_DB.prepare(
-    "SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE"
-  )
-    .bind(email)
-    .first();
+  const [cap, u] = await Promise.all([
+    capPromise,
+    env.CLIENTES_DB.prepare("SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE")
+      .bind(email)
+      .first(),
+  ]);
+  if (!cap.ok) {
+    return json({ ok: false, error: "CAPTCHA", message: cap.message }, 400);
+  }
 
   if (!u) {
     return json({ ok: false, error: "CREDENCIALES", message: "Correo o clave incorrectos" }, 401);
   }
 
-  const hash = await hashClave(clave, u.password_salt);
-  if (hash !== u.password_hash) {
+  const ver = await claveCoincide(clave, u.password_salt, u.password_hash);
+  if (!ver.ok) {
     return json({ ok: false, error: "CREDENCIALES", message: "Correo o clave incorrectos" }, 401);
   }
 
@@ -451,6 +471,19 @@ async function login(request, env, json) {
   }
 
   const token = await crearSesion(env, u.id);
+  if (ver.legacy && ctx && typeof ctx.waitUntil === "function") {
+    const salt = u.password_salt;
+    const id = u.id;
+    ctx.waitUntil(
+      hashClave(clave, salt)
+        .then(function (nuevo) {
+          return env.CLIENTES_DB.prepare("UPDATE usuarios SET password_hash = ? WHERE id = ?")
+            .bind(nuevo, id)
+            .run();
+        })
+        .catch(function () {})
+    );
+  }
   return json({ ok: true, token, usuario: perfilPublico(u) });
 }
 
@@ -681,8 +714,8 @@ async function actualizarYo(request, env, json) {
         400
       );
     }
-    const hashActual = await hashClave(actual, r.usuario.password_salt);
-    if (hashActual !== r.usuario.password_hash) {
+    const verActual = await claveCoincide(actual, r.usuario.password_salt, r.usuario.password_hash);
+    if (!verActual.ok) {
       return json(
         { ok: false, error: "CLAVE", message: "La contraseña actual no coincide" },
         401
@@ -1505,7 +1538,7 @@ async function estadoOpinion(request, env, json) {
 
 /* ================================ Router ================================ */
 
-export async function rutearClientes(path, request, env, { json }) {
+export async function rutearClientes(path, request, env, { json, ctx }) {
   if (path === "/opiniones" && request.method === "GET") {
     return listarOpinionesPublicas(env, json);
   }
@@ -1544,7 +1577,7 @@ export async function rutearClientes(path, request, env, { json }) {
     return registrar(request, env, json, { rol: "cliente" });
   }
   if (path === "/auth/login" && request.method === "POST") {
-    return login(request, env, json);
+    return login(request, env, json, ctx);
   }
   if (path === "/auth/logout" && request.method === "POST") {
     return logout(request, env, json);

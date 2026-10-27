@@ -139,13 +139,9 @@
     return api("/auth/registro", { method: "POST", body: datos }).then(function (data) {
       if (data.ok && data.token) {
         guardarSesion(data.token, data.usuario);
-        return fusionarCarrito().then(function () {
-          return fusionarFavoritos();
-        }).then(function () {
-          return sincronizarVehiculo(data.usuario);
-        }).then(function () {
-          return data;
-        });
+        fusionarCarrito().catch(function () {});
+        fusionarFavoritos().catch(function () {});
+        sincronizarVehiculo(data.usuario).catch(function () {});
       }
       return data;
     });
@@ -155,13 +151,9 @@
     return api("/auth/login", { method: "POST", body: datos }).then(function (data) {
       if (data.ok && data.token) {
         guardarSesion(data.token, data.usuario);
-        return fusionarCarrito().then(function () {
-          return fusionarFavoritos();
-        }).then(function () {
-          return sincronizarVehiculo(data.usuario);
-        }).then(function () {
-          return data;
-        });
+        fusionarCarrito().catch(function () {});
+        fusionarFavoritos().catch(function () {});
+        sincronizarVehiculo(data.usuario).catch(function () {});
       }
       return data;
     });
@@ -805,16 +797,35 @@
     var formReg = modal.querySelector("#auth-modal-registro");
     var formOlvide = modal.querySelector("#auth-modal-olvide");
 
+    function ocuparBoton(btn, texto) {
+      if (!btn) return;
+      if (!btn.getAttribute("data-auth-label")) btn.setAttribute("data-auth-label", btn.textContent);
+      btn.disabled = true;
+      btn.setAttribute("aria-busy", "true");
+      btn.textContent = texto;
+    }
+
+    function soltarBoton(btn) {
+      if (!btn) return;
+      btn.disabled = false;
+      btn.removeAttribute("aria-busy");
+      var label = btn.getAttribute("data-auth-label");
+      if (label) btn.textContent = label;
+    }
+
     if (formLogin) {
       formLogin.addEventListener("submit", function (e) {
         e.preventDefault();
         var err = document.getElementById("auth-login-error");
+        var btn = formLogin.querySelector('[type="submit"]');
+        if (btn && btn.disabled) return;
         mostrarError(err, "");
         var token = tokenTurnstile(turnstileIds.login);
         if (turnstileSiteKey() && !token) {
           mostrarError(err, "Confirma que no eres un robot.");
           return;
         }
+        ocuparBoton(btn, "Iniciando sesión…");
         login({
           email: formLogin.email.value,
           clave: formLogin.clave.value,
@@ -831,6 +842,9 @@
           .catch(function () {
             mostrarError(err, "Error de red. Intenta de nuevo.");
             resetTurnstile("login");
+          })
+          .then(function () {
+            soltarBoton(btn);
           });
       });
     }
@@ -841,9 +855,10 @@
         var err = document.getElementById("auth-olvide-error");
         var ok = document.getElementById("auth-olvide-ok");
         var btn = formOlvide.querySelector('[type="submit"]');
+        if (btn && btn.disabled) return;
         mostrarError(err, "");
         if (ok) ok.hidden = true;
-        if (btn) btn.disabled = true;
+        ocuparBoton(btn, "Enviando…");
         api("/auth/olvide", {
           method: "POST",
           body: { email: formOlvide.email.value },
@@ -863,7 +878,7 @@
             mostrarError(err, "Error de red. Intenta de nuevo.");
           })
           .then(function () {
-            if (btn) btn.disabled = false;
+            soltarBoton(btn);
           });
       });
     }
@@ -872,12 +887,15 @@
       formReg.addEventListener("submit", function (e) {
         e.preventDefault();
         var err = document.getElementById("auth-reg-error");
+        var btn = formReg.querySelector('[type="submit"]');
+        if (btn && btn.disabled) return;
         mostrarError(err, "");
         var token = tokenTurnstile(turnstileIds.registro);
         if (turnstileSiteKey() && !token) {
           mostrarError(err, "Confirma que no eres un robot.");
           return;
         }
+        ocuparBoton(btn, "Creando cuenta…");
         registrar({
           nombre: formReg.nombre.value,
           email: formReg.email.value,
@@ -896,6 +914,9 @@
           .catch(function () {
             mostrarError(err, "Error de red. Intenta de nuevo.");
             resetTurnstile("registro");
+          })
+          .then(function () {
+            soltarBoton(btn);
           });
       });
     }
