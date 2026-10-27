@@ -14,6 +14,17 @@
 
 import { rutearPedidos } from "./pedidos.js";
 import { rutearClientes, usuarioDesdeRequest, resolverPreciosUsuario, registrarUltimaCompra } from "./clientes.js";
+import bannerRecibido from "../images/correos/pedido-recibido.png";
+import bannerConfirmado from "../images/correos/pedido-confirmado.png";
+import bannerCamino from "../images/correos/pedido-en-camino.png";
+import bannerSinStock from "../images/correos/sin-stock.png";
+
+const BANNERS_CORREO = {
+  "/images/correos/pedido-recibido.png": bannerRecibido,
+  "/images/correos/pedido-confirmado.png": bannerConfirmado,
+  "/images/correos/pedido-en-camino.png": bannerCamino,
+  "/images/correos/sin-stock.png": bannerSinStock,
+};
 
 const API = "https://api.mercadolibre.com";
 const KV_TOKEN_KEY = "ML_ACCESS_TOKEN";
@@ -777,6 +788,16 @@ export default {
 
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, "") || "/";
+
+    const bannerCorreo = BANNERS_CORREO[path];
+    if (bannerCorreo && (request.method === "GET" || request.method === "HEAD")) {
+      return new Response(request.method === "HEAD" ? null : bannerCorreo, {
+        headers: {
+          "Content-Type": "image/png",
+          "Cache-Control": "public, max-age=604800",
+        },
+      });
+    }
 
     if (
       (request.method === "GET" || request.method === "HEAD") &&

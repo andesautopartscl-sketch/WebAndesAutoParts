@@ -8,7 +8,14 @@ workers_dev = true
 # Solo la ficha: WhatsApp y Google leen el nombre, el precio y la foto
 # sin pasar el resto del sitio por el worker.
 routes = [
-  { pattern = "andesautoparts.cl/producto.html*", zone_name = "andesautoparts.cl" }
+  { pattern = "andesautoparts.cl/producto.html*", zone_name = "andesautoparts.cl" },
+  { pattern = "andesautoparts.cl/images/correos/*", zone_name = "andesautoparts.cl" },
+  { pattern = "www.andesautoparts.cl/images/correos/*", zone_name = "andesautoparts.cl" }
+]
+
+# Los banners de los correos se importan como binario.
+rules = [
+  { type = "Data", globs = ["**/*.png"], fallthrough = true }
 ]
 
 # Variables públicas (no sensibles)
