@@ -110,10 +110,10 @@ window.ANDES_ENVIO = {
   // Retiro en nuestra dirección. Tiene que coincidir con el NAP de index.html
   // y de Google Business Profile: si cambia la dirección, cambia en los tres.
   retiro: {
-    direccion: "Salas 8973, La Cisterna",
+    direccion: "San Nicolás 1480, San Miguel",
     ciudad: "Región Metropolitana",
     horario: "Lunes a viernes de 8:00 a 18:00 · Sábado de 9:00 a 14:00",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Salas+8973,+La+Cisterna,+Chile",
+    mapa: "https://www.google.com/maps/search/?api=1&query=San+Nicolas+1480,+San+Miguel,+Chile",
     aviso:
       "Te avisamos por WhatsApp cuando el pedido esté listo. Trae tu número de " +
       "pedido y tu cédula para retirarlo.",

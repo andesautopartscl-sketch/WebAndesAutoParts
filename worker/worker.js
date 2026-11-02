@@ -297,7 +297,7 @@ function textoFichaPublica(producto) {
   let texto =
     (producto.titulo || "Repuesto") +
     (precio ? " por " + precio : "") +
-    ". Andes Auto Parts, La Cisterna. Consulta stock por WhatsApp.";
+    ". Andes Auto Parts, San Miguel. Consulta stock por WhatsApp.";
   if (texto.length > 160) texto = texto.slice(0, 157) + "...";
   return texto;
 }

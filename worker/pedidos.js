@@ -325,7 +325,7 @@ ${contenido}
 </td></tr>
 <tr><td bgcolor="#f8f6f2" style="padding:20px 32px 22px;background:#f8f6f2;border-top:1px solid #ece7df;font-family:${FUENTE}">
 <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:${MARCA};font-family:${FUENTE}">Andes Auto Parts</p>
-<p style="margin:0 0 8px;font-size:12px;line-height:1.5;color:#64748b">Salas 8973, La Cisterna, Santiago</p>
+<p style="margin:0 0 8px;font-size:12px;line-height:1.5;color:#64748b">San Nicolás 1480, San Miguel, Santiago</p>
 <p style="margin:0;font-size:12px;line-height:1.6">
 <a href="tel:+56926152826" style="color:${MARCA};text-decoration:none;font-weight:600">+56 9 2615 2826</a>
 <span style="color:#d6d3d1"> · </span>
@@ -368,7 +368,7 @@ ${
 
 function lineaEntrega(pedido) {
   if (pedido.entrega.modo === "retiro") {
-    return "Retiro en Salas 8973, La Cisterna.";
+    return "Retiro en San Nicolás 1480, San Miguel.";
   }
   const destino = [pedido.entrega.direccion, pedido.entrega.comuna, pedido.entrega.region]
     .filter(Boolean)
@@ -471,7 +471,7 @@ function lineaOpinion() {
 function correoClienteConfirmado(pedido) {
   const cierre =
     pedido.entrega.modo === "retiro"
-      ? "Ya puedes pasar a retirarlo a Salas 8973, La Cisterna. Trae tu número de pedido y tu cédula."
+      ? "Ya puedes pasar a retirarlo a San Nicolás 1480, San Miguel. Trae tu número de pedido y tu cédula."
       : pedido.entrega.despacho === "Gratis"
       ? "Lo despachamos a tu dirección sin costo. Si confirmaste antes de las 10:00 am, sale hoy entre 14:00 y 22:00; si fue después, mañana. Te avisamos cuando salga."
       : pedido.entrega.costo > 0
@@ -522,7 +522,7 @@ function correoClienteRechazado(pedido) {
 function correoClienteDespachado(pedido) {
   const cierre =
     pedido.entrega.modo === "retiro"
-      ? "Tu pedido ya está listo para retiro en Salas 8973, La Cisterna. Te esperamos con tu número de pedido y tu cédula."
+      ? "Tu pedido ya está listo para retiro en San Nicolás 1480, San Miguel. Te esperamos con tu número de pedido y tu cédula."
       : pedido.entrega.costo > 0 || pedido.entrega.despacho === "Gratis"
       ? "Tu pedido ya va en camino hacia la dirección registrada. Si necesitamos una referencia adicional para completar la entrega, te contactaremos a la brevedad."
       : `Tu pedido ya fue entregado a ${esc(
