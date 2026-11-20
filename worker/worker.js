@@ -274,7 +274,7 @@ function extractSku(item) {
 }
 
 function esCrawlerDePreview(ua) {
-  return /facebookexternalhit|Facebot|WhatsApp|Twitterbot|TelegramBot|LinkedInBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|DuckDuckBot/i.test(
+  return /facebookexternalhit|Facebot|WhatsApp|Twitterbot|TelegramBot|LinkedInBot|Slackbot|Discordbot|Pinterest|Googlebot|Google-InspectionTool|bingbot|DuckDuckBot/i.test(
     ua || ""
   );
 }
@@ -334,12 +334,17 @@ async function vistaPreviaFicha(request) {
     const titulo = (producto.titulo || "Repuesto") + " | Andes Auto Parts";
     const resumen = textoFichaPublica(producto);
     const imagen = fotoCompartible(producto.imagen);
+    const urlFicha = `https://andesautoparts.cl/producto.html?id=${encodeURIComponent(id)}`;
     let html = await pagina.text();
     html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escAttr(titulo)}</title>`);
+    html = html.replace(
+      /<link\s+rel="canonical"[^>]*>/i,
+      `<link rel="canonical" id="product-canonical" href="${escAttr(urlFicha)}" />`
+    );
     html = ponerMetaHtml(html, "name", "description", resumen);
     html = ponerMetaHtml(html, "property", "og:title", titulo);
     html = ponerMetaHtml(html, "property", "og:description", resumen);
-    html = ponerMetaHtml(html, "property", "og:url", url.href);
+    html = ponerMetaHtml(html, "property", "og:url", urlFicha);
     html = ponerMetaHtml(html, "property", "og:image", imagen);
     const headers = new Headers(pagina.headers);
     headers.delete("content-length");

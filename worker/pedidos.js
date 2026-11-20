@@ -60,6 +60,11 @@ function hoy() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function metodoPago(valor) {
+  if (valor === "whatsapp" || valor === "mercadopago") return valor;
+  return "transferencia";
+}
+
 /* ============================== Validación ============================== */
 
 /**
@@ -130,7 +135,7 @@ function validarPedido(body) {
         transporte: texto(entrega.transporte, 80),
       },
       pago: {
-        metodo: pago.metodo === "whatsapp" ? "whatsapp" : "transferencia",
+        metodo: metodoPago(pago.metodo),
         declarado: pago.declarado === true,
       },
       items: limpios,
@@ -413,6 +418,16 @@ function correoAndes(pedido, urlBase, token) {
   const pago =
     pedido.pago.metodo === "whatsapp"
       ? '<p style="margin:0;padding:12px;background:#f6f8fb;border-radius:8px;font-size:14px">Pago por coordinar en WhatsApp.</p>'
+      : pedido.pago.metodo === "mercadopago"
+      ? pedido.pago.declarado
+        ? `<p style="margin:0;padding:12px;background:#f0fdf4;border-left:3px solid #15803d;border-radius:0 8px 8px 0;font-size:14px"><strong>El cliente declara que ya pagó ${clp(
+            totalPedido(pedido)
+          )} en Mercado Pago.</strong> El link no trae el monto: confirma que el abono sea exactamente ese. Referencia ${esc(
+            pedido.numero
+          )}.</p>`
+        : `<p style="margin:0;padding:12px;background:#fffbeb;border-left:3px solid #b45309;border-radius:0 8px 8px 0;font-size:14px">Pago en Mercado Pago todavía pendiente. El total del pedido es ${clp(
+            totalPedido(pedido)
+          )}.</p>`
       : pedido.pago.declarado
       ? `<p style="margin:0;padding:12px;background:#f0fdf4;border-left:3px solid #15803d;border-radius:0 8px 8px 0;font-size:14px"><strong>El cliente declara que ya transfirió ${clp(
           totalPedido(pedido)
@@ -442,6 +457,10 @@ function correoClienteRecibido(pedido) {
   const siguiente =
     pedido.pago.metodo === "whatsapp"
       ? "Te escribimos por WhatsApp para coordinar el pago y la entrega."
+      : pedido.pago.metodo === "mercadopago"
+      ? pedido.pago.declarado
+        ? "Estamos verificando tu pago en Mercado Pago y el stock. Te avisamos por este mismo correo apenas quede confirmado."
+        : `Paga ${clp(totalPedido(pedido))} en Mercado Pago, en link.mercadopago.cl/andesautoparts, escribiendo ese monto exacto.`
       : pedido.pago.declarado
       ? "Estamos verificando tu transferencia y el stock. Te avisamos por este mismo correo apenas quede confirmada."
       : `Transfiere ${clp(totalPedido(pedido))} usando <strong>${esc(
@@ -458,7 +477,11 @@ ${tablaItems(pedido)}
 <p style="margin:18px 0 0;font-size:14px;line-height:1.6"><strong>Entrega:</strong> ${esc(
       lineaEntrega(pedido)
     )}</p>
-<p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">Si no tenemos la pieza te devolvemos el 100% del monto: solo te pediremos tus datos bancarios para hacer la transferencia. Cualquier duda, respóndenos este correo o escríbenos al +56 9 2615 2826.</p>`,
+<p style="margin:18px 0 0;font-size:13px;color:#6b7280;line-height:1.6">${
+      pedido.pago.metodo === "mercadopago"
+        ? "Si no tenemos la pieza te devolvemos el 100% al mismo medio con el que pagaste en Mercado Pago."
+        : "Si no tenemos la pieza te devolvemos el 100% del monto: solo te pediremos tus datos bancarios para hacer la transferencia."
+    } Cualquier duda, respóndenos este correo o escríbenos al +56 9 2615 2826.</p>`,
     "https://andesautoparts.cl/images/correos/pedido-recibido.png"
   );
 }
@@ -475,7 +498,9 @@ function correoClienteConfirmado(pedido) {
       : pedido.entrega.despacho === "Gratis"
       ? "Lo despachamos a tu dirección sin costo. Si confirmaste antes de las 10:00 am, sale hoy entre 14:00 y 22:00; si fue después, mañana. Te avisamos cuando salga."
       : pedido.entrega.costo > 0
-      ? `El despacho (${clp(pedido.entrega.costo)} con IVA incluido) ya estaba en tu transferencia. Te avisamos cuando salga.`
+      ? `El despacho (${clp(pedido.entrega.costo)} con IVA incluido) ya estaba en tu ${
+          pedido.pago.metodo === "mercadopago" ? "pago" : "transferencia"
+        }. Te avisamos cuando salga.`
       : `Lo despachamos por ${esc(
           pedido.entrega.transporte || "la empresa que elegiste"
         )} y te enviamos el número de seguimiento. El flete lo pagas al retirar.`;
@@ -503,17 +528,23 @@ function correoClienteRechazado(pedido) {
     )}, revisamos tu pedido <strong>${esc(
       pedido.numero
     )}</strong> y lamentablemente no tenemos disponible el repuesto.</p>
-<p style="margin:0 0 18px;padding:14px;background:#fffbeb;border-left:3px solid #b45309;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6">Te devolvemos ${clp(
-      totalPedido(pedido)
-    )} entre 30 minutos y 1 hora después de que nos respondas este correo con tus datos de devolución.</p>
-<p style="margin:0 0 18px;font-size:14px;line-height:1.6">Para hacerte la devolución necesitamos tus datos bancarios. <strong>Responde este correo</strong> con:</p>
+<p style="margin:0 0 18px;padding:14px;background:#fffbeb;border-left:3px solid #b45309;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6">${
+      pedido.pago && pedido.pago.metodo === "mercadopago"
+        ? `Te devolvemos ${clp(totalPedido(pedido))} al mismo medio con el que pagaste en Mercado Pago.`
+        : `Te devolvemos ${clp(totalPedido(pedido))} entre 30 minutos y 1 hora después de que nos respondas este correo con tus datos de devolución.`
+    }</p>
+${
+  pedido.pago && pedido.pago.metodo === "mercadopago"
+    ? ""
+    : `<p style="margin:0 0 18px;font-size:14px;line-height:1.6">Para hacerte la devolución necesitamos tus datos bancarios. <strong>Responde este correo</strong> con:</p>
 <ul style="margin:0 0 18px;padding-left:20px;font-size:14px;line-height:1.8;color:#1f2937">
 <li>Nombre del titular de la cuenta</li>
 <li>RUT del titular</li>
 <li>Banco</li>
 <li>Tipo de cuenta (corriente, vista, ahorro, RUT)</li>
 <li>Número de cuenta</li>
-</ul>
+</ul>`
+}
 <p style="margin:0;font-size:14px;line-height:1.6">Si quieres, también podemos buscar una alternativa compatible con tu vehículo. Escríbenos al +56 9 2615 2826.</p>`,
     "https://andesautoparts.cl/images/correos/sin-stock.png"
   );
@@ -836,7 +867,7 @@ function pedidoCliente(p) {
       comuna: entrega.comuna || "",
       region: entrega.region || "",
     },
-    pago: { metodo: pago.metodo === "whatsapp" ? "whatsapp" : "transferencia" },
+    pago: { metodo: metodoPago(pago.metodo) },
   };
 }
 

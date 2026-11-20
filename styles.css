@@ -4833,6 +4833,17 @@ body.cart-open {
   margin-bottom: 1rem;
 }
 
+.pay-mp-amount {
+  margin: 0.15rem 0 0.85rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.pay-mp-open {
+  margin-top: 0.35rem;
+}
+
 .pay-check {
   display: flex;
   align-items: flex-start;

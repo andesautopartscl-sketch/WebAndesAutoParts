@@ -54,9 +54,9 @@ window.ANDES_TURNSTILE = {
  * pagar por transferencia bancaria, así que cualquier cambio de cuenta se
  * hace acá y en ningún otro lado.
  *
- * `mercadoPago` y `webpay` quedan en false a propósito: mientras estén así,
- * el checkout los muestra con la etiqueta "Próximamente" y deshabilitados.
- * Cuando la integración esté lista, se ponen en true.
+ * `mercadoPago` usa el link sin monto definido: el cliente escribe el total
+ * del pedido en Mercado Pago. `webpay` sigue en false y se muestra como
+ * "Próximamente".
  */
 window.ANDES_PAGO = {
   transferencia: {
@@ -72,7 +72,8 @@ window.ANDES_PAGO = {
     habilitado: true,
   },
   mercadoPago: {
-    habilitado: false,
+    habilitado: true,
+    url: "https://link.mercadopago.cl/andesautoparts",
   },
   webpay: {
     habilitado: false,
@@ -164,7 +165,7 @@ window.ANDES_ENVIO = {
   // Empresas con las que despachamos habitualmente. Alimentan tanto los textos
   // del checkout como las opciones que ve el cliente, así que basta agregar o
   // quitar una acá para que cambie en todas partes.
-  couriers: ["Starken", "Chilexpress"],
+  couriers: ["Starken", "Chilexpress", "Bluexpress"],
 
   textos: {
     retiro: "Retiras sin costo en {direccion}. {horario}.",

@@ -953,7 +953,11 @@
               "</ul>" +
               (p.notas ? '<p class="order-card__note">' + escHtml(p.notas) + "</p>" : "") +
               '<footer class="order-card__foot"><span>' +
-              (p.pago && p.pago.metodo === "whatsapp" ? "WhatsApp" : "Transferencia") +
+              (p.pago && p.pago.metodo === "whatsapp"
+                ? "WhatsApp"
+                : p.pago && p.pago.metodo === "mercadopago"
+                ? "Mercado Pago"
+                : "Transferencia") +
               (p.pagoDeclarado ? " · declaró pago" : "") +
               "</span><strong>" +
               fmtClp(p.total) +

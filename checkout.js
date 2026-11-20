@@ -21,7 +21,7 @@
   var cfgPedidos = window.ANDES_PEDIDOS || {};
   var cfgComprobante = cfgPedidos.comprobante || {};
   var retiro = envio.retiro || {};
-  var couriers = envio.couriers || ["Starken", "Chilexpress"];
+  var couriers = envio.couriers || ["Starken", "Chilexpress", "Bluexpress"];
   var waNumber = String(contacto.whatsappNumber || "56926152826").replace(/\D/g, "");
 
   /** Las 52 comunas de la Región Metropolitana. */
@@ -64,7 +64,9 @@
   var envioBlock = document.getElementById("envio-block");
   var pickupCard = document.getElementById("pickup-card");
   var payTransfer = document.getElementById("pay-transfer");
+  var payMp = document.getElementById("pay-mp");
   var pagadoCheck = document.getElementById("co-pagado");
+  var pagadoMpCheck = document.getElementById("co-pagado-mp");
   var fileWrap = document.getElementById("pay-file");
   var fileInput = document.getElementById("co-comprobante");
   var fileHint = document.getElementById("pay-file-hint");
@@ -494,8 +496,9 @@
       actualizarTransporteUi();
     }
 
-    // El monto de la transferencia incluye el flete propio cuando aplica.
+    // El monto mostrado incluye el flete propio cuando aplica.
     if (payTransfer && !payTransfer.hidden) pintarBloquePago();
+    if (payMp && !payMp.hidden) pintarBloqueMercadoPago();
   }
 
   /* ======================== Empresa de transporte ======================== */
@@ -656,6 +659,7 @@
     actualizarTituloEnvio();
     pintarDespacho();
     if (payTransfer && !payTransfer.hidden) pintarBloquePago();
+    if (payMp && !payMp.hidden) pintarBloqueMercadoPago();
   }
 
   if (itemsEl) {
@@ -690,10 +694,22 @@
 
   /**
    * Con retiro no hay dirección que pedir, y con WhatsApp el despacho se
-   * acuerda en el chat, así que tampoco bloqueamos al cliente con ella.
+   * acuerda en el chat. Transferencia y Mercado Pago sí la necesitan.
    */
   function requiereDireccion() {
-    return !esRetiro() && metodoSeleccionado() === "transferencia";
+    return !esRetiro() && metodoSeleccionado() !== "whatsapp";
+  }
+
+  function urlMercadoPago() {
+    var mp = cfg.mercadoPago || {};
+    return mp.url || "https://link.mercadopago.cl/andesautoparts";
+  }
+
+  function textoBoton() {
+    var metodo = metodoSeleccionado();
+    if (metodo === "whatsapp") return "Enviar el pedido por WhatsApp";
+    if (metodo === "mercadopago") return "Ya pagué en Mercado Pago, confirmar";
+    return "Ya transferí, confirmar mi pedido";
   }
 
   function datosBancariosHtml(conMonto) {
@@ -743,6 +759,17 @@
     if (reembolso) reembolso.textContent = textosPago.reembolso || "";
   }
 
+  /** El link de Mercado Pago abre en $0: el cliente tiene que ver el total. */
+  function pintarBloqueMercadoPago() {
+    if (finalizado) return;
+    var monto = document.getElementById("pay-mp-monto");
+    if (monto) monto.textContent = fmt(totalAPagar());
+    var numero = document.getElementById("pay-mp-numero");
+    if (numero) numero.textContent = numeroPedido();
+    var link = document.getElementById("pay-mp-link");
+    if (link) link.href = urlMercadoPago();
+  }
+
   function actualizarRequisitos() {
     var metodo = metodoSeleccionado();
     var conDireccion = requiereDireccion();
@@ -759,18 +786,22 @@
     });
 
     var transferencia = metodo === "transferencia";
+    var mercadoPago = metodo === "mercadopago";
     if (payTransfer) payTransfer.hidden = !transferencia;
+    if (payMp) payMp.hidden = !mercadoPago;
     if (pagadoCheck) {
       pagadoCheck.required = transferencia;
-      // Si se va a WhatsApp, la declaración de pago deja de tener sentido.
+      // Si se va a otro medio, la declaración de la transferencia ya no vale.
       if (!transferencia) pagadoCheck.checked = false;
     }
+    if (pagadoMpCheck) {
+      pagadoMpCheck.required = mercadoPago;
+      if (!mercadoPago) pagadoMpCheck.checked = false;
+    }
     if (transferencia) pintarBloquePago();
+    if (mercadoPago) pintarBloqueMercadoPago();
 
-    submitBtn.textContent =
-      metodo === "whatsapp"
-        ? "Enviar el pedido por WhatsApp"
-        : "Ya transferí, confirmar mi pedido";
+    submitBtn.textContent = textoBoton();
 
     actualizarComprobanteUi();
   }
@@ -910,7 +941,10 @@
       comuna: comunaValor(),
       notas: (form.elements.notas.value || "").trim(),
       entrega: entregaSeleccionada(),
-      pagado: !!(pagadoCheck && pagadoCheck.checked),
+      pagado:
+        metodoSeleccionado() === "mercadopago"
+          ? !!(pagadoMpCheck && pagadoMpCheck.checked)
+          : !!(pagadoCheck && pagadoCheck.checked),
       metodo: metodoSeleccionado(),
       despacho: evaluarDespacho(),
       transporte: transporteValor(),
@@ -992,6 +1026,13 @@
         pagadoCheck
       );
     }
+    if (datos.metodo === "mercadopago" && !datos.pagado) {
+      marcar(
+        "pagado_mp",
+        "Abre Mercado Pago, paga el monto de arriba y marca la casilla para confirmar tu pedido.",
+        pagadoMpCheck
+      );
+    }
 
     var archivo = archivoComprobante();
     if (archivo && archivo.size > maxComprobanteBytes) {
@@ -1036,7 +1077,12 @@
     lineas.push("Despacho: " + datos.despacho.resumen);
     if (datos.despacho.costo > 0) {
       lineas.push("Costo despacho: " + fmt(datos.despacho.costo));
-      lineas.push("Total a transferir: " + fmt(sub + datos.despacho.costo));
+    }
+    var total = sub + (datos.despacho.costo || 0);
+    if (datos.metodo === "mercadopago") {
+      lineas.push("Total a pagar en Mercado Pago: " + fmt(total));
+    } else if (datos.despacho.costo > 0) {
+      lineas.push("Total a transferir: " + fmt(total));
     }
     if (datos.transporte) lineas.push("Transporte: " + datos.transporte);
     lineas.push("");
@@ -1062,6 +1108,13 @@
     lineas.push("");
     if (datos.metodo === "whatsapp") {
       lineas.push("Forma de pago: por coordinar en este chat");
+    } else if (datos.metodo === "mercadopago") {
+      lineas.push("Forma de pago: Mercado Pago (link.mercadopago.cl/andesautoparts)");
+      lineas.push(
+        datos.pagado
+          ? "*** El cliente declara que YA PAGÓ en Mercado Pago. El link no trae el monto: verificar que el abono sea el total del pedido. ***"
+          : "Pago en Mercado Pago todavía pendiente."
+      );
     } else {
       lineas.push("Forma de pago: transferencia bancaria");
       lineas.push(
@@ -1196,7 +1249,12 @@
         entrega: datos.entrega === "retiro" ? "Retiro en tienda" : "Envío a domicilio",
         despacho: datos.despacho.resumen,
         transporte: datos.transporte,
-        forma_pago: datos.metodo === "whatsapp" ? "WhatsApp" : "Transferencia",
+        forma_pago:
+          datos.metodo === "whatsapp"
+            ? "WhatsApp"
+            : datos.metodo === "mercadopago"
+            ? "Mercado Pago"
+            : "Transferencia",
         pago_declarado: datos.pagado ? "SÍ, verificar abono" : "Pendiente",
         comentarios: datos.notas,
         pedido: resumen,
@@ -1248,7 +1306,8 @@
         datos.comuna +
         " cuesta " +
         fmt(datos.despacho.costo) +
-        " con IVA incluido, sumado al total a transferir."
+        " con IVA incluido, sumado al total" +
+        (datos.metodo === "mercadopago" ? " a pagar en Mercado Pago." : " a transferir.")
       );
     }
     if (datos.despacho.courier) {
@@ -1279,6 +1338,13 @@
         "Te abrimos WhatsApp con el detalle de tu pedido. Si no se abrió solo, " +
         "usa el botón de abajo: el mensaje ya viene escrito." +
         entrega;
+    } else if (datos.metodo === "mercadopago" && datos.pagado) {
+      texto.textContent =
+        "Guarda tu número de pedido. Ahora verificamos el pago en Mercado Pago y el " +
+        "stock, y te confirmamos a " +
+        datos.email +
+        " o por WhatsApp." +
+        entrega;
     } else if (datos.pagado) {
       texto.textContent =
         "Guarda tu número de pedido. Ahora verificamos la transferencia y el " +
@@ -1306,10 +1372,13 @@
       bankCard.hidden = !mostrarBanco;
     }
 
-    if (datos.metodo === "transferencia") {
+    if (datos.metodo === "transferencia" || datos.metodo === "mercadopago") {
       var reembolso = document.getElementById("done-refund");
       if (reembolso) {
-        reembolso.textContent = textosPago.reembolso || "";
+        reembolso.textContent =
+          datos.metodo === "mercadopago"
+            ? "Si no tenemos la pieza, te devolvemos el 100% al mismo medio con el que pagaste en Mercado Pago."
+            : textosPago.reembolso || "";
         reembolso.hidden = !reembolso.textContent;
       }
     }
@@ -1373,7 +1442,7 @@
               (resultado && resultado.data && resultado.data.message) ||
               "No pudimos registrar el pedido. Revisa tu conexión e intenta de nuevo.";
             submitBtn.disabled = false;
-            submitBtn.textContent = "Confirmar pedido";
+            submitBtn.textContent = textoBoton();
             return;
           }
           var numFinal = resultado.numero || numero;
