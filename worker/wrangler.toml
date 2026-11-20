@@ -29,6 +29,8 @@ GITHUB_FILE_PATH = "data/productos.json"
 # Pedidos: PEDIDOS_FROM debe usar el dominio verificado en Resend.
 PEDIDOS_FROM = "Andes Auto Parts <pedidos@andesautoparts.cl>"
 PEDIDOS_AVISO = "andesautopartscl@gmail.com"
+# ID público de Google (OAuth, tipo aplicación web). Vacío = el botón no aparece.
+GOOGLE_CLIENT_ID = "661207808172-io37e5m6rk2g7km6i2g4q6075hmst82p.apps.googleusercontent.com"
 
 # KV para ML_ACCESS_TOKEN (permite POST /update-token en runtime)
 # Tras crear el namespace, reemplaza id y preview_id:

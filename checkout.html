@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261120b" />
+  <link rel="stylesheet" href="styles.css?v=20261120d" />
 </head>
 <body>
   <header class="site-header">
@@ -309,7 +309,7 @@
                   <span class="pay-option__body">
                     <span class="pay-option__title">Mercado Pago</span>
                     <span class="pay-option__desc">
-                      Tarjeta, débito o saldo de Mercado Pago. El link te pide el monto: escríbelo igual al total del pedido.
+                      Tarjeta, débito o saldo de Mercado Pago. Pagas allá y, al terminar, vuelves a esta página para cerrar el pedido.
                     </span>
                   </span>
                 </label>
@@ -363,36 +363,21 @@
                 <p class="pay-refund" id="pay-refund"></p>
               </div>
 
-              <!-- El link de Mercado Pago no trae el monto: el cliente lo escribe. -->
+              <!-- El link no trae el monto. El pedido se cierra al volver desde Mercado Pago. -->
               <div class="pay-transfer" id="pay-mp" hidden>
                 <div class="bank-card">
                   <h3 class="bank-card__title">Paga en Mercado Pago</h3>
                   <p class="bank-card__note">
-                    Abre el link y escribe este monto exacto. Mercado Pago no lo
-                    carga solo: si escribes otro valor, el pago no va a coincidir
-                    con el pedido.
+                    El botón de abajo te lleva a pagar. Escribe allá este monto
+                    exacto: el link abre en cero. Cuando el pago termine, Mercado
+                    Pago te devuelve a esta página y el pedido queda cerrado.
                   </p>
                   <p class="pay-mp-amount" id="pay-mp-monto">$0</p>
                   <p class="bank-card__note">
                     Número de pedido, por si te pide una referencia:
                     <strong id="pay-mp-numero">—</strong>
                   </p>
-                  <a
-                    class="btn btn-outline pay-mp-open"
-                    id="pay-mp-link"
-                    href="https://link.mercadopago.cl/andesautoparts"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >Abrir Mercado Pago</a>
                 </div>
-
-                <label class="pay-check" for="co-pagado-mp">
-                  <input type="checkbox" id="co-pagado-mp" name="pagado_mp" />
-                  <span class="pay-check__text">
-                    Ya pagué este monto en Mercado Pago
-                  </span>
-                </label>
-                <p class="field-error" data-error-for="pagado_mp" hidden></p>
                 <p class="pay-refund">
                   Si no tenemos la pieza, te devolvemos el 100% al mismo medio con el que pagaste.
                 </p>
@@ -521,11 +506,11 @@
     </div>
   </div>
 
-  <script src="contact-config.js?v=20261120b"></script>
+  <script src="contact-config.js?v=20261120e"></script>
   <script src="cart.js?v=20261014s"></script>
   <script src="favoritos.js?v=20261014f"></script>
   <script src="analitica.js?v=20261014s"></script>
-  <script src="auth.js?v=20261027a"></script>
-  <script src="checkout.js?v=20261120b"></script>
+  <script src="auth.js?v=20261120d"></script>
+  <script src="checkout.js?v=20261120c"></script>
 </body>
 </html>

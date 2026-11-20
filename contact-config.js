@@ -48,6 +48,16 @@ window.ANDES_TURNSTILE = {
 };
 
 /**
+ * Botón "Continuar con Google" del inicio de sesión.
+ * El ID es público (cliente OAuth web). Tiene que ser el mismo que
+ * GOOGLE_CLIENT_ID del Worker. Vacío = el botón no se muestra.
+ * Orígenes autorizados: https://andesautoparts.cl y https://www.andesautoparts.cl
+ */
+window.ANDES_GOOGLE = {
+  clientId: "661207808172-io37e5m6rk2g7km6i2g4q6075hmst82p.apps.googleusercontent.com",
+};
+
+/**
  * Datos de pago que usa checkout.html.
  *
  * Los campos de `transferencia` se muestran tal cual al cliente cuando elige

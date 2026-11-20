@@ -66,7 +66,6 @@
   var payTransfer = document.getElementById("pay-transfer");
   var payMp = document.getElementById("pay-mp");
   var pagadoCheck = document.getElementById("co-pagado");
-  var pagadoMpCheck = document.getElementById("co-pagado-mp");
   var fileWrap = document.getElementById("pay-file");
   var fileInput = document.getElementById("co-comprobante");
   var fileHint = document.getElementById("pay-file-hint");
@@ -705,10 +704,66 @@
     return mp.url || "https://link.mercadopago.cl/andesautoparts";
   }
 
+  var CLAVE_REGRESO_MP = "andes_mp_regreso";
+
+  /** El pedido ya está guardado. Al volver desde Mercado Pago solo hay que mostrarlo. */
+  function guardarRegresoMp(numero, datos, resumen) {
+    try {
+      window.sessionStorage.setItem(
+        CLAVE_REGRESO_MP,
+        JSON.stringify({
+          numero: numero,
+          resumen: resumen,
+          datos: {
+            metodo: "mercadopago",
+            pagado: false,
+            email: datos.email,
+            nombre: datos.nombre,
+            entrega: datos.entrega,
+            comuna: datos.comuna,
+            despacho: datos.despacho,
+            transporte: datos.transporte,
+            transporteAConfirmar: datos.transporteAConfirmar,
+          },
+        })
+      );
+    } catch (e) {
+      /* Sin storage igual puede pagar; el correo del pedido ya salió. */
+    }
+  }
+
+  function reanudarRegresoMercadoPago() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("desde") !== "mercadopago") return;
+    var crudo = "";
+    try {
+      crudo = window.sessionStorage.getItem(CLAVE_REGRESO_MP) || "";
+    } catch (e) {
+      crudo = "";
+    }
+    if (!crudo) return;
+    var guardado;
+    try {
+      guardado = JSON.parse(crudo);
+    } catch (e) {
+      return;
+    }
+    if (!guardado || !guardado.numero || !guardado.datos) return;
+    try {
+      window.sessionStorage.removeItem(CLAVE_REGRESO_MP);
+    } catch (e) {
+      /* Ya vamos a mostrar el pedido. */
+    }
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, "", "checkout.html");
+    }
+    mostrarConfirmacion(guardado.numero, guardado.datos, guardado.resumen || "");
+  }
+
   function textoBoton() {
     var metodo = metodoSeleccionado();
     if (metodo === "whatsapp") return "Enviar el pedido por WhatsApp";
-    if (metodo === "mercadopago") return "Ya pagué en Mercado Pago, confirmar";
+    if (metodo === "mercadopago") return "Pagar con Mercado Pago";
     return "Ya transferí, confirmar mi pedido";
   }
 
@@ -766,8 +821,6 @@
     if (monto) monto.textContent = fmt(totalAPagar());
     var numero = document.getElementById("pay-mp-numero");
     if (numero) numero.textContent = numeroPedido();
-    var link = document.getElementById("pay-mp-link");
-    if (link) link.href = urlMercadoPago();
   }
 
   function actualizarRequisitos() {
@@ -793,10 +846,6 @@
       pagadoCheck.required = transferencia;
       // Si se va a otro medio, la declaración de la transferencia ya no vale.
       if (!transferencia) pagadoCheck.checked = false;
-    }
-    if (pagadoMpCheck) {
-      pagadoMpCheck.required = mercadoPago;
-      if (!mercadoPago) pagadoMpCheck.checked = false;
     }
     if (transferencia) pintarBloquePago();
     if (mercadoPago) pintarBloqueMercadoPago();
@@ -943,7 +992,7 @@
       entrega: entregaSeleccionada(),
       pagado:
         metodoSeleccionado() === "mercadopago"
-          ? !!(pagadoMpCheck && pagadoMpCheck.checked)
+          ? false
           : !!(pagadoCheck && pagadoCheck.checked),
       metodo: metodoSeleccionado(),
       despacho: evaluarDespacho(),
@@ -1026,14 +1075,6 @@
         pagadoCheck
       );
     }
-    if (datos.metodo === "mercadopago" && !datos.pagado) {
-      marcar(
-        "pagado_mp",
-        "Abre Mercado Pago, paga el monto de arriba y marca la casilla para confirmar tu pedido.",
-        pagadoMpCheck
-      );
-    }
-
     var archivo = archivoComprobante();
     if (archivo && archivo.size > maxComprobanteBytes) {
       marcar(
@@ -1338,10 +1379,10 @@
         "Te abrimos WhatsApp con el detalle de tu pedido. Si no se abrió solo, " +
         "usa el botón de abajo: el mensaje ya viene escrito." +
         entrega;
-    } else if (datos.metodo === "mercadopago" && datos.pagado) {
+    } else if (datos.metodo === "mercadopago") {
       texto.textContent =
-        "Guarda tu número de pedido. Ahora verificamos el pago en Mercado Pago y el " +
-        "stock, y te confirmamos a " +
+        "Volviste desde Mercado Pago. Guardamos tu pedido y ahora verificamos el pago y el " +
+        "stock. Te confirmamos a " +
         datos.email +
         " o por WhatsApp." +
         entrega;
@@ -1388,6 +1429,8 @@
     wa.textContent =
       datos.metodo === "whatsapp"
         ? "Abrir WhatsApp con mi pedido"
+        : datos.metodo === "mercadopago"
+        ? "Escribir por WhatsApp"
         : "Enviar el comprobante por WhatsApp";
 
     // El siguiente pedido tiene que llevar una referencia nueva.
@@ -1453,6 +1496,13 @@
               titulo: numFinal,
               path: "/checkout.html",
             });
+          }
+          if (datos.metodo === "mercadopago") {
+            guardarRegresoMp(numFinal, datos, resumenFinal);
+            window.AndesCart.vaciar();
+            submitBtn.textContent = "Te llevamos a Mercado Pago…";
+            window.location.href = urlMercadoPago();
+            return;
           }
           mostrarConfirmacion(numFinal, datos, resumenFinal);
           window.AndesCart.vaciar();
@@ -1622,4 +1672,6 @@
       });
     }
   }
+
+  reanudarRegresoMercadoPago();
 })();

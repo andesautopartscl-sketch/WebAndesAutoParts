@@ -328,6 +328,9 @@
   var lastFocus = null;
   var turnstileIds = { login: null, registro: null };
   var turnstileScriptPromise = null;
+  var googleScriptPromise = null;
+  var googleListo = false;
+  var googlePendiente = "";
 
   function turnstileSiteKey() {
     var cfg = window.ANDES_TURNSTILE || {};
@@ -618,6 +621,111 @@
     else abrirMenu(trigger);
   }
 
+  function googleClientId() {
+    var cfg = window.ANDES_GOOGLE || {};
+    return String(cfg.clientId || "").trim();
+  }
+
+  function cargarGoogle() {
+    if (!googleClientId()) return Promise.resolve();
+    if (window.google && window.google.accounts && window.google.accounts.id) return Promise.resolve();
+    if (googleScriptPromise) return googleScriptPromise;
+    googleScriptPromise = new Promise(function (resolve) {
+      var s = document.createElement("script");
+      s.src = "https://accounts.google.com/gsi/client?hl=es";
+      s.async = true;
+      s.onload = function () {
+        resolve();
+      };
+      s.onerror = function () {
+        resolve();
+      };
+      document.head.appendChild(s);
+    });
+    return googleScriptPromise;
+  }
+
+  function aplicarSesion(data) {
+    if (data && data.ok && data.token) {
+      guardarSesion(data.token, data.usuario);
+      fusionarCarrito().catch(function () {});
+      fusionarFavoritos().catch(function () {});
+      sincronizarVehiculo(data.usuario).catch(function () {});
+    }
+    return data;
+  }
+
+  function abrirCompletarGoogle(perfil, pendiente) {
+    googlePendiente = pendiente || "";
+    var modal = asegurarModal();
+    var form = modal.querySelector("#auth-modal-google");
+    if (form) {
+      form.nombre.value = (perfil && perfil.nombre) || "";
+      form.email.value = (perfil && perfil.email) || "";
+      form.telefono.value = "";
+    }
+    mostrarError(document.getElementById("auth-google-reg-error"), "");
+    setTab("google");
+  }
+
+  function onGoogleCredential(response) {
+    var err = document.getElementById("auth-google-error");
+    mostrarError(err, "");
+    var credential = response && response.credential;
+    if (!credential) {
+      mostrarError(err, "No pudimos entrar con Google. Intenta de nuevo.");
+      return;
+    }
+    api("/auth/google", { method: "POST", body: { credential: credential } })
+      .then(function (data) {
+        if (data.nuevo && data.pendiente) {
+          abrirCompletarGoogle(data.perfil, data.pendiente);
+          return;
+        }
+        if (!data.ok || !data.token) {
+          mostrarError(err, data.message || "No pudimos entrar con Google.");
+          return;
+        }
+        aplicarSesion(data);
+        cerrarModal();
+      })
+      .catch(function () {
+        mostrarError(err, "Error de red. Intenta de nuevo.");
+      });
+  }
+
+  function pintarBotonGoogle() {
+    var modal = modalEl;
+    if (!modal) return;
+    var clientId = googleClientId();
+    modal.querySelectorAll("[data-auth-google]").forEach(function (el) {
+      el.hidden = !clientId;
+    });
+    if (!clientId || googleListo) return;
+    cargarGoogle().then(function () {
+      if (!window.google || !google.accounts || !google.accounts.id || googleListo) return;
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: onGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      var host = modal.querySelector("[data-auth-google-btn]");
+      if (!host) return;
+      var ancho = host.parentElement ? host.parentElement.clientWidth : 320;
+      google.accounts.id.renderButton(host, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "pill",
+        logo_alignment: "center",
+        width: Math.max(240, Math.min(360, ancho || 320)),
+      });
+      googleListo = true;
+    });
+  }
+
   function asegurarModal() {
     if (modalEl) return modalEl;
     var base = prefijoRutas();
@@ -668,6 +776,11 @@
       '<p class="account-error" id="auth-login-error" hidden></p>' +
       '<button type="submit" class="btn btn-primary btn-lg auth-modal__submit">Iniciar Sesión</button>' +
       "</form>" +
+      '<div class="auth-modal__or" data-auth-google hidden><span>o</span></div>' +
+      '<div class="auth-modal__google" data-auth-google hidden>' +
+      '<div data-auth-google-btn></div>' +
+      '<p class="account-error" id="auth-google-error" hidden></p>' +
+      "</div>" +
       '<div class="auth-modal__divider"></div>' +
       '<p class="auth-modal__switch-q">¿No tienes una cuenta?</p>' +
       '<button type="button" class="btn auth-modal__ghost" data-auth-tab="registro">Crear una cuenta</button>' +
@@ -714,6 +827,22 @@
       '<div class="auth-modal__divider"></div>' +
       '<button type="button" class="btn auth-modal__ghost" data-auth-tab="login">Volver a iniciar sesión</button>' +
       "</div>" +
+      '<div data-auth-pane="google" hidden>' +
+      '<h2 class="auth-modal__title">Completa tu cuenta</h2>' +
+      '<p class="auth-modal__lead">Es tu primera vez con Google. Revisa tus datos para crear la cuenta.</p>' +
+      '<form class="account-form auth-modal__form" id="auth-modal-google" autocomplete="on">' +
+      '<div class="field"><label class="visually-hidden" for="auth-google-nombre">Nombre</label>' +
+      '<input type="text" id="auth-google-nombre" name="nombre" required minlength="2" autocomplete="name" placeholder="Nombre y apellido" /></div>' +
+      '<div class="field"><label class="visually-hidden" for="auth-google-email">Correo</label>' +
+      '<input type="email" id="auth-google-email" name="email" required readonly autocomplete="email" placeholder="Correo electrónico" /></div>' +
+      '<div class="field"><label class="visually-hidden" for="auth-google-telefono">Teléfono</label>' +
+      '<input type="tel" id="auth-google-telefono" name="telefono" autocomplete="tel" placeholder="Teléfono +56 9 …" /></div>' +
+      '<p class="account-error" id="auth-google-reg-error" hidden></p>' +
+      '<button type="submit" class="btn btn-primary btn-lg auth-modal__submit">Crear cuenta</button>' +
+      "</form>" +
+      '<div class="auth-modal__divider"></div>' +
+      '<button type="button" class="btn auth-modal__ghost" data-auth-tab="login">Volver a iniciar sesión</button>' +
+      "</div>" +
       "</div>" +
       "</div>";
     document.body.appendChild(modalEl);
@@ -734,7 +863,14 @@
     });
     var title = modal.querySelector("#auth-modal-title");
     if (title && tab === "login") title.id = "auth-modal-title";
-    var focusId = tab === "registro" ? "auth-reg-nombre" : tab === "olvide" ? "auth-olvide-email" : "auth-login-email";
+    var focusId =
+      tab === "registro"
+        ? "auth-reg-nombre"
+        : tab === "google"
+        ? "auth-google-nombre"
+        : tab === "olvide"
+        ? "auth-olvide-email"
+        : "auth-login-email";
     var focus = document.getElementById(focusId);
     if (focus) focus.focus();
     if (tab === "login" || tab === "registro") montarTurnstile(tab);
@@ -748,6 +884,7 @@
     modal.hidden = false;
     document.body.classList.add("auth-modal-open");
     montarTurnstile(tab === "registro" ? "registro" : "login");
+    pintarBotonGoogle();
   }
 
   function cerrarModal() {
@@ -756,6 +893,8 @@
     document.body.classList.remove("auth-modal-open");
     mostrarError(document.getElementById("auth-login-error"), "");
     mostrarError(document.getElementById("auth-reg-error"), "");
+    mostrarError(document.getElementById("auth-google-error"), "");
+    mostrarError(document.getElementById("auth-google-reg-error"), "");
     if (lastFocus && typeof lastFocus.focus === "function") {
       try {
         lastFocus.focus();
@@ -796,6 +935,7 @@
     var formLogin = modal.querySelector("#auth-modal-login");
     var formReg = modal.querySelector("#auth-modal-registro");
     var formOlvide = modal.querySelector("#auth-modal-olvide");
+    var formGoogle = modal.querySelector("#auth-modal-google");
 
     function ocuparBoton(btn, texto) {
       if (!btn) return;
@@ -914,6 +1054,44 @@
           .catch(function () {
             mostrarError(err, "Error de red. Intenta de nuevo.");
             resetTurnstile("registro");
+          })
+          .then(function () {
+            soltarBoton(btn);
+          });
+      });
+    }
+
+    if (formGoogle) {
+      formGoogle.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var err = document.getElementById("auth-google-reg-error");
+        var btn = formGoogle.querySelector('[type="submit"]');
+        if (btn && btn.disabled) return;
+        mostrarError(err, "");
+        if (!googlePendiente) {
+          mostrarError(err, "Vuelve a entrar con Google.");
+          return;
+        }
+        ocuparBoton(btn, "Creando cuenta…");
+        api("/auth/google/completar", {
+          method: "POST",
+          body: {
+            pendiente: googlePendiente,
+            nombre: formGoogle.nombre.value,
+            telefono: formGoogle.telefono.value,
+          },
+        })
+          .then(function (data) {
+            if (!data.ok || !data.token) {
+              mostrarError(err, data.message || "No pudimos crear la cuenta.");
+              return;
+            }
+            googlePendiente = "";
+            aplicarSesion(data);
+            cerrarModal();
+          })
+          .catch(function () {
+            mostrarError(err, "Error de red. Intenta de nuevo.");
           })
           .then(function () {
             soltarBoton(btn);

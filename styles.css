@@ -5330,6 +5330,42 @@ body.auth-modal-open {
   background: #e8edf2;
 }
 
+.auth-modal__or {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0.85rem 0 0.7rem;
+  color: #98a2b3;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.auth-modal__or[hidden],
+.auth-modal__google[hidden] {
+  display: none !important;
+}
+
+.auth-modal__or::before,
+.auth-modal__or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e8edf2;
+}
+
+.auth-modal__google {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 44px;
+}
+
+.auth-modal__google .account-error {
+  align-self: stretch;
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+}
+
 .auth-modal__switch-q {
   margin: 0 0 0.5rem;
   font-size: 0.88rem;

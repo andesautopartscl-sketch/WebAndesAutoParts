@@ -487,6 +487,160 @@ async function login(request, env, json, ctx) {
   return json({ ok: true, token, usuario: perfilPublico(u) });
 }
 
+async function perfilGoogle(credential, clientId) {
+  if (!credential || !clientId) return null;
+  const res = await fetch(
+    "https://oauth2.googleapis.com/tokeninfo?id_token=" + encodeURIComponent(credential)
+  );
+  if (!res.ok) return null;
+  const data = await res.json();
+  if (data.aud !== clientId) return null;
+  if (String(data.email_verified) !== "true") return null;
+  if (data.iss !== "accounts.google.com" && data.iss !== "https://accounts.google.com") return null;
+  const email = texto(data.email, 160).toLowerCase();
+  if (!emailOk(email)) return null;
+  return {
+    email,
+    nombre: texto(data.name || data.given_name || "", 120),
+    sub: texto(data.sub, 80),
+  };
+}
+
+async function sesionSiActiva(env, json, u) {
+  if (!u.activo) {
+    return json(
+      {
+        ok: false,
+        error: "CUENTA_BLOQUEADA",
+        message:
+          "Tu cuenta está desactivada. Contacta a tu vendedor Andes Auto Parts para reactivarla.",
+      },
+      403
+    );
+  }
+  const bloq = await aplicarBloqueoSinCompra(env, u);
+  if (bloq) return json({ ok: false, error: bloq.error, message: bloq.message }, 403);
+  const token = await crearSesion(env, u.id);
+  return json({ ok: true, token, usuario: perfilPublico(u) });
+}
+
+async function entrarConGoogle(request, env, json) {
+  if (!env.CLIENTES_DB) return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
+  const clientId = String(env.GOOGLE_CLIENT_ID || "").trim();
+  if (!clientId || !env.TOKEN_KV) {
+    return json(
+      { ok: false, error: "GOOGLE_NO_CONFIGURADO", message: "Entrar con Google todavía no está disponible." },
+      503
+    );
+  }
+
+  const ip = request.headers.get("CF-Connecting-IP") || "ip";
+  if (!(await rateLimit(env, "google:" + ip))) {
+    return json({ ok: false, error: "RATE_LIMIT" }, 429);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+
+  const perfil = await perfilGoogle(body.credential, clientId);
+  if (!perfil) {
+    return json(
+      { ok: false, error: "GOOGLE", message: "No pudimos confirmar la cuenta de Google. Intenta de nuevo." },
+      401
+    );
+  }
+
+  const u = await env.CLIENTES_DB.prepare("SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE")
+    .bind(perfil.email)
+    .first();
+  if (u) return sesionSiActiva(env, json, u);
+
+  const pendiente = nuevoId();
+  await env.TOKEN_KV.put(
+    "GOOGLE_PEND:" + pendiente,
+    JSON.stringify({ email: perfil.email, nombre: perfil.nombre, sub: perfil.sub }),
+    { expirationTtl: 900 }
+  );
+  return json({
+    ok: true,
+    nuevo: true,
+    pendiente,
+    perfil: { email: perfil.email, nombre: perfil.nombre },
+  });
+}
+
+async function completarGoogle(request, env, json) {
+  if (!env.CLIENTES_DB || !env.TOKEN_KV) {
+    return json({ ok: false, error: "DB_NO_CONFIGURADA" }, 500);
+  }
+
+  const ip = request.headers.get("CF-Connecting-IP") || "ip";
+  if (!(await rateLimit(env, "google-fin:" + ip))) {
+    return json({ ok: false, error: "RATE_LIMIT" }, 429);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return json({ ok: false, error: "JSON_INVALIDO" }, 400);
+  }
+
+  const pendiente = texto(body.pendiente, 80);
+  if (!pendiente) return json({ ok: false, error: "GOOGLE", message: "Vuelve a entrar con Google." }, 400);
+  const crudo = await env.TOKEN_KV.get("GOOGLE_PEND:" + pendiente);
+  if (!crudo) {
+    return json(
+      { ok: false, error: "GOOGLE", message: "La sesión de Google venció. Vuelve a entrar con Google." },
+      400
+    );
+  }
+
+  let perfil;
+  try {
+    perfil = JSON.parse(crudo);
+  } catch (err) {
+    perfil = null;
+  }
+  if (!perfil || !emailOk(perfil.email)) {
+    return json({ ok: false, error: "GOOGLE", message: "Vuelve a entrar con Google." }, 400);
+  }
+
+  const nombre = texto(body.nombre, 120) || texto(perfil.nombre, 120);
+  if (nombre.length < 2) {
+    return json({ ok: false, error: "NOMBRE_INVALIDO", message: "Escribe tu nombre y apellido." }, 400);
+  }
+
+  const ya = await env.CLIENTES_DB.prepare("SELECT * FROM usuarios WHERE email = ? COLLATE NOCASE")
+    .bind(perfil.email)
+    .first();
+  if (ya) {
+    await env.TOKEN_KV.delete("GOOGLE_PEND:" + pendiente);
+    return sesionSiActiva(env, json, ya);
+  }
+
+  const id = nuevoId();
+  const salt = nuevoSalt();
+  const passwordHash = await hashClave(nuevoId() + nuevoId(), salt);
+  await env.CLIENTES_DB.prepare(
+    `INSERT INTO usuarios (
+      id, email, password_hash, password_salt, rol, nombre, telefono, rut, documento,
+      razon_social, giro, direccion, comuna, region, descuento_pct, activo, creado_por, creado_en
+    ) VALUES (?, ?, ?, ?, 'cliente', ?, ?, '', 'boleta', '', '', '', '', '', 0, 1, NULL, ?)`
+  )
+    .bind(id, perfil.email, passwordHash, salt, nombre, texto(body.telefono, 40), ahoraIso())
+    .run();
+  await env.TOKEN_KV.delete("GOOGLE_PEND:" + pendiente);
+
+  const usuario = await env.CLIENTES_DB.prepare("SELECT * FROM usuarios WHERE id = ?").bind(id).first();
+  const token = await crearSesion(env, id);
+  return json({ ok: true, token, usuario: perfilPublico(usuario) });
+}
+
 async function logout(request, env, json) {
   const token = bearer(request);
   if (token && env.CLIENTES_DB) {
@@ -1578,6 +1732,12 @@ export async function rutearClientes(path, request, env, { json, ctx }) {
   }
   if (path === "/auth/login" && request.method === "POST") {
     return login(request, env, json, ctx);
+  }
+  if (path === "/auth/google" && request.method === "POST") {
+    return entrarConGoogle(request, env, json);
+  }
+  if (path === "/auth/google/completar" && request.method === "POST") {
+    return completarGoogle(request, env, json);
   }
   if (path === "/auth/logout" && request.method === "POST") {
     return logout(request, env, json);
