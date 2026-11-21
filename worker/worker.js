@@ -35,8 +35,6 @@ const KV_SYNC_META = "SYNC_META";
 const ITEMS_PER_INVOCATION = 200;
 const MULTI_ITEM_BATCH = 20;
 const SEARCH_PAGE_SIZE = 100;
-const ML_ITEM_ATTRS =
-  "id,title,price,currency_id,thumbnail,pictures,permalink,available_quantity,condition,seller_sku,attributes,category_id";
 
 const CORS_HEADERS_BASE = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -204,7 +202,13 @@ async function mlFetch(url, accessToken) {
   }
   if (!res.ok) {
     const msg = data.message || data.error || res.statusText;
-    throw new Error(`ML API ${res.status}: ${msg}`);
+    let path = url;
+    try {
+      path = new URL(url).pathname + new URL(url).search;
+    } catch {
+      /* keep url */
+    }
+    throw new Error(`ML API ${res.status}: ${msg} (${path})`);
   }
   return data;
 }
@@ -234,20 +238,48 @@ async function fetchAllActiveItemIds(sellerId, accessToken) {
   return ids;
 }
 
+function itemFromBulkEntry(entry) {
+  if (!entry || typeof entry !== "object") return null;
+  const status = entry.status_code ?? entry.code;
+  if (status != null && Number(status) !== 200) return null;
+  if (entry.body && typeof entry.body === "object") return entry.body;
+  if (entry.id) return entry;
+  return null;
+}
+
+async function fetchItemsIndividually(itemIds, accessToken) {
+  const items = [];
+  for (const id of itemIds) {
+    const item = await mlFetch(`${API}/items/${encodeURIComponent(id)}`, accessToken);
+    if (item && item.id) items.push(item);
+  }
+  return items;
+}
+
 async function fetchItemsMulti(itemIds, accessToken) {
   const items = [];
   for (let i = 0; i < itemIds.length; i += MULTI_ITEM_BATCH) {
     const chunk = itemIds.slice(i, i + MULTI_ITEM_BATCH);
     const idsParam = chunk.map(encodeURIComponent).join(",");
-    const url =
-      `${API}/items?ids=${idsParam}` +
-      `&attributes=${encodeURIComponent(ML_ITEM_ATTRS)}`;
-    const data = await mlFetch(url, accessToken);
-    const entries = Array.isArray(data) ? data : [];
-    for (const entry of entries) {
-      if (entry && entry.code === 200 && entry.body) {
-        items.push(entry.body);
+    const url = `${API}/items/bulk?ids=${idsParam}`;
+    try {
+      const data = await mlFetch(url, accessToken);
+      const entries = Array.isArray(data)
+        ? data
+        : Array.isArray(data.items)
+          ? data.items
+          : Array.isArray(data.results)
+            ? data.results
+            : [];
+      for (const entry of entries) {
+        const item = itemFromBulkEntry(entry);
+        if (item) items.push(item);
       }
+    } catch (err) {
+      const msg = String(err && err.message ? err.message : err);
+      if (!/403|deprecated|not found|404/i.test(msg)) throw err;
+      const fallback = await fetchItemsIndividually(chunk, accessToken);
+      items.push(...fallback);
     }
   }
   return items;
